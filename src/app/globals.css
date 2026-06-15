@@ -1,26 +1,353 @@
 @import "tailwindcss";
 
+/* ═══════════════════════════════════════════════
+   RHEMA AI — Premium Design System
+   Vibe: Ethereal Glass (SaaS/AI/Tech)
+   Font: Plus Jakarta Sans + Bebas Neue
+   ═══════════════════════════════════════════════ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Palette — OLED black foundation */
+  --bg:      #050505;
+  --bg2:     #080808;
+  --card:    #0d0d0d;
+  --card2:   #110e0b;
+  --line:    rgba(255,255,255,0.07);
+  --line2:   rgba(255,255,255,0.12);
+  --accent:  #FF5C1A;
+  --accent2: #FF7A3D;
+  --accent-dim: rgba(255,92,26,0.12);
+  --green:   #22C55E;
+  --red:     #EF4444;
+  --ink:     #F5F5F5;
+  --ink2:    #E0E0E0;
+  --sub:     #4a4a4a;
+  --sub2:    #888888;
+  --blue: var(--accent);
+
+  /* Radius system */
+  --r-xs:  6px;
+  --r-sm:  10px;
+  --r:     14px;
+  --r-lg:  20px;
+  --r-xl:  28px;
+  --r-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-md:  0 4px 20px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+  --shadow-lg:  0 8px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
+  --glow:       0 0 32px rgba(255,92,26,0.18), 0 0 8px rgba(255,92,26,0.1);
+  --glow-sm:    0 0 16px rgba(255,92,26,0.12);
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring:   cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-smooth:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+@theme {
+  --color-bg:      #050505;
+  --color-bg2:     #080808;
+  --color-card:    #0d0d0d;
+  --color-card2:   #110e0b;
+  --color-accent:  #FF5C1A;
+  --color-accent2: #FF7A3D;
+  --color-green:   #22C55E;
+  --color-red:     #EF4444;
+  --color-ink:     #F5F5F5;
+  --color-sub:     #4a4a4a;
+  --color-sub2:    #888888;
+  --color-blue:    #FF5C1A;
+  --color-line:    rgba(255,255,255,0.07);
+  --font-bebas:    var(--font-bebas), 'Bebas Neue', sans-serif;
+  --font-jakarta:  var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+html { scroll-behavior: smooth; }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  position: relative;
 }
+
+/* ── Радиальный фоновый glow (оранжевое свечение сверху) ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(255,92,26,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 80% 20%, rgba(255,92,26,0.04) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Noise grain overlay ── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Контейнер ── */
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Секции ── */
+.section     { padding: 112px 0; position: relative; }
+.section-alt { padding: 112px 0; background: var(--bg2); position: relative; }
+
+/* ── КНОПКИ (сохраняем скошенный край как бренд-элемент) ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  border: none;
+  outline: none;
+  clip-path: polygon(14px 0%, 100% 0%, 100% 100%, 0% 100%);
+  transition: all 0.4s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.btn:hover::before { opacity: 1; }
+.btn:active { transform: scale(0.98); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-sm  { padding: 9px 20px 9px 28px; }
+.btn-md  { padding: 12px 28px 12px 34px; }
+.btn-lg  { padding: 15px 36px 15px 44px; font-size: 14px; letter-spacing: 0.07em; }
+
+.btn-blue {
+  background: linear-gradient(135deg, var(--accent) 0%, #e84f10 100%);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(255,92,26,0.4), 0 1px 0 rgba(255,255,255,0.15) inset;
+}
+.btn-blue:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
+  box-shadow: 0 8px 32px rgba(255,92,26,0.55), 0 1px 0 rgba(255,255,255,0.2) inset;
+  transform: translateY(-2px) scale(1.01);
+}
+
+.btn-line {
+  background: transparent;
+  border: 1px solid rgba(255,92,26,0.4);
+  color: var(--accent);
+}
+.btn-line:hover:not(:disabled) {
+  border-color: rgba(255,92,26,0.7);
+  background: rgba(255,92,26,0.06);
+  box-shadow: var(--glow-sm);
+}
+
+.btn-dim {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--line2);
+  color: var(--sub2);
+}
+.btn-dim:hover:not(:disabled) {
+  border-color: rgba(255,255,255,0.2);
+  color: var(--ink);
+  background: rgba(255,255,255,0.07);
+}
+
+/* ── SECTION LABEL — eyebrow pill badge ── */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  padding: 5px 12px 5px 10px;
+  background: rgba(255,92,26,0.08);
+  border: 1px solid rgba(255,92,26,0.2);
+  border-radius: var(--r-full);
+}
+.section-label::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  box-shadow: 0 0 8px rgba(255,92,26,0.6);
+}
+
+/* ── КАРТОЧКИ — Double-Bezel architecture ── */
+
+/* Outer shell */
+.card-shell {
+  padding: 1px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  border-radius: var(--r-lg);
+  transition: all 0.45s var(--ease-out-expo);
+}
+.card-shell:hover {
+  background: linear-gradient(145deg, rgba(255,92,26,0.2) 0%, rgba(255,92,26,0.04) 100%);
+}
+
+/* Inner core */
+.card {
+  background: linear-gradient(145deg, #131313 0%, #0c0c0c 100%);
+  border-radius: calc(var(--r-lg) - 1px);
+  padding: 28px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.45s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+}
+
+/* Simple card (без shell) */
+.card-simple {
+  background: linear-gradient(145deg, #131313 0%, #0c0c0c 100%);
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 28px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.35s var(--ease-smooth), box-shadow 0.35s var(--ease-smooth), transform 0.35s var(--ease-smooth);
+  position: relative;
+  overflow: hidden;
+}
+.card-simple::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+}
+.card-simple:hover {
+  border-color: rgba(255,92,26,0.25);
+  box-shadow: var(--shadow-md), var(--glow-sm);
+  transform: translateY(-3px);
+}
+
+/* Accent card */
+.card-accent {
+  background: linear-gradient(145deg, #141008 0%, #0d0905 100%);
+  border: 1px solid rgba(255,92,26,0.2);
+  border-radius: var(--r);
+  padding: 28px;
+  box-shadow: var(--shadow-sm), 0 0 20px rgba(255,92,26,0.06);
+  transition: all 0.35s var(--ease-smooth);
+}
+.card-accent:hover {
+  border-color: rgba(255,92,26,0.4);
+  box-shadow: var(--shadow-md), var(--glow);
+  transform: translateY(-3px);
+}
+
+/* ── INPUT ── */
+.input-base {
+  padding: 13px 18px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-sm);
+  color: var(--ink);
+  font-size: 14px;
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+  width: 100%;
+}
+.input-base::placeholder { color: var(--sub); }
+.input-base:focus {
+  border-color: rgba(255,92,26,0.4);
+  box-shadow: 0 0 0 3px rgba(255,92,26,0.08);
+}
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--line); }
+
+/* ── TYPOGRAPHY ── */
+h1, h2, h3, h4 {
+  font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
+  letter-spacing: 0.03em;
+  line-height: 1.04;
+  color: var(--ink);
+}
+
+/* ── STAT NUMBER ── */
+.stat-number {
+  font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
+  font-size: 72px;
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: 0.01em;
+  text-shadow: 0 0 40px rgba(255,92,26,0.25);
+}
+
+/* ── PILL ── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--r-full);
+  font-size: 12px;
+  color: var(--sub2);
+  background: rgba(255,255,255,0.03);
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  transition: all 0.3s var(--ease-smooth);
+}
+.pill:hover {
+  border-color: rgba(255,92,26,0.35);
+  color: var(--ink);
+  background: rgba(255,92,26,0.05);
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,92,26,0.3); }

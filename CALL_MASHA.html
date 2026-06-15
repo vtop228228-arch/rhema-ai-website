@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Созвон: Маша — SPIN</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0a0a;
+      color: #e0e8f0;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      padding: 32px 28px;
+      max-width: 900px;
+    }
+    h1 { font-size: 22px; color: #00C8FF; letter-spacing: 0.04em; margin-bottom: 2px; }
+    .meta { color: #5a6a80; font-size: 13px; margin-bottom: 8px; }
+    .warn {
+      background: #1a1200;
+      border: 1px solid #3a2a00;
+      border-radius: 3px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: #f59e0b;
+      margin-bottom: 28px;
+    }
+
+    .section { margin-bottom: 28px; }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      padding: 3px 10px;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+    .s  { background: #0a1520; color: #00C8FF;  border: 1px solid #1a3a50; }
+    .p  { background: #1a0a0a; color: #EF4444;  border: 1px solid #3a1a1a; }
+    .i  { background: #1a1200; color: #f59e0b;  border: 1px solid #3a2a00; }
+    .n  { background: #0a1a0a; color: #22C55E;  border: 1px solid #1a3a1a; }
+    .close { background: #141414; color: #e0e8f0; border: 1px solid #2a2a2a; }
+
+    .section-hint { font-size: 12px; color: #5a6a80; }
+
+    .q-list { list-style: none; }
+    .q-list li {
+      background: #141414;
+      border: 1px solid #1e1e1e;
+      border-radius: 3px;
+      padding: 12px 16px;
+      margin-bottom: 7px;
+    }
+    .q-list li:hover { border-color: #2a2a2a; }
+    .q-list li::before { content: '→ '; color: #00C8FF; }
+    .sub { font-size: 12px; color: #5a6a80; padding-left: 18px; margin-top: 3px; }
+
+    .quote {
+      border-left: 2px solid #00C8FF;
+      background: #0f0f0f;
+      padding: 12px 16px;
+      font-style: italic;
+      font-size: 14px;
+      margin: 8px 0;
+    }
+    .quote.amber { border-left-color: #f59e0b; }
+    .quote.green  { border-left-color: #22C55E; }
+    .quote.red    { border-left-color: #EF4444; }
+
+    .sep { border: none; border-top: 1px solid #1e1e1e; margin: 24px 0; }
+
+    .row { display: flex; gap: 12px; }
+    .row .q-list { flex: 1; }
+
+    .kase {
+      background: #141414;
+      border: 1px solid #1e1e1e;
+      border-radius: 3px;
+      padding: 16px 20px;
+    }
+    .kase strong { color: #00C8FF; }
+    .kase .num { font-size: 20px; font-weight: 700; color: #22C55E; }
+
+    .pill {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: 2px;
+      margin: 2px;
+    }
+    .pill-red   { background: #1a0a0a; color: #EF4444; border: 1px solid #3a1a1a; }
+    .pill-green { background: #0a1a0a; color: #22C55E; border: 1px solid #1a3a1a; }
+  </style>
+</head>
+<body>
+
+  <h1>Маша — онлайн-школа</h1>
+  <p class="meta">SPIN · созвон сегодня</p>
+  <div class="warn">
+    ⚠ SPIN — это диалог, не монолог. Задал S → дождался ответа → задал P → и т.д. Не вываливай все вопросы сразу.
+  </div>
+
+  <!-- ОТКРЫТИЕ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="badge close">Открытие · 2 мин</span>
+      <span class="section-hint">Убери её напряжение про ТЗ</span>
+    </div>
+    <div class="quote">
+      "Маша, то что не можешь сформулировать ТЗ — это нормально, 9 из 10 фаундеров не могут. Давай просто поговорим про твой бизнес — сам разберусь что нужно."
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- S -->
+  <div class="section">
+    <div class="section-head">
+      <span class="badge s">S — Ситуация</span>
+      <span class="section-hint">Факты. Не оцениваем, просто слушаем.</span>
+    </div>
+    <ul class="q-list">
+      <li>Сколько сейчас активных студентов? Какой поток в месяц?</li>
+      <li>Формат школы — живые потоки, записанные курсы?
+        <p class="sub">Влияет на архитектуру нейрокуратора</p>
+      </li>
+      <li>Как сейчас обрабатываются вопросы студентов — ты сама или куратор?</li>
+      <li>Что из операционки сейчас на тебе лично?</li>
+    </ul>
+  </div>
+
+  <hr class="sep">
+
+  <!-- P -->
+  <div class="section">
+    <div class="section-head">
+      <span class="badge p">P — Проблема</span>
+      <span class="section-hint">Не называй боль сам — дай ей сказать. Молчи после вопроса.</span>
+    </div>
+    <ul class="q-list">
+      <li>Что в операционке школы больше всего раздражает прямо сейчас?
+        <p class="sub">После этого — молчи. Она сама назовёт боль.</p>
+      </li>
+      <li>Сколько часов в день куратор тратит на вопросы студентов? Есть ощущение что половина — одно и то же?</li>
+      <li>Были случаи когда студент ушёл или был недоволен из-за долгого ответа?</li>
+      <li>Что из своих задач хочешь убрать со своего стола в первую очередь?</li>
+    </ul>
+  </div>
+
+  <hr class="sep">
+
+  <!-- I -->
+  <div class="section">
+    <div class="section-head">
+      <span class="badge i">I — Извлечение</span>
+      <span class="section-hint">Превращаем боль в деньги. Считаем вслух её цифрами — не своими.</span>
+    </div>
+    <ul class="q-list">
+      <li>Если куратор тратит [X] часов на типовые вопросы — что он <em style="color:#f59e0b">не успевает</em> делать за это время?
+        <p class="sub">Цель: она скажет "индивидуальная работа", "продажи", "контент"</p>
+      </li>
+      <li>Если курс вырастет в 2 раза — придётся нанимать второго куратора?
+        <p class="sub">Вскрывает проблему масштабирования</p>
+      </li>
+      <li>Как задержки ответов влияют на то, доходят ли студенты до конца курса?
+        <p class="sub">Низкая доходимость = плохие отзывы = меньше продаж следующего потока</p>
+      </li>
+      <li>Ты сама занимаешься [то что назвала] — что как собственник <em style="color:#f59e0b">не успеваешь</em> делать пока это на тебе?</li>
+    </ul>
+  </div>
+
+  <hr class="sep">
+
+  <!-- N -->
+  <div class="section">
+    <div class="section-head">
+      <span class="badge n">N — Направление</span>
+      <span class="section-hint">Она сама формулирует ценность — не ты. Задаёшь вопрос и ждёшь.</span>
+    </div>
+    <ul class="q-list">
+      <li>Если AI закрывает 80% типовых вопросов — сколько это освобождает часов в месяц?</li>
+      <li>Если куратор перестанет отвечать на рутину — на что направит это время?</li>
+      <li>Если школа может расти без найма новых кураторов — насколько легче масштабироваться?</li>
+    </ul>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ВОЗРАЖЕНИЕ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="badge p">Возражение</span>
+      <span class="section-hint">"А вдруг AI ошибётся с деньгами / билетами?"</span>
+    </div>
+    <div class="quote red">
+      "AI не действует сам — он предлагает, ты подтверждаешь. Нашёл рейс → показал тебе → ты нажала купить. Ошибка невозможна без твоего согласия. Ты всегда последний шаг."
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- КЕЙС -->
+  <div class="section">
+    <div class="section-head">
+      <span class="badge n">Кейс</span>
+      <span class="section-hint">Называй только если спросит "а были похожие проекты?"</span>
+    </div>
+    <div class="kase">
+      <strong>ISnail Academy</strong> — онлайн-школа ногтевого сервиса (Ирина Соколова)<br>
+      AI-куратор «Вика» вместо живого куратора<br><br>
+      <span class="num">7-й студент</span> — окупаемость системы<br>
+      <span class="pill pill-green">100% типовых вопросов закрыты</span>
+      <span class="pill pill-green">$9/мес на API vs $500+ на куратора</span>
+    </div>
+  </div>
+
+  <hr class="sep">
+
+  <!-- ЗАКРЫТИЕ -->
+  <div class="section">
+    <div class="section-head">
+      <span class="badge close">Закрытие · 3 мин</span>
+      <span class="section-hint">После того как она сама назвала потери — вставляй её цифру</span>
+    </div>
+    <div class="quote green">
+      "Маша, ты сама только что сказала что [её цифра / её боль]. Чтобы показать точно где теряется и что делать — нужна диагностика. 3 дня, 30 000 ₽, гарантия возврата если не найдём ничего ценного. После — конкретный план с ROI, и ты сама решаешь. Как смотришь?"
+    </div>
+    <div class="quote amber" style="margin-top:10px;">
+      Если "подумаю" → "Что именно хочешь обдумать? Давай разберём прямо сейчас."
+    </div>
+    <div class="quote red" style="margin-top:10px;">
+      Если "дорого" → "Смотри: диагностика стоит 30к. Если не найдём потерь — вернём деньги. Если найдём — ты увидишь где теряешь в разы больше. Какой риск?"
+    </div>
+  </div>
+
+</body>
+</html>
