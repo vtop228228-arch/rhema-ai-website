@@ -79,6 +79,25 @@ src/components/
   sections/  → все секции страниц (см. SPEC.md §4)
 ```
 
+## Текущая структура страниц (факт, сохраняем)
+
+- `/` → HeroMain · Marquee · ForWho · ServicesTabs · PriceTable · ContactForm
+- `/how-we-work` → HeroHowWeWork · Myths · ServiceStep · Process · Cases · PatternCTA · Stats · Works · DiagnosticPricing · FAQ · ContactForm
+- `/about` → HeroAbout · ComparisonTable · MethodCards · Competencies · Flagship · ContactForm
+- Отзывы (Testimonials) скрыты — были выдуманы, вернуть с реальными.
+
+## Кейсы (Cases.tsx) — статус
+
+Переделаны под реальные проекты Rhema AI: JARVIS (SaaS аналитики продаж), ISnail Academy,
+SigmaUp, LifesystemA. Описание и боли — реальные; **цифры результата помечены `provisional: true`
+и комментарием — ЗАМЕНИТЬ реальными** после завершения внедрений. Не выдумывать новые метрики.
+
+## Следующая фича — AI-агент бесплатной диагностики (SPEC §9)
+
+Ядро: на `/` живой агент мини-диагностики (сфера+боль → карта потерь → лид).
+Модели: Haiku 4.5 (диалог) + Sonnet 4.6 (карта). Хранение: Supabase + дубль в Telegram.
+Это единственная динамическая часть — остальной сайт статичный. Перед сборкой читать SPEC §9.
+
 ## Визуальные детали оригинала (reveluxai.ru)
 
 1. **Фон:** OLED-чёрный `#050505`, НЕ тёмно-синий
