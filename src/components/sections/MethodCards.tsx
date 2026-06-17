@@ -90,7 +90,7 @@ export default function MethodCards() {
                 <div key={i} style={{
                   background: 'var(--card)',
                   border: '1px solid var(--line)',
-                  borderRadius: 6,
+                  borderRadius: 0,
                   padding: 20,
                   display: 'flex',
                   flexDirection: 'column',
@@ -118,16 +118,16 @@ export default function MethodCards() {
                     {/* Традиционно */}
                     <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                       <span style={{ fontSize: 12, color: 'var(--sub)', width: 80, flexShrink: 0 }}>Традиционно</span>
-                      <div style={{ flex: 1, height: 6, background: 'var(--line)', borderRadius: 3, overflow: 'hidden' }}>
-                        <div style={{ width: `${item.tradW * 100}%`, height: '100%', background: 'var(--sub)', borderRadius: 3 }} />
+                      <div style={{ flex: 1, height: 6, background: 'var(--line)', borderRadius: 0, overflow: 'hidden' }}>
+                        <div style={{ width: `${item.tradW * 100}%`, height: '100%', background: 'var(--sub)', borderRadius: 0 }} />
                       </div>
                       <span style={{ fontSize: 12, color: 'var(--sub2)', minWidth: 100, textAlign: 'right' }}>{item.trad}</span>
                     </div>
                     {/* Мы */}
                     <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
                       <span style={{ fontSize: 12, color: 'var(--accent)', width: 80, flexShrink: 0 }}>Мы</span>
-                      <div style={{ flex: 1, height: 6, background: 'var(--line)', borderRadius: 3, overflow: 'hidden' }}>
-                        <div style={{ width: `${item.oursW * 100}%`, height: '100%', background: 'var(--accent)', borderRadius: 3 }} />
+                      <div style={{ flex: 1, height: 6, background: 'var(--line)', borderRadius: 0, overflow: 'hidden' }}>
+                        <div style={{ width: `${item.oursW * 100}%`, height: '100%', background: 'var(--accent)', borderRadius: 0 }} />
                       </div>
                       <span style={{ fontSize: 12, color: 'var(--ink)', fontWeight: 700, minWidth: 100, textAlign: 'right' }}>{item.ours}</span>
                     </div>

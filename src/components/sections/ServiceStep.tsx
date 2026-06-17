@@ -71,7 +71,7 @@ export default function ServiceStep() {
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  fontSize: 14,
+                  fontSize: 16,
                   fontWeight: 700,
                   color: active === i ? 'var(--accent)' : 'var(--sub)',
                   textDecoration: active === i ? 'underline' : 'none',
@@ -82,8 +82,6 @@ export default function ServiceStep() {
                 {s.label}
               </button>
             ))}
-            {active === 0 && <span style={{ color: 'var(--sub)', fontSize: 14 }}>→ ШАГ 2</span>}
-            {active === 1 && <span style={{ color: 'var(--sub)', fontSize: 14 }}>ШАГ 1 ←</span>}
           </div>
 
           {/* Контент */}
@@ -154,12 +152,6 @@ export default function ServiceStep() {
                   <strong style={{ color: 'var(--ink)' }}>Срок:</strong>{' '}
                   <span style={{ color: 'var(--sub2)' }}>{step.term}</span>
                 </p>
-                {'guarantee' in step && step.guarantee && (
-                  <p style={{ fontSize: 13, margin: 0 }}>
-                    <strong style={{ color: 'var(--ink)' }}>Гарантия:</strong>{' '}
-                    <span style={{ color: 'var(--sub2)' }}>{step.guarantee}</span>
-                  </p>
-                )}
                 {'price' in step && step.price && (
                   <p style={{ fontSize: 13, margin: 0 }}>
                     <strong style={{ color: 'var(--ink)' }}>Цена:</strong>{' '}
@@ -182,7 +174,7 @@ export default function ServiceStep() {
             <div style={{
               background: 'var(--card)',
               border: '1px solid var(--line)',
-              borderRadius: 3,
+              borderRadius: 0,
               aspectRatio: '3/4',
               display: 'flex',
               alignItems: 'center',

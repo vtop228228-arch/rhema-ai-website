@@ -39,7 +39,7 @@ export default function Works() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
             {CASES.map((c, i) => (
               <div key={i} style={{
-                background: 'linear-gradient(145deg, #181818, #121212)',
+                background: 'linear-gradient(145deg, rgba(24,24,24,0.88), rgba(18,18,18,0.88))',
                 border: '1px solid var(--line)',
                 borderRadius: 'var(--radius)',
                 padding: 28,
@@ -52,7 +52,7 @@ export default function Works() {
                 transition: 'border-color 0.25s, transform 0.25s',
               }}
               onMouseEnter={e => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,92,26,0.3)';
+                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,106,0,0.3)';
                 (e.currentTarget as HTMLElement).style.transform = 'translateY(-3px)';
               }}
               onMouseLeave={e => {
@@ -65,8 +65,8 @@ export default function Works() {
                   display: 'inline-flex',
                   alignSelf: 'flex-start',
                   padding: '4px 12px',
-                  border: '1px solid rgba(255,92,26,0.35)',
-                  borderRadius: 100,
+                  border: '1px solid rgba(255,106,0,0.35)',
+                  borderRadius: 0,
                   fontSize: 12,
                   fontWeight: 600,
                   color: 'var(--accent)',
@@ -77,21 +77,21 @@ export default function Works() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
                   <div>
-                    <p style={{ fontSize: 11, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, fontWeight: 600 }}>Думал:</p>
+                    <p style={{ fontSize: 12, color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, fontWeight: 600 }}>Думал:</p>
                     <p style={{ fontSize: 14, color: 'var(--ink)', fontStyle: 'italic' }}>{c.thought}</p>
                   </div>
                   <div style={{ height: 1, background: 'var(--line)' }} />
                   <div>
-                    <p style={{ fontSize: 11, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, fontWeight: 600 }}>Правда:</p>
-                    <p style={{ fontSize: 14, color: 'var(--sub2)', lineHeight: 1.55 }}>{c.truth}</p>
+                    <p style={{ fontSize: 12, color: '#888', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 6, fontWeight: 600 }}>Правда:</p>
+                    <p style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.55 }}>{c.truth}</p>
                   </div>
                 </div>
 
                 {/* Потери */}
                 <div style={{
                   padding: '12px 16px',
-                  background: 'rgba(255,92,26,0.06)',
-                  border: '1px solid rgba(255,92,26,0.15)',
+                  background: 'rgba(255,106,0,0.06)',
+                  border: '1px solid rgba(255,106,0,0.15)',
                   borderRadius: 'var(--radius-sm)',
                   display: 'flex',
                   alignItems: 'center',

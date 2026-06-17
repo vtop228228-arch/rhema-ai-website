@@ -130,7 +130,7 @@ export default function Cases() {
                 <div style={{
                   background: 'var(--card)',
                   border: '1px solid var(--line)',
-                  borderRadius: 3,
+                  borderRadius: 0,
                   padding: 20,
                 }}>
                   <p style={{ fontSize: 12, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 10px', fontWeight: 700 }}>
@@ -145,7 +145,7 @@ export default function Cases() {
                 <div style={{
                   background: 'var(--card)',
                   border: '1px solid var(--line)',
-                  borderRadius: 3,
+                  borderRadius: 0,
                   padding: 20,
                 }}>
                   <p style={{ fontSize: 12, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 10px', fontWeight: 700 }}>
@@ -163,7 +163,7 @@ export default function Cases() {
                 <div style={{
                   background: 'var(--card)',
                   border: '1px solid var(--line)',
-                  borderRadius: 3,
+                  borderRadius: 0,
                   padding: 20,
                 }}>
                   <p style={{ fontSize: 12, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 10px', fontWeight: 700 }}>
@@ -176,7 +176,7 @@ export default function Cases() {
                 <div style={{
                   background: 'var(--card)',
                   border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
-                  borderRadius: 3,
+                  borderRadius: 0,
                   padding: 20,
                 }}>
                   <p style={{ fontSize: 12, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 10px', fontWeight: 700 }}>

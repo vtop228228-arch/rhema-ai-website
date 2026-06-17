@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
-import { Bebas_Neue, Plus_Jakarta_Sans } from 'next/font/google';
+import { Bebas_Neue, Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import ShaderBackground from '@/components/ui/ShaderBackground';
 
 const bebasNeue = Bebas_Neue({
   weight: '400',
@@ -11,11 +12,11 @@ const bebasNeue = Bebas_Neue({
   display: 'swap',
 });
 
-// Inter BANNED по скиллу → Plus Jakarta Sans (premium SaaS typography)
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800'],
-  variable: '--font-jakarta',
+// Шрифт тела — Inter (как в дизайн-макете Rhema AI).
+const inter = Inter({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600'],
+  variable: '--font-inter',
   display: 'swap',
 });
 
@@ -27,11 +28,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${bebasNeue.variable} ${plusJakartaSans.variable}`}>
+    <html lang="ru" className={`${bebasNeue.variable} ${inter.variable}`}>
       <body>
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <ShaderBackground />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   );

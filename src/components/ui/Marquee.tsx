@@ -1,43 +1,38 @@
-const ITEMS = [
-  'AI-агенты', 'Telegram Mini Apps', 'Автоматизация',
-  'Диагностика бизнеса', 'SaaS-платформы', 'Разработка ПО',
-  'RAG-системы', 'Интеграции', 'Claude Opus', 'Supabase',
-  'Next.js 15', 'Мультиагентные системы',
+const ITEMS: { label: string; accent?: boolean }[] = [
+  { label: 'AI-АГЕНТЫ 24/7' },
+  { label: 'ROI ЗА 1–2 МЕСЯЦА' },
+  { label: 'ВНЕДРЕНИЕ ПОД КЛЮЧ' },
+  { label: 'БЕСПЛАТНАЯ ДИАГНОСТИКА', accent: true },
+  { label: 'ОСТРЫЕ РЕШЕНИЯ ДЛЯ БИЗНЕСА' },
 ];
 
-export default function Marquee() {
-  const doubled = [...ITEMS, ...ITEMS];
-
+function Track() {
   return (
-    <div style={{
-      borderTop: '1px solid var(--line)',
-      borderBottom: '1px solid var(--line)',
-      background: 'var(--bg2)',
-      overflow: 'hidden',
-      padding: '14px 0',
-    }}>
-      <div style={{
-        display: 'flex',
-        gap: 48,
-        animation: 'marquee 30s linear infinite',
-        width: 'max-content',
-      }}>
-        {doubled.map((item, i) => (
-          <span key={i} style={{ display: 'flex', alignItems: 'center', gap: 48, whiteSpace: 'nowrap' }}>
-            <span style={{ fontSize: 12, fontWeight: 600, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--sub)' }}>
-              {item}
-            </span>
-            <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--accent)', opacity: 0.6, flexShrink: 0 }} />
+    <div style={{ display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>
+      {ITEMS.map((item, i) => (
+        <span key={i} style={{ display: 'inline-flex', alignItems: 'center' }}>
+          <span style={{
+            fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif',
+            fontSize: 15, letterSpacing: '2.5px',
+            color: item.accent ? 'var(--accent)' : '#888',
+            padding: '11px 20px',
+          }}>
+            {item.label}
           </span>
-        ))}
-      </div>
+          <span style={{ color: 'rgba(255,106,0,0.35)', padding: '0 2px', fontSize: 15, lineHeight: 1 }}>→</span>
+        </span>
+      ))}
+    </div>
+  );
+}
 
-      <style>{`
-        @keyframes marquee {
-          from { transform: translateX(0); }
-          to   { transform: translateX(-50%); }
-        }
-      `}</style>
+export default function Marquee() {
+  return (
+    <div style={{ overflow: 'hidden', background: 'var(--bg2)', borderTop: '1px solid #0E0E0E', borderBottom: '1px solid #0E0E0E' }}>
+      <div style={{ display: 'flex', width: 'max-content', alignItems: 'center', animation: 'marquee 44s linear infinite' }}>
+        <Track />
+        <Track />
+      </div>
     </div>
   );
 }

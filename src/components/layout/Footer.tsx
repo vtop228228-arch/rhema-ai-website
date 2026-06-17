@@ -1,92 +1,25 @@
-'use client';
-
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer style={{ borderTop: '1px solid var(--line)', background: 'var(--bg)' }}>
+    <footer className="footer-pad" style={{ borderTop: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, padding: '24px 72px' }}>
+      <Link href="/" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+        <Image src="/logo.png" alt="RHEMA AI" height={22} width={61} style={{ height: 22, width: 'auto', display: 'block' }} />
+      </Link>
 
-      {/* Нижняя строка */}
-      <div className="container" style={{ padding: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 16 }}>
+      <span style={{ fontSize: 12, color: '#666' }}>© 2026 Rhema AI. Все права защищены.</span>
 
-        {/* Логотип */}
-        <Link href="/" style={{ textDecoration: 'none' }}>
-          <span className="font-bebas" style={{ fontSize: 22, letterSpacing: '0.08em', color: 'var(--ink)' }}>
-            RHEMA <span style={{ color: 'var(--accent)' }}>AI</span>
-          </span>
-        </Link>
-
-        {/* Иконки соцсетей */}
-        <div style={{ display: 'flex', gap: 10 }}>
-          <a
-            href="mailto:vtop228228@gmail.com"
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: '50%',
-              background: 'var(--card)',
-              border: '1px solid var(--line)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textDecoration: 'none',
-              color: 'var(--sub)',
-              fontSize: 16,
-              transition: 'border-color 0.2s, color 0.2s',
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)';
-              (e.currentTarget as HTMLElement).style.color = 'var(--accent)';
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLElement).style.borderColor = 'var(--line)';
-              (e.currentTarget as HTMLElement).style.color = 'var(--sub)';
-            }}
-          >
-            ✉
-          </a>
-          <a
-            href="https://t.me/rhema_ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: '50%',
-              background: 'var(--card)',
-              border: '1px solid var(--line)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textDecoration: 'none',
-              color: 'var(--sub)',
-              fontSize: 14,
-              transition: 'border-color 0.2s, color 0.2s',
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)';
-              (e.currentTarget as HTMLElement).style.color = 'var(--accent)';
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLElement).style.borderColor = 'var(--line)';
-              (e.currentTarget as HTMLElement).style.color = 'var(--sub)';
-            }}
-          >
-            ✈
-          </a>
-        </div>
+      <div style={{ display: 'flex', gap: 22 }}>
+        <a href="https://t.me/rhema_ai" target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: '#888', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 500 }}>Telegram</a>
+        <a href="https://wa.me/79999999999" target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: '#888', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 500 }}>WhatsApp</a>
       </div>
 
-      {/* Разделитель + копирайт */}
-      <div style={{ borderTop: '1px solid var(--line)' }}>
-        <div className="container" style={{ padding: '14px 24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-          <span style={{ fontSize: 12, color: 'var(--sub)' }}>© 2026 Rhema AI. Все права защищены.</span>
-          <Link href="/privacy" style={{ fontSize: 12, color: 'var(--sub)', textDecoration: 'none' }}>
-            Политика конфиденциальности
-          </Link>
-        </div>
-      </div>
-
+      <style>{`
+        @media (max-width: 720px) {
+          .footer-pad { padding: 24px 22px !important; justify-content: center; text-align: center; }
+        }
+      `}</style>
     </footer>
   );
 }

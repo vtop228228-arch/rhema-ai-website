@@ -1,67 +1,53 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════
-   RHEMA AI — Premium Design System
-   Vibe: Ethereal Glass (SaaS/AI/Tech)
-   Font: Plus Jakarta Sans + Bebas Neue
+   RHEMA AI — Design System «Industrial»
+   Vibe: OLED-чёрный монолит + оранжевый акцент
+   Font: Inter (body) + Bebas Neue (headings)
+   Острые углы, плоские блоки, минимум декора.
+   Источник: design-export/RHEMA AI Landing.dc.html
    ═══════════════════════════════════════════════ */
 
 :root {
-  /* Palette — OLED black foundation */
-  --bg:      #050505;
-  --bg2:     #080808;
-  --card:    #0d0d0d;
-  --card2:   #110e0b;
-  --line:    rgba(255,255,255,0.07);
-  --line2:   rgba(255,255,255,0.12);
-  --accent:  #FF5C1A;
-  --accent2: #FF7A3D;
-  --accent-dim: rgba(255,92,26,0.12);
+  /* Palette */
+  --bg:      rgba(9,9,9,0.88);
+  --bg2:     rgba(7,7,7,0.88);
+  --card:    rgba(12,12,12,0.88);
+  --card2:   rgba(13,13,13,0.88);
+  --line:    #0F0F0F;
+  --line2:   #141414;
+  --accent:  #FF6A00;
+  --accent2: #FF7A1A;
+  --accent-dim: rgba(255,106,0,0.08);
   --green:   #22C55E;
-  --red:     #EF4444;
-  --ink:     #F5F5F5;
-  --ink2:    #E0E0E0;
-  --sub:     #4a4a4a;
+  --red:     #D95252;
+  --ink:     #F0EEE8;
+  --ink2:    #C0BBB2;
+  --sub:     #505050;
   --sub2:    #888888;
-  --blue: var(--accent);
+  --blue: var(--accent);   /* legacy-алиас → оранжевый */
 
-  /* Radius system */
-  --r-xs:  6px;
-  --r-sm:  10px;
-  --r:     14px;
-  --r-lg:  20px;
-  --r-xl:  28px;
-  --r-full: 9999px;
-
-  /* Shadows */
-  --shadow-sm:  0 1px 3px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
-  --shadow-md:  0 4px 20px rgba(0,0,0,0.6), 0 1px 4px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
-  --shadow-lg:  0 8px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
-  --glow:       0 0 32px rgba(255,92,26,0.18), 0 0 8px rgba(255,92,26,0.1);
-  --glow-sm:    0 0 16px rgba(255,92,26,0.12);
-
-  /* Motion */
-  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-spring:   cubic-bezier(0.32, 0.72, 0, 1);
-  --ease-smooth:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --glow: 0 0 28px 8px rgba(255,106,0,0.2);
 }
 
 @theme {
-  --color-bg:      #050505;
-  --color-bg2:     #080808;
-  --color-card:    #0d0d0d;
-  --color-card2:   #110e0b;
-  --color-accent:  #FF5C1A;
-  --color-accent2: #FF7A3D;
+  --color-bg:      #090909;
+  --color-bg2:     #070707;
+  --color-card:    #0C0C0C;
+  --color-card2:   #0D0D0D;
+  --color-accent:  #FF6A00;
+  --color-accent2: #FF7A1A;
   --color-green:   #22C55E;
-  --color-red:     #EF4444;
-  --color-ink:     #F5F5F5;
-  --color-sub:     #4a4a4a;
+  --color-red:     #D95252;
+  --color-ink:     #F0EEE8;
+  --color-ink2:    #C0BBB2;
+  --color-sub:     #505050;
   --color-sub2:    #888888;
-  --color-blue:    #FF5C1A;
-  --color-line:    rgba(255,255,255,0.07);
+  --color-blue:    #FF6A00;
+  --color-line:    #0F0F0F;
+  --color-line2:   #141414;
   --font-bebas:    var(--font-bebas), 'Bebas Neue', sans-serif;
-  --font-jakarta:  var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
+  --font-inter:    var(--font-inter), 'Inter', system-ui, sans-serif;
 }
 
 /* ── Reset ── */
@@ -74,237 +60,142 @@
 html { scroll-behavior: smooth; }
 
 body {
-  background: var(--bg);
+  background: transparent;
   color: var(--ink);
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 15px;
-  line-height: 1.72;
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'kern' 1, 'liga' 1;
-  position: relative;
 }
 
-/* ── Радиальный фоновый glow (оранжевое свечение сверху) ── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(255,92,26,0.07) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 30% at 80% 20%, rgba(255,92,26,0.04) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
+a { text-decoration: none; }
+button { cursor: pointer; }
+
+/* ── Keyframes (из макета) ── */
+@keyframes blink   { 0%,100%{opacity:1} 50%{opacity:0.1} }
+@keyframes fadeUp  { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+@keyframes spin    { to{transform:rotate(360deg)} }
+@keyframes shimmer { 0%,100%{opacity:0.2} 50%{opacity:1} }
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+@keyframes ctaGlow { 0%,100%{box-shadow:0 0 0 0 rgba(255,106,0,0)} 50%{box-shadow:0 0 28px 8px rgba(255,106,0,0.2)} }
+
+/* ── Layout helpers ── */
+/* Полноширинная секция с горизонтальными отступами как в макете. */
+.section-pad { padding: 68px 72px; }
+
+@media (max-width: 720px) {
+  .section-pad { padding: 48px 22px; }
 }
 
-/* ── Noise grain overlay ── */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  opacity: 0.025;
-  pointer-events: none;
-  z-index: 1;
+/* Заголовок секции: маркер + Bebas + линия */
+.section-head {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 36px;
+}
+.section-head .dot {
+  width: 4px; height: 4px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.section-head .title {
+  font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
+  font-size: 34px;
+  letter-spacing: 2px;
+  color: var(--ink);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.section-head .rule {
+  flex: 1;
+  height: 1px;
+  background: var(--line);
 }
 
-/* ── Контейнер ── */
-.container {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 32px;
-  position: relative;
-  z-index: 2;
+/* ── Eyebrow (оранжевая линия + текст) ── */
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.eyebrow .bar {
+  width: 36px; height: 1px;
+  background: var(--accent);
+}
+.eyebrow .text {
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 600;
 }
 
-/* ── Секции ── */
-.section     { padding: 112px 0; position: relative; }
-.section-alt { padding: 112px 0; background: var(--bg2); position: relative; }
-
-/* ── КНОПКИ (сохраняем скошенный край как бренд-элемент) ── */
+/* ── КНОПКИ — плоская оранжевая заливка (стиль макета) ── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-weight: 700;
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
   cursor: pointer;
   white-space: nowrap;
   text-decoration: none;
   border: none;
   outline: none;
-  clip-path: polygon(14px 0%, 100% 0%, 100% 100%, 0% 100%);
-  transition: all 0.4s var(--ease-out-expo);
-  position: relative;
-  overflow: hidden;
+  transition: opacity 0.15s, background 0.18s, border-color 0.18s, color 0.18s;
 }
-.btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.btn:hover::before { opacity: 1; }
-.btn:active { transform: scale(0.98); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-.btn-sm  { padding: 9px 20px 9px 28px; }
-.btn-md  { padding: 12px 28px 12px 34px; }
-.btn-lg  { padding: 15px 36px 15px 44px; font-size: 14px; letter-spacing: 0.07em; }
+.btn-sm  { padding: 8px 18px;  font-size: 14px; }
+.btn-md  { padding: 11px 20px; font-size: 16px; }
+.btn-lg  { padding: 13px 22px; font-size: 19px; }
 
+/* Основная — заливка */
 .btn-blue {
-  background: linear-gradient(135deg, var(--accent) 0%, #e84f10 100%);
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(255,92,26,0.4), 0 1px 0 rgba(255,255,255,0.15) inset;
+  background: var(--accent);
+  color: #090909;
 }
-.btn-blue:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--accent2) 0%, var(--accent) 100%);
-  box-shadow: 0 8px 32px rgba(255,92,26,0.55), 0 1px 0 rgba(255,255,255,0.2) inset;
-  transform: translateY(-2px) scale(1.01);
-}
+.btn-blue:hover:not(:disabled) { opacity: 0.82; }
 
+/* Outline */
 .btn-line {
   background: transparent;
-  border: 1px solid rgba(255,92,26,0.4);
+  border: 1px solid rgba(255,106,0,0.45);
   color: var(--accent);
 }
 .btn-line:hover:not(:disabled) {
-  border-color: rgba(255,92,26,0.7);
-  background: rgba(255,92,26,0.06);
-  box-shadow: var(--glow-sm);
+  border-color: rgba(255,106,0,0.8);
+  background: rgba(255,106,0,0.06);
 }
 
+/* Тёмная */
 .btn-dim {
-  background: rgba(255,255,255,0.04);
+  background: var(--card);
   border: 1px solid var(--line2);
   color: var(--sub2);
 }
 .btn-dim:hover:not(:disabled) {
   border-color: rgba(255,255,255,0.2);
   color: var(--ink);
-  background: rgba(255,255,255,0.07);
-}
-
-/* ── SECTION LABEL — eyebrow pill badge ── */
-.section-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--accent);
-  padding: 5px 12px 5px 10px;
-  background: rgba(255,92,26,0.08);
-  border: 1px solid rgba(255,92,26,0.2);
-  border-radius: var(--r-full);
-}
-.section-label::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--accent);
-  flex-shrink: 0;
-  box-shadow: 0 0 8px rgba(255,92,26,0.6);
-}
-
-/* ── КАРТОЧКИ — Double-Bezel architecture ── */
-
-/* Outer shell */
-.card-shell {
-  padding: 1px;
-  background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
-  border-radius: var(--r-lg);
-  transition: all 0.45s var(--ease-out-expo);
-}
-.card-shell:hover {
-  background: linear-gradient(145deg, rgba(255,92,26,0.2) 0%, rgba(255,92,26,0.04) 100%);
-}
-
-/* Inner core */
-.card {
-  background: linear-gradient(145deg, #131313 0%, #0c0c0c 100%);
-  border-radius: calc(var(--r-lg) - 1px);
-  padding: 28px;
-  box-shadow: var(--shadow-md);
-  transition: all 0.45s var(--ease-out-expo);
-  position: relative;
-  overflow: hidden;
-}
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-}
-
-/* Simple card (без shell) */
-.card-simple {
-  background: linear-gradient(145deg, #131313 0%, #0c0c0c 100%);
-  border: 1px solid var(--line);
-  border-radius: var(--r);
-  padding: 28px;
-  box-shadow: var(--shadow-sm);
-  transition: border-color 0.35s var(--ease-smooth), box-shadow 0.35s var(--ease-smooth), transform 0.35s var(--ease-smooth);
-  position: relative;
-  overflow: hidden;
-}
-.card-simple::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
-}
-.card-simple:hover {
-  border-color: rgba(255,92,26,0.25);
-  box-shadow: var(--shadow-md), var(--glow-sm);
-  transform: translateY(-3px);
-}
-
-/* Accent card */
-.card-accent {
-  background: linear-gradient(145deg, #141008 0%, #0d0905 100%);
-  border: 1px solid rgba(255,92,26,0.2);
-  border-radius: var(--r);
-  padding: 28px;
-  box-shadow: var(--shadow-sm), 0 0 20px rgba(255,92,26,0.06);
-  transition: all 0.35s var(--ease-smooth);
-}
-.card-accent:hover {
-  border-color: rgba(255,92,26,0.4);
-  box-shadow: var(--shadow-md), var(--glow);
-  transform: translateY(-3px);
 }
 
 /* ── INPUT ── */
 .input-base {
-  padding: 13px 18px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: var(--r-sm);
+  background: #131313;
+  border: 1px solid #1C1C1C;
   color: var(--ink);
+  padding: 11px 14px;
   font-size: 14px;
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  outline: none;
-  transition: border-color 0.3s var(--ease-smooth), box-shadow 0.3s var(--ease-smooth);
+  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
   width: 100%;
+  outline: none;
+  transition: border-color 0.18s;
 }
-.input-base::placeholder { color: var(--sub); }
-.input-base:focus {
-  border-color: rgba(255,92,26,0.4);
-  box-shadow: 0 0 0 3px rgba(255,92,26,0.08);
-}
+.input-base::placeholder { color: var(--sub2); }
+.input-base:focus { border-color: rgba(255,106,0,0.55); }
 
 /* ── DIVIDER ── */
 .divider { height: 1px; background: var(--line); }
@@ -312,42 +203,60 @@ body::after {
 /* ── TYPOGRAPHY ── */
 h1, h2, h3, h4 {
   font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   line-height: 1.04;
   color: var(--ink);
-}
-
-/* ── STAT NUMBER ── */
-.stat-number {
-  font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
-  font-size: 72px;
-  line-height: 1;
-  color: var(--accent);
-  letter-spacing: 0.01em;
-  text-shadow: 0 0 40px rgba(255,92,26,0.25);
-}
-
-/* ── PILL ── */
-.pill {
-  display: inline-flex;
-  align-items: center;
-  padding: 5px 14px;
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: var(--r-full);
-  font-size: 12px;
-  color: var(--sub2);
-  background: rgba(255,255,255,0.03);
-  font-family: var(--font-jakarta), 'Plus Jakarta Sans', sans-serif;
-  transition: all 0.3s var(--ease-smooth);
-}
-.pill:hover {
-  border-color: rgba(255,92,26,0.35);
-  color: var(--ink);
-  background: rgba(255,92,26,0.05);
+  font-weight: 400;
 }
 
 /* ── SCROLLBAR ── */
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 2px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,92,26,0.3); }
+::-webkit-scrollbar-thumb { background: #1E1E1E; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,106,0,0.4); }
+
+/* ── Compat vars (Industrial: no rounding, no glow) ── */
+:root {
+  --radius: 0px;
+  --radius-sm: 0px;
+  --radius-lg: 0px;
+  --shadow-card: none;
+}
+
+/* ── Legacy section/container layout ── */
+.section     { padding: 68px 72px; }
+.section-alt { padding: 68px 72px; background: var(--bg2); }
+.container   { max-width: 1120px; margin-left: auto; margin-right: auto; }
+
+@media (max-width: 720px) {
+  .section, .section-alt { padding: 48px 22px; }
+}
+
+/* ── Stat number ── */
+.stat-number {
+  font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
+  font-size: 56px;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: 2px;
+}
+
+/* ── Section label (eyebrow-pill) ── */
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 10px;
+  color: var(--accent);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.section-label::before {
+  content: '';
+  width: 22px;
+  height: 1px;
+  background: var(--accent);
+  flex-shrink: 0;
+}

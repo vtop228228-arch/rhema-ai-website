@@ -41,7 +41,7 @@ export default function Myths() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
             {MYTHS.map((item, i) => (
               <div key={i} style={{
-                background: 'linear-gradient(145deg, #181818, #121212)',
+                background: 'linear-gradient(145deg, rgba(24,24,24,0.88), rgba(18,18,18,0.88))',
                 border: '1px solid var(--line)',
                 borderRadius: 'var(--radius)',
                 padding: 22,

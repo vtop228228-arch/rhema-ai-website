@@ -24,7 +24,7 @@ export default function Stats() {
               }}
             >
               <div className="stat-number">{stat.value}</div>
-              <p style={{ fontSize: 13, color: 'var(--sub2)', margin: 0, maxWidth: 120 }}>
+              <p style={{ fontSize: 15, color: 'var(--ink2)', margin: 0, maxWidth: 120 }}>
                 {stat.label}
               </p>
             </div>

@@ -1,352 +1,179 @@
 'use client';
 
 import { useState } from 'react';
-import SectionLabel from '@/components/ui/SectionLabel';
-import Button from '@/components/ui/Button';
 
-const TABS = [
-  {
-    id: 'diagnostics',
-    label: 'ДИАГНОСТИКА',
-    content: {
-      type: 'diagnostics',
-      title: 'ДИАГНОСТИКА БИЗНЕС-ПРОЦЕССОВ',
-      subtitle: 'Ваша точка входа — без риска',
-      problem: [
-        '90% компаний внедряют AI не там, где он нужен.',
-        'Покупают модные инструменты, которые не решают реальных проблем.',
-      ],
-      approach: 'Мы проводим глубокий анализ ваших процессов и находим конкретные точки, где автоматизация принесёт измеримую прибыль — а где не принесёт.',
-      gets: [
-        'Карта бизнес-процессов с оценкой потенциала',
-        'Расчёт ROI для каждой точки внедрения',
-        'Приоритизированный roadmap',
-        'Оценка сроков и бюджета',
-      ],
-      term: '3 дня',
-      price: 'Бесплатно',
-      guarantee: 'не найдём проблем — вернём деньги (за 53 диагностики такого не было)',
-      cta: 'Заказать диагностику',
-    },
-  },
-  {
-    id: 'agents',
-    label: 'AI-АГЕНТЫ',
-    content: {
-      type: 'agents',
-      title: 'AI-АГЕНТЫ ДЛЯ БИЗНЕСА',
-      subtitle: 'Не «голые» боты — полноценные системы',
-      groups: [
-        {
-          name: 'Для продаж',
-          items: [
-            'Нейропродажник — первый контакт, квалификация, передача в CRM',
-            'AI-обработка заявок — мгновенные ответы 24/7',
-            'WhatsApp/Telegram агент — автоматизация переписки',
-            'AI-автодозвон — массовый обзвон с квалификацией',
-          ],
-        },
-        {
-          name: 'Для поддержки',
-          items: [
-            'FAQ-бот 24/7 — ответы без участия человека',
-            'Сервис-деск триаж — маршрутизация обращений',
-            'Анти-No-Show — напоминания о записях',
-          ],
-        },
-        {
-          name: 'Для аналитики:',
-          items: [
-            'AI-аналитик звонков — проверка 100% разговоров',
-            'BI-дашборд с AI — визуализация + рекомендации',
-            'Предиктивная аналитика — прогнозы и тренды',
-          ],
-        },
-        {
-          name: 'Для HR:',
-          items: [
-            'AI HR-скрининг — первичное интервьюирование',
-            'Онбординг-агент — адаптация новичков',
-          ],
-        },
-      ],
-      includes: [
-        'Веб-интерфейс для управления',
-        'Интеграции с CRM',
-        'Дашборд аналитики',
-        '30 дней поддержки',
-      ],
-      term: '5-14 дней',
-      price: 'от 60 000 ₽',
-      cta: 'Посмотреть каталог',
-    },
-  },
-  {
-    id: 'development',
-    label: 'РАЗРАБОТКА ПО',
-    content: {
-      type: 'development',
-      title: 'РАЗРАБОТКА ПО ПОД AI',
-      subtitle: 'AI-агент без интерфейса — как двигатель без машины.\nРаботает, но пользоваться неудобно.',
-      groups: [
-        {
-          name: 'Веб-приложения',
-          items: ['Дашборды и админ-панели', 'Личные кабинеты', 'CRM-интерфейсы'],
-        },
-        {
-          name: 'Мобильная разработка',
-          items: ['PWA-приложения', 'Mini app Telegram', 'Нативные приложения'],
-        },
-        {
-          name: 'Интеграции',
-          items: ['AmoCRM, Bitrix24, 1С', 'Телефония', 'Платёжные системы', 'Любые API'],
-        },
-        {
-          name: 'BI-аналитика',
-          items: ['Realtime-дашборды', 'Автоматические отчёты', 'Экспорт в Excel/PDF'],
-        },
-      ],
-      term: 'от 7 дней',
-      price: 'от 150 000 ₽',
-      cta: 'Обсудить проект',
-    },
-  },
-  {
-    id: 'saas',
-    label: 'SAAS-ПЛАТФОРМЫ',
-    content: {
-      type: 'saas',
-      title: 'SAAS-ПЛАТФОРМЫ',
-      subtitle: 'Компании, которые хотят масштабировать AI на всю организацию или монетизировать решение.',
-      stages: [
-        { name: 'Discovery', term: '1-2 недели' },
-        { name: 'PoC', term: '3-6 недель' },
-        { name: 'Pilot', term: '1-2 месяца' },
-        { name: 'Scale', term: '2-3 месяца' },
-      ],
-      includes: {
-        groups: [
-          { name: 'Архитектура', items: ['мультитенантность', 'защита данных', 'масштабируемость'] },
-          { name: 'Бизнес-логика', items: ['биллинг', 'роли', 'white-label'] },
-          { name: 'Поддержка', items: ['3 мес сопровождения', 'документация', 'обучение'] },
-          { name: 'Безопасность', items: ['152-ФЗ', 'хэширование', 'rate limit'] },
-        ],
-        example: 'За 6 недель создали платформу с 33 Edge Functions, 200+ компонентами, интеграцией AmoCRM, двухуровневым AI-анализом. Традиционная оценка: $195K-$335K.',
-      },
-      term: 'от 4 недель',
-      price: 'от 490 000 ₽',
-      cta: 'Обсудить проект',
-    },
-  },
-];
+const TABS = ['ДИАГНОСТИКА', 'AI-АГЕНТЫ', 'РАЗРАБОТКА ПО', 'SAAS-ПЛАТФОРМЫ'];
 
-export default function ServicesTabs() {
-  const [active, setActive] = useState(0);
-  const tab = TABS[active];
-  const c = tab.content;
+const bebas = 'var(--font-bebas), Bebas Neue, sans-serif';
 
+function Bullet({ children }: { children: React.ReactNode }) {
   return (
-    <section className="section">
-      <div className="container">
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+    <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+      <div style={{ width: 3, height: 3, background: 'var(--accent)', flexShrink: 0, marginTop: 7 }} />
+      <span style={{ fontSize: 14, color: 'var(--ink2)' }}>{children}</span>
+    </div>
+  );
+}
 
-          {/* Метка */}
-          <SectionLabel>Мы делаем так:</SectionLabel>
+function Category({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div style={{ background: 'var(--card)', padding: '20px 22px' }}>
+      <div style={{ fontSize: 11, color: 'var(--accent)', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 10, fontWeight: 700 }}>{title}</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        {items.map((it, i) => <Bullet key={i}>{it}</Bullet>)}
+      </div>
+    </div>
+  );
+}
 
-          {/* Табы */}
-          <div style={{ display: 'flex', gap: 0, borderBottom: '1px solid var(--line)' }}>
-            {TABS.map((t, i) => (
-              <button
-                key={t.id}
-                onClick={() => setActive(i)}
-                style={{
-                  padding: '10px 20px',
-                  background: 'none',
-                  border: 'none',
-                  borderBottom: active === i ? '2px solid var(--accent)' : '2px solid transparent',
-                  marginBottom: -1,
-                  cursor: 'pointer',
-                  fontSize: 13,
-                  fontWeight: 700,
-                  letterSpacing: '0.06em',
-                  color: active === i ? 'var(--accent)' : 'var(--sub)',
-                  transition: 'color 0.2s',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {t.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Контент */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 48, alignItems: 'start' }}>
-
-            {/* Левая часть */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <div>
-                <h2 className="font-bebas text-ink" style={{ fontSize: 32, letterSpacing: '0.03em', margin: '0 0 4px' }}>
-                  {c.title}
-                </h2>
-                <p style={{ fontSize: 14, color: 'var(--sub)', margin: 0 }}>{c.subtitle}</p>
-              </div>
-
-              <div style={{ height: 1, background: 'var(--line)' }} />
-
-              {/* Диагностика */}
-              {'problem' in c && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  <div>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', margin: '0 0 8px' }}>Проблема:</p>
-                    {c.problem.map((p, i) => (
-                      <p key={i} style={{ fontSize: 14, color: 'var(--sub2)', margin: '0 0 4px' }}>• {p}</p>
-                    ))}
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', margin: '0 0 8px' }}>Наш подход:</p>
-                    <p style={{ fontSize: 14, color: 'var(--sub2)', lineHeight: 1.6, margin: 0 }}>{c.approach}</p>
-                  </div>
-                  <div>
-                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', margin: '0 0 8px' }}>Что получаете:</p>
-                    {c.gets.map((g, i) => (
-                      <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
-                        <span style={{ color: 'var(--accent)', flexShrink: 0 }}>✓</span>
-                        <span style={{ fontSize: 14, color: 'var(--ink)' }}>{g}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* AI-агенты и Разработка ПО — 2x2 grid карточек */}
-              {'groups' in c && (
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                  {c.groups.map((g, i) => (
-                    <div key={i} style={{
-                      background: 'var(--card)',
-                      border: '1px solid var(--line)',
-                      borderRadius: 3,
-                      padding: 16,
-                    }}>
-                      <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', margin: '0 0 8px' }}>{g.name}</p>
-                      {g.items.map((item, j) => (
-                        <div key={j} style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
-                          <span style={{ color: 'var(--accent)', fontSize: 12, flexShrink: 0 }}>✓</span>
-                          <span style={{ fontSize: 13, color: 'var(--ink)' }}>{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* AI-агенты: "Каждый агент включает:" */}
-              {'includes' in c && Array.isArray(c.includes) && (
-                <div>
-                  <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)', margin: '0 0 10px' }}>Каждый агент включает:</p>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-                    {c.includes.map((item, i) => (
-                      <div key={i} style={{ display: 'flex', gap: 8 }}>
-                        <span style={{ color: 'var(--accent)', fontSize: 12 }}>✓</span>
-                        <span style={{ fontSize: 13, color: 'var(--ink)' }}>{item}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* SaaS — стадии */}
-              {'stages' in c && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  {c.stages.map((s, i) => (
-                    <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                      <span style={{
-                        width: 10, height: 10, borderRadius: '50%',
-                        background: i === 0 ? 'var(--accent)' : 'var(--line)',
-                        flexShrink: 0,
-                      }} />
-                      <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)', minWidth: 80 }}>{s.name}</span>
-                      <span style={{ fontSize: 13, color: 'var(--sub)' }}>{s.term}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Срок/цена/гарантия */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 4, borderTop: '1px solid var(--line)', paddingTop: 16 }}>
-                <p style={{ fontSize: 13, margin: 0 }}>
-                  <strong style={{ color: 'var(--ink)' }}>СРОК:</strong>{' '}
-                  <span style={{ color: 'var(--sub2)' }}>{c.term}</span>
-                </p>
-                <p style={{ fontSize: 13, margin: 0 }}>
-                  <strong style={{ color: 'var(--ink)' }}>СТОИМОСТЬ:</strong>{' '}
-                  <span style={{ color: 'var(--sub2)' }}>{c.price}</span>
-                </p>
-                {'guarantee' in c && (
-                  <p style={{ fontSize: 13, margin: 0 }}>
-                    <strong style={{ color: 'var(--ink)' }}>ГАРАНТИЯ:</strong>{' '}
-                    <span style={{ color: 'var(--sub2)' }}>{c.guarantee}</span>
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <Button href="/how-we-work#contact" variant="blue" size="md">{c.cta}</Button>
-              </div>
-            </div>
-
-            {/* Правая часть — иллюстрация */}
-            <div style={{
-              background: 'var(--card)',
-              border: '1px solid var(--line)',
-              borderRadius: 3,
-              aspectRatio: '3/4',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
-              overflow: 'hidden',
-            }}>
-              {/* SaaS: блок с инфо */}
-              {'stages' in c ? (
-                <div style={{ padding: 24, width: '100%' }}>
-                  <p style={{ fontSize: 12, color: 'var(--sub)', margin: '0 0 12px' }}>Что входит в результат:</p>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-                    {c.includes.groups.map((g, i) => (
-                      <div key={i}>
-                        <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', margin: '0 0 6px' }}>{g.name}</p>
-                        {g.items.map((item, j) => (
-                          <p key={j} style={{ fontSize: 12, color: 'var(--sub2)', margin: '0 0 2px' }}>• {item}</p>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ marginTop: 16, padding: 12, background: 'var(--bg)', borderRadius: 3 }}>
-                    <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', margin: '0 0 6px' }}>Пример: AI Sales Analytics</p>
-                    <p style={{ fontSize: 12, color: 'var(--sub2)', margin: 0, lineHeight: 1.5 }}>{c.includes.example}</p>
-                  </div>
-                </div>
-              ) : (
-                <svg viewBox="0 0 300 400" width="70%" height="70%" style={{ opacity: 0.12 }}>
-                  <g stroke="var(--accent)" strokeWidth="1" fill="none">
-                    <circle cx="150" cy="120" r="60" />
-                    <circle cx="150" cy="100" r="30" />
-                    <line x1="150" y1="180" x2="150" y2="280" />
-                    <line x1="150" y1="210" x2="100" y2="250" />
-                    <line x1="150" y1="210" x2="200" y2="250" />
-                    <circle cx="100" cy="250" r="4" fill="var(--accent)" />
-                    <circle cx="200" cy="250" r="4" fill="var(--accent)" />
-                    <circle cx="150" cy="280" r="4" fill="var(--accent)" />
-                    <circle cx="150" cy="60" r="6" fill="var(--accent)" />
-                  </g>
-                </svg>
-              )}
-              <div style={{ position: 'absolute', top: 0, right: 0, width: 3, height: 60, background: 'var(--accent)' }} />
-            </div>
-
-          </div>
+function Meta({ term, price, cta }: { term: string; price: string; cta: string }) {
+  return (
+    <div style={{ background: 'var(--card2)', padding: '18px 22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 14 }}>
+      <div style={{ display: 'flex', gap: 32 }}>
+        <div>
+          <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 2 }}>Срок</div>
+          <div style={{ fontFamily: bebas, fontSize: 22, color: 'var(--accent)' }}>{term}</div>
+        </div>
+        <div>
+          <div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 2 }}>Стоимость</div>
+          <div style={{ fontFamily: bebas, fontSize: 22, color: 'var(--accent)' }}>{price}</div>
         </div>
       </div>
-    </section>
+      <a href="#contact" style={{ background: 'var(--accent)', color: '#090909', padding: '11px 22px', fontFamily: bebas, fontSize: 15, letterSpacing: '1px' }}>{cta}</a>
+    </div>
+  );
+}
+
+export default function ServicesTabs() {
+  const [tab, setTab] = useState(0);
+  const grid2: React.CSSProperties = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 };
+
+  return (
+    <div className="section-pad" style={{ borderTop: '1px solid var(--line)', background: 'var(--bg)' }}>
+      <div className="section-head">
+        <div className="dot" />
+        <span className="title">МЫ ДЕЛАЕМ ТАК</span>
+        <div className="rule" />
+      </div>
+
+      {/* Tabs */}
+      <div style={{ display: 'flex', borderBottom: '1px solid var(--line2)', marginBottom: 28, overflowX: 'auto' }}>
+        {TABS.map((t, i) => (
+          <button
+            key={i}
+            onClick={() => setTab(i)}
+            style={{
+              background: 'none', border: 'none', borderBottom: `2px solid ${tab === i ? 'var(--accent)' : 'transparent'}`,
+              padding: '11px 22px', fontFamily: bebas, fontSize: 15, letterSpacing: '1.5px',
+              color: tab === i ? 'var(--accent)' : '#999', marginBottom: -1, whiteSpace: 'nowrap',
+            }}
+          >
+            {t}
+          </button>
+        ))}
+      </div>
+
+      {/* TAB 0 — Диагностика */}
+      {tab === 0 && (
+        <div className="svc-grid" style={{ ...grid2, animation: 'fadeUp 0.2s ease' }}>
+          <div style={{ background: 'var(--card)', padding: '30px 28px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ fontFamily: bebas, fontSize: 26, color: 'var(--accent)', letterSpacing: '1px', lineHeight: 1.05 }}>ДИАГНОСТИКА<br />БИЗНЕС-ПРОЦЕССОВ</div>
+            <p style={{ fontSize: 15, color: 'var(--ink2)', lineHeight: 1.7 }}>90% компаний внедряют AI не там, где нужно. Мы находим точки, где автоматизация принесёт измеримую прибыль — а где не принесёт.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+              <Bullet>Карта бизнес-процессов с оценкой потенциала</Bullet>
+              <Bullet>Расчёт ROI для каждой точки внедрения</Bullet>
+              <Bullet>Приоритизированный roadmap автоматизации</Bullet>
+              <Bullet>Оценка сроков и бюджета внедрения</Bullet>
+            </div>
+            <div style={{ display: 'flex', gap: 24, paddingTop: 12, borderTop: '1px solid #161616' }}>
+              <div><div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 3 }}>Срок</div><div style={{ fontFamily: bebas, fontSize: 24, color: 'var(--accent)' }}>3 ДНЯ</div></div>
+              <div><div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 3 }}>Стоимость</div><div style={{ fontFamily: bebas, fontSize: 24, color: 'var(--accent)' }}>БЕСПЛАТНО</div></div>
+            </div>
+          </div>
+          <div style={{ background: 'var(--card2)', padding: '30px 28px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ fontSize: 11, color: '#888', letterSpacing: '2px', textTransform: 'uppercase', marginTop: 4 }}>Каждый клиент получает</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {['Детальную карту потерь в ₽ и часах', 'Список приоритетных точек автоматизации', 'Предварительный план внедрения с ROI'].map((t, i) => (
+                <div key={i} style={{ background: 'rgba(19,19,19,0.88)', padding: '10px 13px', fontSize: 13, color: 'var(--ink2)' }}>{t}</div>
+              ))}
+            </div>
+            <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'var(--accent)', color: '#090909', padding: '12px 20px', fontFamily: bebas, fontSize: 15, letterSpacing: '1px', marginTop: 'auto' }}>ЗАКАЗАТЬ ДИАГНОСТИКУ</a>
+          </div>
+        </div>
+      )}
+
+      {/* TAB 1 — AI-агенты */}
+      {tab === 1 && (
+        <div style={{ animation: 'fadeUp 0.2s ease', display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <div className="svc-grid" style={grid2}>
+            <Category title="Для продаж" items={['Нейропродажник — первый контакт, квалификация, передача в CRM', 'AI-обработка заявок — мгновенные ответы 24/7', 'WhatsApp/Telegram агент — автоматизация переписки', 'AI-автодозвон — массовый обзвон с квалификацией']} />
+            <Category title="Для поддержки" items={['FAQ-бот 24/7 — ответы без участия человека', 'Сервис-деск триаж — маршрутизация обращений', 'Анти-No-Show — напоминания о записях']} />
+          </div>
+          <div className="svc-grid" style={grid2}>
+            <Category title="Для аналитики" items={['AI-аналитик звонков — проверка 100% разговоров', 'BI-дашборд с AI — визуализация + рекомендации', 'Предиктивная аналитика — прогнозы и тренды']} />
+            <Category title="Для HR" items={['AI HR-скрининг — первичное интервьюирование', 'Онбординг-агент — адаптация новичков']} />
+          </div>
+          <Meta term="5–14 ДНЕЙ" price="ОТ 30 000 ₽" cta="ПОСМОТРЕТЬ КАТАЛОГ" />
+        </div>
+      )}
+
+      {/* TAB 2 — Разработка ПО */}
+      {tab === 2 && (
+        <div style={{ animation: 'fadeUp 0.2s ease', display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <div className="svc-grid" style={grid2}>
+            <Category title="Веб-приложения" items={['Дашборды и админ-панели', 'Личные кабинеты', 'CRM-интерфейсы']} />
+            <Category title="Мобильная разработка" items={['PWA-приложения', 'Mini app Telegram', 'Нативные приложения']} />
+          </div>
+          <div className="svc-grid" style={grid2}>
+            <Category title="Интеграции" items={['AmoCRM, Bitrix24, 1С', 'Телефония, платёжные системы', 'Любые API']} />
+            <Category title="BI-аналитика" items={['Realtime-дашборды', 'Автоматические отчёты', 'Экспорт в Excel/PDF']} />
+          </div>
+          <Meta term="ОТ 7 ДНЕЙ" price="ОТ 90 000 ₽" cta="ОБСУДИТЬ ПРОЕКТ" />
+        </div>
+      )}
+
+      {/* TAB 3 — SaaS */}
+      {tab === 3 && (
+        <div className="svc-grid" style={{ ...grid2, animation: 'fadeUp 0.2s ease' }}>
+          <div style={{ background: 'var(--card)', padding: '30px 28px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ fontFamily: bebas, fontSize: 26, color: 'var(--accent)', letterSpacing: '1px', lineHeight: 1.05 }}>SAAS-ПЛАТФОРМЫ</div>
+            <p style={{ fontSize: 15, color: 'var(--ink2)', lineHeight: 1.7 }}>Для компаний, которые хотят масштабировать AI на всю организацию или монетизировать решение.</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', background: 'rgba(255,106,0,0.08)', borderLeft: '2px solid var(--accent)' }}><span style={{ fontFamily: bebas, fontSize: 12, color: 'var(--accent)', letterSpacing: '1px' }}>DISCOVERY</span><span style={{ fontSize: 11, color: '#777' }}>1–2 недели</span></div>
+              {[['POC', '3–6 недель'], ['PILOT', '1–2 месяца'], ['SCALE', '2–3 месяца']].map(([s, t], i) => (
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 14px', background: 'rgba(17,17,17,0.88)' }}><span style={{ fontFamily: bebas, fontSize: 13, color: '#999', letterSpacing: '1px' }}>{s}</span><span style={{ fontSize: 12, color: '#888' }}>{t}</span></div>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: 24, paddingTop: 12, borderTop: '1px solid #161616' }}>
+              <div><div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 2 }}>Срок</div><div style={{ fontFamily: bebas, fontSize: 24, color: 'var(--accent)' }}>ОТ 4 НЕДЕЛЬ</div></div>
+              <div><div style={{ fontSize: 11, color: '#888', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: 2 }}>Стоимость</div><div style={{ fontFamily: bebas, fontSize: 24, color: 'var(--accent)' }}>ОТ 250 000 ₽</div></div>
+            </div>
+          </div>
+          <div style={{ background: 'var(--card2)', padding: '30px 28px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ fontSize: 11, color: '#888', letterSpacing: '2px', textTransform: 'uppercase' }}>Что входит в результат</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+              {[
+                ['Архитектура', 'Мультитенантность', 'Защита данных', 'Масштабируемость'],
+                ['Бизнес-логика', 'Биллинг', 'Роли', 'White-label'],
+                ['Поддержка', '3 мес сопровождения', 'Документация', 'Обучение'],
+                ['Безопасность', '152-ФЗ', 'Хэширование', 'Rate limit'],
+              ].map(([title, ...rows], i) => (
+                <div key={i}>
+                  <div style={{ fontSize: 10, color: 'var(--accent)', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: 6, fontWeight: 600 }}>{title}</div>
+                  <div style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.7 }}>{rows.map((r, j) => <span key={j}>• {r}<br /></span>)}</div>
+                </div>
+              ))}
+            </div>
+            <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'var(--accent)', color: '#090909', padding: '12px 20px', fontFamily: bebas, fontSize: 15, letterSpacing: '1px', marginTop: 'auto' }}>ОБСУДИТЬ ПРОЕКТ</a>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @media (max-width: 720px) {
+          .svc-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+    </div>
   );
 }

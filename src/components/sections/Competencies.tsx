@@ -33,7 +33,7 @@ export default function Competencies() {
               <div key={i} style={{
                 background: 'var(--card)',
                 border: '1px solid var(--line)',
-                borderRadius: 3,
+                borderRadius: 0,
                 padding: 24,
                 display: 'flex',
                 flexDirection: 'column',

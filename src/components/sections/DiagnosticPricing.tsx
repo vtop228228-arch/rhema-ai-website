@@ -5,6 +5,7 @@ const PLANS = [
   {
     name: 'Экспресс',
     subtitle: 'Для быстрой оценки ситуации',
+    price: 'БЕСПЛАТНО',
     term: '1 - 2 дня',
     features: [
       'Анализ по вашим материалам',
@@ -14,10 +15,12 @@ const PLANS = [
       'Рекомендации',
     ],
     popular: false,
+    cta: 'Получить бесплатно',
   },
   {
     name: 'Полная',
     subtitle: 'Глубокий анализ всего бизнеса',
+    price: 'от 30 000 ₽',
     term: '3 - 4 дня',
     features: [
       'Глубинный анализ',
@@ -29,10 +32,12 @@ const PLANS = [
       'Приоритизация действий',
     ],
     popular: true,
+    cta: 'Заказать диагностику',
   },
   {
     name: 'ENTERPRISE',
     subtitle: 'Для сложных/крупных проектов',
+    price: 'от 60 000 ₽',
     term: '5 - 7 дней',
     features: [
       'Всё из Полной',
@@ -43,6 +48,7 @@ const PLANS = [
       '2 недели поддержки после',
     ],
     popular: false,
+    cta: 'Заказать диагностику',
   },
 ];
 
@@ -66,7 +72,7 @@ export default function DiagnosticPricing() {
               <div key={i} style={{
                 background: plan.popular ? 'var(--card)' : 'var(--bg)',
                 border: plan.popular ? '1px solid var(--accent)' : '1px solid var(--line)',
-                borderRadius: 6,
+                borderRadius: 0,
                 padding: 28,
                 display: 'flex',
                 flexDirection: 'column',
@@ -81,8 +87,18 @@ export default function DiagnosticPricing() {
                   }}>
                     {plan.name}
                   </h3>
-                  <p style={{ fontSize: 13, color: 'var(--sub)', margin: '0 0 6px' }}>{plan.subtitle}</p>
-                  <p style={{ fontSize: 13, color: 'var(--accent)', margin: 0, fontWeight: 600 }}>Срок: {plan.term}</p>
+                  <p style={{ fontSize: 13, color: 'var(--sub)', margin: '0 0 12px' }}>{plan.subtitle}</p>
+                  <div style={{
+                    fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif',
+                    fontSize: 32,
+                    color: 'var(--accent)',
+                    letterSpacing: '0.03em',
+                    lineHeight: 1,
+                    margin: '0 0 6px',
+                  }}>
+                    {plan.price}
+                  </div>
+                  <p style={{ fontSize: 12, color: 'var(--sub)', margin: 0 }}>Срок: {plan.term}</p>
                 </div>
 
                 <div style={{ height: 1, background: 'var(--line)' }} />
@@ -103,7 +119,7 @@ export default function DiagnosticPricing() {
                     size="md"
                     style={{ width: '100%' }}
                   >
-                    Заказать диагностику
+                    {plan.cta}
                   </Button>
                 </div>
               </div>
@@ -114,7 +130,7 @@ export default function DiagnosticPricing() {
           <div style={{
             background: 'var(--card)',
             border: '1px solid var(--line)',
-            borderRadius: 6,
+            borderRadius: 0,
             padding: 32,
             display: 'flex',
             flexDirection: 'column',

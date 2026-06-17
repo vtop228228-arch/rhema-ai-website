@@ -55,7 +55,7 @@ export default function Flagship() {
               <div key={i} style={{
                 padding: '6px 14px',
                 border: '1px solid var(--line)',
-                borderRadius: 20,
+                borderRadius: 0,
                 fontSize: 13,
                 color: 'var(--sub2)',
                 background: 'var(--card)',
@@ -69,7 +69,7 @@ export default function Flagship() {
           <div style={{
             background: 'var(--card)',
             border: '1px solid var(--line)',
-            borderRadius: 3,
+            borderRadius: 0,
             padding: 28,
             display: 'grid',
             gridTemplateColumns: '1fr 1fr 1fr',

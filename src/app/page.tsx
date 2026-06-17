@@ -1,8 +1,10 @@
 import HeroMain from '@/components/sections/hero/HeroMain';
 import Marquee from '@/components/ui/Marquee';
-import ForWho from '@/components/sections/ForWho';
 import ServicesTabs from '@/components/sections/ServicesTabs';
-import PriceTable from '@/components/sections/PriceTable';
+import ForWho from '@/components/sections/ForWho';
+import HowItWorks from '@/components/sections/HowItWorks';
+import FullCycle from '@/components/sections/FullCycle';
+import FAQ from '@/components/sections/FAQ';
 import ContactForm from '@/components/sections/ContactForm';
 
 export default function Home() {
@@ -10,9 +12,11 @@ export default function Home() {
     <div>
       <HeroMain />
       <Marquee />
-      <ForWho />
       <ServicesTabs />
-      <PriceTable />
+      <ForWho />
+      <HowItWorks />
+      <FullCycle />
+      <FAQ />
       <ContactForm />
     </div>
   );
