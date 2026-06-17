@@ -9,7 +9,7 @@ export default function HeroHowWeWork() {
   return (
     <section
       className="hero-hww"
-      style={{ padding: '72px 72px 60px', borderBottom: '1px solid var(--line2)' }}
+      style={{ borderBottom: '1px solid var(--line2)' }}
     >
       <div className="eyebrow" style={{ marginBottom: 22, animation: 'fadeUp 0.5s ease 0.05s both' }}>
         <div className="bar" />
@@ -43,8 +43,9 @@ export default function HeroHowWeWork() {
       </div>
 
       <style>{`
+        .hero-hww { padding: 72px 72px 60px; }
         @media (max-width: 720px) {
-          .hero-hww { padding: 48px 22px 40px !important; }
+          .hero-hww { padding: 48px 22px 40px; }
         }
       `}</style>
     </section>

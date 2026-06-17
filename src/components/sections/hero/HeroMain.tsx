@@ -10,12 +10,10 @@ export default function HeroMain() {
           flex: 1,
           minWidth: 0,
           background: 'transparent',
-          padding: '60px 40px 60px 72px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           gap: 24,
-          overflow: 'hidden',
           position: 'relative',
         }}
       >
@@ -38,7 +36,15 @@ export default function HeroMain() {
         </div>
 
         {/* H1 */}
-        <h1 className="hero-h1" style={{ fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 'clamp(28px, 8vw, 76px)', lineHeight: 0.87, position: 'relative', zIndex: 1, overflowWrap: 'break-word' }}>
+        <h1 style={{
+          fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif',
+          fontSize: 'clamp(28px, 7.5vw, 76px)',
+          lineHeight: 0.87,
+          position: 'relative',
+          zIndex: 1,
+          overflowWrap: 'break-word',
+          wordBreak: 'normal',
+        }}>
           <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>ОТ ДИАГНОСТИКИ</span>
           <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>ДО МАСШТАБИРОВАНИЯ</span>
           <span className="hero-sub" style={{ display: 'block', color: '#999', fontSize: '0.43em', letterSpacing: '5px', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>ЗА 2 МИНУТЫ — БЕСПЛАТНО</span>
@@ -57,13 +63,18 @@ export default function HeroMain() {
       <DiagnosticAgent />
 
       <style>{`
+        .hero-left {
+          padding: 60px 40px 60px 72px;
+          overflow: hidden;
+        }
         @media (max-width: 900px) {
-          .hero-wrap { flex-direction: column; min-height: auto !important; }
-          .hero-left { padding: 48px 22px 32px !important; }
+          .hero-wrap { flex-direction: column; min-height: auto; }
+          .hero-left { padding: 48px 22px 36px; overflow: visible; }
           .hero-divider { display: none; }
         }
         @media (max-width: 480px) {
-          .hero-sub { letter-spacing: 2px !important; }
+          .hero-left { padding: 40px 20px 28px; }
+          .hero-sub { letter-spacing: 2px; }
         }
       `}</style>
     </section>
