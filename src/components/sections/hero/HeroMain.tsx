@@ -1,5 +1,3 @@
-import DiagnosticAgent from '@/components/sections/DiagnosticAgent';
-
 export default function HeroMain() {
   return (
     <section className="hero-wrap" style={{ display: 'flex', minHeight: 640 }}>
@@ -50,17 +48,10 @@ export default function HeroMain() {
         </p>
       </div>
 
-      {/* DIVIDER */}
-      <div className="hero-divider" style={{ width: 1, background: 'var(--line2)', flexShrink: 0 }} />
-
-      {/* RIGHT: chat widget */}
-      <DiagnosticAgent />
-
       <style>{`
         @media (max-width: 900px) {
           .hero-wrap { flex-direction: column; }
           .hero-left { padding: 48px 22px 40px; }
-          .hero-divider { display: none; }
         }
       `}</style>
     </section>
