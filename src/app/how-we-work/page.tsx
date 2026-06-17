@@ -1,13 +1,7 @@
 import HeroHowWeWork from '@/components/sections/hero/HeroHowWeWork';
-import Myths from '@/components/sections/Myths';
-import ServiceStep from '@/components/sections/ServiceStep';
 import Process from '@/components/sections/Process';
-import Cases from '@/components/sections/Cases';
-import PatternCTA from '@/components/sections/PatternCTA';
-import Stats from '@/components/sections/Stats';
-// Отзывы скрыты до реальных клиентских — были выдуманы, нельзя публиковать
-import Works from '@/components/sections/Works';
 import DiagnosticPricing from '@/components/sections/DiagnosticPricing';
+import Stats from '@/components/sections/Stats';
 import FAQ from '@/components/sections/FAQ';
 import ContactForm from '@/components/sections/ContactForm';
 
@@ -20,14 +14,9 @@ export default function HowWeWork() {
   return (
     <div>
       <HeroHowWeWork />
-      <Myths />
-      <ServiceStep />
       <Process />
-      <Cases />
-      <PatternCTA />
-      <Stats />
-      <Works />
       <DiagnosticPricing />
+      <Stats />
       <FAQ />
       <ContactForm />
     </div>

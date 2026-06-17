@@ -1,7 +1,5 @@
 import HeroAbout from '@/components/sections/hero/HeroAbout';
 import ComparisonTable from '@/components/sections/ComparisonTable';
-import MethodCards from '@/components/sections/MethodCards';
-import Competencies from '@/components/sections/Competencies';
 import Flagship from '@/components/sections/Flagship';
 import ContactForm from '@/components/sections/ContactForm';
 
@@ -15,10 +13,7 @@ export default function About() {
     <div>
       <HeroAbout />
       <ComparisonTable />
-      <MethodCards />
-      <Competencies />
       <Flagship />
-
       <ContactForm />
     </div>
   );

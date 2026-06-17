@@ -5,6 +5,7 @@ import Image from 'next/image';
 
 const NAV_LINKS = [
   { href: '/how-we-work', label: 'Как работаем' },
+  { href: '/cases', label: 'Кейсы' },
   { href: '/about', label: 'О нас' },
   { href: '/#contact', label: 'Контакты' },
 ];
