@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
     const anthropicStream = client.messages.stream({
       model,
-      max_tokens: isMap ? 800 : 400,
+      max_tokens: isMap ? 450 : 250,
       // Стабильный системный префикс кешируем — повторные вызовы дешевле.
       system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
       messages: [{ role: 'user', content: userPrompt }],
