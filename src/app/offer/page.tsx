@@ -57,7 +57,7 @@ export default function OfferPage() {
       <h2 style={h2}>10. Контакты</h2>
       <p style={p}>
         E-mail: <a href="mailto:rhemaaiagency@gmail.com" style={{ color: 'var(--accent)' }}>rhemaaiagency@gmail.com</a><br />
-        Telegram: <a href="https://t.me/rhema_ai" style={{ color: 'var(--accent)' }}>@rhema_ai</a>
+        Telegram: <a href="https://t.me/RhemaAI_support" style={{ color: 'var(--accent)' }}>@RhemaAI_support</a>
       </p>
     </main>
   );
