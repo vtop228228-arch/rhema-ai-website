@@ -9,45 +9,56 @@
    ═══════════════════════════════════════════════ */
 
 :root {
-  /* Palette */
-  --bg:      rgba(9,9,9,0.88);
-  --bg2:     rgba(7,7,7,0.88);
-  --card:    rgba(12,12,12,0.88);
-  --card2:   rgba(13,13,13,0.88);
-  --line:    #0F0F0F;
-  --line2:   #141414;
-  --accent:  #FF6A00;
-  --accent2: #FF7A1A;
-  --accent-dim: rgba(255,106,0,0.08);
-  --green:   #22C55E;
-  --red:     #D95252;
-  --ink:     #F0EEE8;
-  --ink2:    #C0BBB2;
-  --sub:     #505050;
-  --sub2:    #888888;
-  --blue: var(--accent);   /* legacy-алиас → оранжевый */
+  /* Palette — Variant B: cold neutral dark */
+  --bg:      rgba(10,10,11,0.9);
+  --bg2:     rgba(8,8,9,0.9);
+  --card:    rgba(20,20,22,0.9);
+  --card2:   rgba(23,23,26,0.9);
+  --line:    #1E1E22;
+  --line2:   #26262B;
 
+  /* Orange — CTA buttons and key numbers ONLY */
+  --accent:     #FF6A00;
+  --accent2:    #FF7A1A;
+  --accent-dim: rgba(255,106,0,0.08);
+
+  /* Blue — section labels, eyebrows, navigation links */
+  --accent-blue:     #4D9FFF;
+  --accent-blue-dim: rgba(77,159,255,0.10);
+
+  /* Text hierarchy */
+  --ink:   #FFFFFF;
+  --ink2:  #C0BBB2;
+  --sub:   #505050;
+  --sub2:  #888888;
+
+  /* Status */
+  --green: #22C55E;
+  --red:   #D95252;
+
+  --blue: var(--accent);   /* legacy alias */
   --glow: 0 0 28px 8px rgba(255,106,0,0.2);
 }
 
 @theme {
-  --color-bg:      #090909;
-  --color-bg2:     #070707;
-  --color-card:    #0C0C0C;
-  --color-card2:   #0D0D0D;
-  --color-accent:  #FF6A00;
-  --color-accent2: #FF7A1A;
-  --color-green:   #22C55E;
-  --color-red:     #D95252;
-  --color-ink:     #F0EEE8;
-  --color-ink2:    #C0BBB2;
-  --color-sub:     #505050;
-  --color-sub2:    #888888;
-  --color-blue:    #FF6A00;
-  --color-line:    #0F0F0F;
-  --color-line2:   #141414;
-  --font-bebas:    var(--font-dm), 'DM Sans', sans-serif;
-  --font-inter:    var(--font-dm), 'DM Sans', sans-serif;
+  --color-bg:           #0A0A0B;
+  --color-bg2:          #080809;
+  --color-card:         #141416;
+  --color-card2:        #17171A;
+  --color-accent:       #FF6A00;
+  --color-accent2:      #FF7A1A;
+  --color-accent-blue:  #4D9FFF;
+  --color-green:        #22C55E;
+  --color-red:          #D95252;
+  --color-ink:          #FFFFFF;
+  --color-ink2:         #C0BBB2;
+  --color-sub:          #505050;
+  --color-sub2:         #888888;
+  --color-blue:         #FF6A00;
+  --color-line:         #1E1E22;
+  --color-line2:        #26262B;
+  --font-bebas:         var(--font-dm), 'DM Sans', sans-serif;
+  --font-inter:         var(--font-dm), 'DM Sans', sans-serif;
 }
 
 /* ── Reset ── */
@@ -59,7 +70,7 @@
 
 html {
   scroll-behavior: smooth;
-  background: #090909;
+  background: #0A0A0B;
 }
 
 body {
@@ -100,7 +111,7 @@ button { cursor: pointer; }
 }
 .section-head .dot {
   width: 4px; height: 4px;
-  background: var(--accent);
+  background: var(--accent-blue);
   flex-shrink: 0;
 }
 .section-head .title {
@@ -117,7 +128,7 @@ button { cursor: pointer; }
   background: var(--line);
 }
 
-/* ── Eyebrow (оранжевая линия + текст) ── */
+/* ── Eyebrow (синяя линия + текст) ── */
 .eyebrow {
   display: flex;
   align-items: center;
@@ -125,11 +136,11 @@ button { cursor: pointer; }
 }
 .eyebrow .bar {
   width: 36px; height: 1px;
-  background: var(--accent);
+  background: var(--accent-blue);
 }
 .eyebrow .text {
   font-size: 10px;
-  color: var(--accent);
+  color: var(--accent-blue);
   letter-spacing: 3px;
   text-transform: uppercase;
   font-weight: 600;
@@ -156,12 +167,18 @@ button { cursor: pointer; }
 .btn-md  { padding: 11px 20px; font-size: 16px; }
 .btn-lg  { padding: 13px 22px; font-size: 19px; }
 
-/* Основная — заливка */
+/* Основная — gradient + glow */
 .btn-blue {
-  background: var(--accent);
+  background: linear-gradient(180deg, var(--accent2), var(--accent));
   color: #090909;
+  font-weight: 700;
+  box-shadow: 0 4px 22px -4px rgba(255,106,0,0.55), 0 0 0 1px rgba(255,106,0,0.22);
+  transition: box-shadow 0.2s, transform 0.2s, opacity 0.15s !important;
 }
-.btn-blue:hover:not(:disabled) { opacity: 0.82; }
+.btn-blue:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 34px -2px rgba(255,106,0,0.75), 0 0 0 1px rgba(255,106,0,0.4);
+}
 
 /* Outline */
 .btn-line {
@@ -256,7 +273,7 @@ h1, h2, h3, h4 {
   align-items: center;
   gap: 9px;
   font-size: 10px;
-  color: var(--accent);
+  color: var(--accent-blue);
   letter-spacing: 3px;
   text-transform: uppercase;
   font-weight: 600;
@@ -266,6 +283,6 @@ h1, h2, h3, h4 {
   content: '';
   width: 22px;
   height: 1px;
-  background: var(--accent);
+  background: var(--accent-blue);
   flex-shrink: 0;
 }

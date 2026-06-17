@@ -6,16 +6,16 @@ const bebas = 'var(--font-bebas), Bebas Neue, sans-serif';
 
 const FAQS = [
   {
-    q: 'СКОЛЬКО ЭТО СТОИТ?',
-    a: 'Простой AI-бот — от 30 000 ₽, платформа под ключ — от 90 000 ₽. Точную цифру называем после бесплатной диагностики: только тогда понятно, что именно нужно делать и сколько это принесёт.',
+    q: 'Как понять, что это вообще мне нужно?',
+    a: 'Если у вас хотя бы одно из этого: заявки теряются, менеджеры делают одно и то же руками каждый день, непонятно откуда приходят деньги и куда уходят — значит нужно. Начните с бесплатной диагностики: за 3 дня покажем цифры, и вы сами решите.',
   },
   {
-    q: 'КАК БЫСТРО ВЫ ЗАПУСКАЕТЕ?',
-    a: 'Бота запускаем за 5–14 дней. Полноценную платформу — за 3–6 недель. Дедлайны фиксируем в договоре — не тянем и не переносим.',
+    q: 'Сколько это стоит и когда окупится?',
+    a: 'Простой AI-бот — от 30 000 ₽, платформа под ключ — от 90 000 ₽. По нашим проектам средняя окупаемость — 1–2 месяца. Точную цифру и расчёт ROI называем после диагностики: без неё любая оценка — это гадание.',
   },
   {
-    q: 'НАМ НУЖЕН СВОЙ ТЕХНИЧЕСКИЙ СПЕЦИАЛИСТ?',
-    a: 'Нет. Мы берём на себя всё: от проектирования до запуска и поддержки. Вам нужен только один человек, который понимает свой бизнес — мы сами разберёмся в остальном.',
+    q: 'Нам придётся нанимать технических людей?',
+    a: 'Нет. Мы забираем всё на себя — от проектирования до запуска и поддержки 3 месяца. Вам нужен только человек, который знает свой бизнес и может ответить на наши вопросы. Всё остальное — наша работа.',
   },
 ];
 
@@ -24,28 +24,58 @@ export default function FAQ() {
 
   return (
     <div className="section-pad" style={{ borderTop: '1px solid var(--line)', background: 'transparent' }}>
-      <div className="section-head" style={{ marginBottom: 48 }}>
+      <div className="section-head" style={{ marginBottom: 40 }}>
         <div className="dot" />
         <span className="title">ЧАСТЫЕ ВОПРОСЫ</span>
         <div className="rule" />
       </div>
 
       <div className="faq-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'start' }}>
+
         {/* Аккордеон */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {FAQS.map((f, i) => {
             const isOpen = open === i;
             return (
-              <div key={i} style={{ background: 'var(--card)', cursor: 'pointer' }} onClick={() => setOpen(isOpen ? -1 : i)}>
-                <div style={{ padding: '18px 22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 }}>
-                  <span style={{ fontFamily: bebas, fontSize: 17, letterSpacing: '1px', color: isOpen ? 'var(--accent)' : 'var(--ink)', lineHeight: 1.2, flex: 1, transition: 'color 0.2s' }}>{f.q}</span>
-                  <div style={{ width: 24, height: 24, border: `1px solid ${isOpen ? 'var(--accent)' : '#1E1E1E'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'border-color 0.2s' }}>
-                    <span style={{ color: isOpen ? 'var(--accent)' : '#505050', fontSize: 17, lineHeight: 1, fontWeight: 300, userSelect: 'none' }}>{isOpen ? '−' : '+'}</span>
+              <div
+                key={i}
+                style={{
+                  background: isOpen ? 'rgba(20,20,22,0.98)' : 'var(--card)',
+                  borderLeft: `2px solid ${isOpen ? 'var(--accent)' : 'transparent'}`,
+                  cursor: 'pointer',
+                  transition: 'background 0.2s, border-color 0.2s',
+                }}
+                onClick={() => setOpen(isOpen ? -1 : i)}
+                onMouseEnter={(e) => {
+                  if (!isOpen) (e.currentTarget as HTMLElement).style.borderLeftColor = 'rgba(255,106,0,0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  if (!isOpen) (e.currentTarget as HTMLElement).style.borderLeftColor = 'transparent';
+                }}
+              >
+                <div style={{ padding: '20px 22px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, minHeight: 64 }}>
+                  <span style={{ fontSize: 15, fontWeight: 600, color: isOpen ? 'var(--ink)' : 'var(--ink2)', lineHeight: 1.4, flex: 1, transition: 'color 0.2s' }}>
+                    {f.q}
+                  </span>
+                  <div style={{
+                    width: 32, height: 32, flexShrink: 0,
+                    background: isOpen ? 'var(--accent)' : 'rgba(255,255,255,0.04)',
+                    border: `1px solid ${isOpen ? 'var(--accent)' : '#2A2A2E'}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background 0.22s, border-color 0.22s',
+                  }}>
+                    <span style={{
+                      color: isOpen ? '#090909' : '#888',
+                      fontSize: 20, lineHeight: 1, fontWeight: 300, userSelect: 'none',
+                      display: 'block',
+                      transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.22s, color 0.22s',
+                    }}>+</span>
                   </div>
                 </div>
                 {isOpen && (
-                  <div style={{ padding: '0 22px 20px', borderTop: '1px solid var(--line2)', animation: 'fadeUp 0.18s ease' }}>
-                    <p style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.85, paddingTop: 15 }}>{f.a}</p>
+                  <div style={{ padding: '0 22px 22px', borderTop: '1px solid var(--line2)', animation: 'fadeUp 0.2s ease' }}>
+                    <p style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.9, paddingTop: 16 }}>{f.a}</p>
                   </div>
                 )}
               </div>
@@ -57,21 +87,29 @@ export default function FAQ() {
         <div className="faq-side" style={{ display: 'flex', flexDirection: 'column', gap: 22, paddingTop: 6, position: 'sticky', top: 72 }}>
           <div className="eyebrow">
             <div className="bar" />
-            <span className="text">Не нашли ответ?</span>
+            <span className="text">Остались вопросы?</span>
           </div>
-          <p style={{ fontFamily: bebas, fontSize: 28, color: 'var(--ink)', lineHeight: 1.0, letterSpacing: '1px' }}>
-            СПРОСИТЕ<br /><span style={{ color: 'var(--accent)' }}>НАПРЯМУЮ</span>
+          <p style={{ fontFamily: bebas, fontSize: 32, color: 'var(--ink)', lineHeight: 1.0, letterSpacing: '1px' }}>
+            ОТВЕТИМ<br /><span style={{ color: 'var(--accent)' }}>ЗА 1 ДЕНЬ</span>
           </p>
-          <p style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.75, maxWidth: 280 }}>Ответим в течение рабочего дня — в Telegram или по телефону.</p>
+          <p style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.75, maxWidth: 280 }}>
+            Напишите — разберём вашу ситуацию и скажем честно, поможет ли AI и что конкретно стоит делать.
+          </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <a href="#contact" style={{ background: 'var(--accent)', color: '#090909', padding: '12px 20px', fontFamily: bebas, fontSize: 15, letterSpacing: '1px', width: 'fit-content' }}>НАПИСАТЬ НАМ →</a>
-            <span style={{ fontSize: 11, color: '#888' }}>Бесплатно · без обязательств</span>
+            <a href="#contact" className="btn btn-blue btn-md" style={{ width: 'fit-content' }}>
+              НАПИСАТЬ НАМ →
+            </a>
+            <span style={{ fontSize: 11, color: '#555' }}>Бесплатно · без обязательств</span>
           </div>
-          <div style={{ borderTop: '1px solid var(--line2)', paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {['10 клиентов уже работают с нами', 'Средний ROI — 1–2 месяца', 'Бесплатная диагностика за 2 минуты'].map((t, i) => (
-              <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'center' }}>
-                <div style={{ width: 3, height: 3, background: 'var(--accent)', flexShrink: 0 }} />
-                <span style={{ fontSize: 13, color: 'var(--ink2)' }}>{t}</span>
+          <div style={{ borderTop: '1px solid var(--line2)', paddingTop: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[
+              'Средняя окупаемость — 1–2 месяца',
+              'Запуск от 5 рабочих дней',
+              'Бесплатная диагностика за 2 минуты',
+            ].map((t, i) => (
+              <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                <span style={{ color: 'var(--accent)', fontSize: 13, flexShrink: 0, marginTop: 1 }}>✓</span>
+                <span style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.5 }}>{t}</span>
               </div>
             ))}
           </div>
