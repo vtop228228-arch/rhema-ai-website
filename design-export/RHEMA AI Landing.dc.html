@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<template id="__bundler_thumbnail" data-bg-color="#090909">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1200" height="800" fill="#090909"></rect>
+    <polygon points="600,80 680,200 520,200" fill="#FF6A00" fill-opacity="0.9"></polygon>
+    <polygon points="600,320 680,200 520,200" fill="#FF6A00" fill-opacity="0.5"></polygon>
+    <text x="600" y="420" font-family="sans-serif" font-size="96" font-weight="900" fill="#F0EEE8" text-anchor="middle" letter-spacing="12">RHEMA</text>
+    <text x="600" y="510" font-family="sans-serif" font-size="48" font-weight="700" fill="#FF6A00" text-anchor="middle" letter-spacing="8">AI</text>
+    <rect x="480" y="560" width="240" height="3" fill="#FF6A00" opacity="0.4"></rect>
+  </svg>
+</template>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@400;500;600&amp;display=swap">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { background: #090909; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.1} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    @keyframes shimmer { 0%,100%{opacity:0.2} 50%{opacity:1} }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes ctaGlow { 0%,100%{box-shadow:0 0 0 0 rgba(255,106,0,0)} 50%{box-shadow:0 0 28px 8px rgba(255,106,0,0.2)} }
+    input::placeholder, textarea::placeholder { color: #888; font-family: 'Inter', sans-serif; font-size: 13px; }
+    input:focus, textarea:focus { outline: none; }
+    button { cursor: pointer; }
+    a { text-decoration: none; }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-thumb { background: #1E1E1E; }
+  </style>
+</helmet>
+
+<div style="min-height: 100vh; background: #090909; color: #F0EEE8; font-family: 'Inter', system-ui, sans-serif;">
+
+  <!-- ══ NAV ══ -->
+  <nav style="background: rgba(9,9,9,0.97); border-bottom: 1px solid #0F0F0F; height: 54px; padding: 0 72px; display: flex; align-items: center; gap: 36px; position: sticky; top: 0; z-index: 50; backdrop-filter: blur(10px);">
+    <img src="logo.png" height="50" style="display:block;flex-shrink:0;width:auto;" alt="RHEMA AI">
+    <div style="flex: 1;"></div>
+    <a href="#" style="font-size: 11px; color: #999; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;" style-hover="color:#F0EEE8">Как работаем</a>
+    <a href="#" style="font-size: 11px; color: #999; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;" style-hover="color:#F0EEE8">О нас</a>
+    <a href="#contact" style="font-size: 11px; color: #999; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;" style-hover="color:#F0EEE8">Контакты</a>
+    <button onClick="{{ startChat }}" style="background: #FF6A00; color: #090909; border: none; padding: 8px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 14px; letter-spacing: 1px; transition: opacity 0.15s;" style-hover="opacity: 0.82;">ДИАГНОСТИКА</button>
+  </nav>
+
+  <!-- ══ HERO ══ -->
+  <div style="display: flex; min-height: 640px;">
+
+    <!-- LEFT: МОНОЛИТ -->
+    <div style="flex: 1; min-width: 0; background: #090909; padding: 60px 40px 60px 72px; display: flex; flex-direction: column; justify-content: center; gap: 24px; overflow: hidden; position: relative;">
+      <!-- Grid texture -->
+      <div style="position: absolute; inset: 0; background-image: linear-gradient(rgba(255,106,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,106,0,0.04) 1px, transparent 1px); background-size: 42px 42px; pointer-events: none;"></div>
+      <!-- Depth vignette -->
+      <div style="position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 55%, transparent 40%, #090909 82%); pointer-events: none;"></div>
+      <!-- Eyebrow -->
+      <div style="display: flex; align-items: center; gap: 12px; position: relative; z-index: 1; animation: fadeUp 0.5s ease 0.05s both;">
+        <div style="width: 36px; height: 1px; background: #FF6A00;"></div>
+        <span style="font-size: 10px; color: #FF6A00; letter-spacing: 3px; text-transform: uppercase; font-weight: 600;">AI-диагностика бизнеса</span>
+      </div>
+      <!-- H1 with stagger -->
+      <h1 style="font-family: 'Bebas Neue', sans-serif; font-size: clamp(42px, 4.4vw, 76px); line-height: 0.87; position: relative; z-index: 1;">
+        <span style="display: block; color: #F0EEE8; animation: fadeUp 0.6s ease 0.18s both;">ОТ ДИАГНОСТИКИ</span>
+        <span style="display: block; color: #FF6A00; animation: fadeUp 0.6s ease 0.3s both;">ДО МАСШТАБИРОВАНИЯ</span>
+        <span style="display: block; color: #666666; font-size: 0.43em; letter-spacing: 5px; margin-top: 10px; animation: fadeUp 0.6s ease 0.4s both;">ЗА 2 МИНУТЫ — БЕСПЛАТНО</span>
+      </h1>
+      <!-- Body -->
+      <p style="font-size: 14px; color: 555; max-width: 400px; line-height: 1.85; position: relative; z-index: 1; animation: fadeUp 0.6s ease 0.45s both; text-wrap: pretty">Задайте 2–3 вопроса о своём бизнесе прямо здесь. AI покажет персональную карту потерь в ₽ и порекомендует, что внедрить.</p>
+      <!-- Stats -->
+      
+    </div>
+    <!-- DIVIDER -->
+    <div style="width: 1px; background: #141414; flex-shrink: 0;"></div>
+
+    <!-- RIGHT: chat widget (always dark) -->
+    <div style="flex: 0 0 460px; background: #0C0C0C; display: flex; flex-direction: column; min-height: 640px;">
+
+      <!-- Chat header -->
+      <div style="padding: 18px 24px; border-bottom: 1px solid #161616; display: flex; align-items: center; gap: 9px; flex-shrink: 0;">
+        <div style="width: 6px; height: 6px; background: #FF6A00;"></div>
+        <span style="font-family: 'Bebas Neue', sans-serif; font-size: 12px; letter-spacing: 2px; color: #FF6A00;">ДИАГНОСТИКА БИЗНЕСА</span>
+      </div>
+
+      <!-- IDLE -->
+      <sc-if value="{{ isIdle }}" hint-placeholder-val="{{ true }}">
+        <div style="flex: 1; padding: 30px 24px; display: flex; flex-direction: column; gap: 18px; justify-content: center;">
+          <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 24px; letter-spacing: 1px; color: #F0EEE8; line-height: 1.05;">Узнайте за 2 минуты,<br>где теряете деньги</h2>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; gap: 9px; align-items: center;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0;"></div><span style="font-size: 13px; color: #999;">2–3 вопроса, ~2 минуты</span></div>
+            <div style="display: flex; gap: 9px; align-items: center;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0;"></div><span style="font-size: 13px; color: #999;">Персональная карта потерь в ₽</span></div>
+            <div style="display: flex; gap: 9px; align-items: center;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0;"></div><span style="font-size: 13px; color: #999;">AI-решения для вашей ниши</span></div>
+            <div style="display: flex; gap: 9px; align-items: center;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0;"></div><span style="font-size: 13px; color: #999;">Ориентир ROI для вашей сферы</span></div>
+          </div>
+          <div>
+            <button onClick="{{ startChat }}" style="background: #FF6A00; color: #090909; border: none; padding: 13px 22px; font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; animation: ctaGlow 3s ease-in-out infinite;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#090909"></path></svg>
+              НАЧАТЬ ДИАГНОСТИКУ
+            </button>
+            <p style="font-size: 10px; color: #777; margin-top: 8px;">Бесплатно · без регистрации</p>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- CHAT OPEN -->
+      <sc-if value="{{ chatOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden;">
+
+          <!-- Messages -->
+          <div ref="{{ chatRef }}" style="flex: 1; overflow-y: auto; padding: 14px 18px; display: flex; flex-direction: column; gap: 9px; min-height: 0;">
+
+            <!-- Typing dots -->
+            <sc-if value="{{ typingNS }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; gap: 5px; align-items: center; padding: 10px 13px; background: #181818; width: fit-content;">
+                <div style="width: 5px; height: 5px; background: #333; border-radius: 50%; animation: blink 1.1s ease-in-out infinite 0s;"></div>
+                <div style="width: 5px; height: 5px; background: #333; border-radius: 50%; animation: blink 1.1s ease-in-out infinite 0.18s;"></div>
+                <div style="width: 5px; height: 5px; background: #333; border-radius: 50%; animation: blink 1.1s ease-in-out infinite 0.36s;"></div>
+              </div>
+            </sc-if>
+
+            <!-- Message list -->
+            <sc-for list="{{ msgs }}" as="msg" hint-placeholder-count="0">
+              <div style="display: flex; justify-content: {{ msg.align }}; animation: fadeUp 0.2s ease;">
+                <div style="max-width: 87%; padding: 9px 13px; background: {{ msg.bg }};">
+                  <span style="font-size: 13px; line-height: 1.65; color: {{ msg.color }}; white-space: pre-wrap; display: block; text-wrap: pretty;">{{ msg.text }}</span>
+                </div>
+              </div>
+            </sc-for>
+
+            <!-- Streaming bubble -->
+            <sc-if value="{{ isStreaming }}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; justify-content: flex-start; animation: fadeUp 0.18s ease;">
+                <div style="max-width: 87%; padding: 9px 13px; background: #181818;">
+                  <span style="font-size: 13px; line-height: 1.65; color: #C0BBB2; white-space: pre-wrap; text-wrap: pretty;">{{ stream }}</span><span style="display: inline-block; width: 1.5px; height: 13px; background: #FF6A00; margin-left: 1px; animation: blink 0.65s ease-in-out infinite; vertical-align: text-bottom;"></span>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- Map loading -->
+            <sc-if value="{{ isMapLoading }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 14px; background: #0E0E0E; border: 1px solid #1A1A1A; display: flex; flex-direction: column; gap: 11px; animation: fadeUp 0.22s ease;">
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <div style="width: 11px; height: 11px; border: 1.5px solid #FF6A00; border-top-color: transparent; border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0;"></div>
+                  <span style="font-size: 12px; color: #999;">Генерирую карту потерь...</span>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <div style="display: flex; gap: 9px; align-items: center;"><span style="font-size: 10px; color: #505050; width: 76px; flex-shrink: 0;">Анализ бизнеса</span><div style="flex: 1; height: 2px; background: #161616; overflow: hidden; position: relative;"><div style="position: absolute; inset-y: 0; left: 0; width: 88%; background: #FF6A00; animation: shimmer 1.4s ease-in-out infinite;"></div></div></div>
+                  <div style="display: flex; gap: 9px; align-items: center;"><span style="font-size: 10px; color: #505050; width: 76px; flex-shrink: 0;">Расчёт потерь</span><div style="flex: 1; height: 2px; background: #161616; overflow: hidden; position: relative;"><div style="position: absolute; inset-y: 0; left: 0; width: 58%; background: #FF6A00; animation: shimmer 1.4s ease-in-out infinite 0.35s;"></div></div></div>
+                  <div style="display: flex; gap: 9px; align-items: center;"><span style="font-size: 10px; color: #505050; width: 76px; flex-shrink: 0;">Рекомендации</span><div style="flex: 1; height: 2px; background: #161616; overflow: hidden; position: relative;"><div style="position: absolute; inset-y: 0; left: 0; width: 34%; background: #FF6A00; animation: shimmer 1.4s ease-in-out infinite 0.7s;"></div></div></div>
+                </div>
+              </div>
+            </sc-if>
+
+            <!-- LOSS MAP CARD -->
+            <sc-if value="{{ showMap }}" hint-placeholder-val="{{ false }}">
+              <div style="background: #0E0E0E; border: 1px solid #1A1A1A; padding: 16px; display: flex; flex-direction: column; gap: 13px; animation: fadeUp 0.35s ease;">
+                <div style="display: flex; align-items: center; gap: 9px;">
+                  <div style="width: 2px; height: 22px; background: #FF6A00; flex-shrink: 0;"></div>
+                  <div>
+                    <div style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #FF6A00; letter-spacing: 1px; line-height: 1;">КАРТА ПОТЕРЬ</div>
+                    <div style="font-size: 9px; color: #999; text-transform: uppercase; letter-spacing: 2px; margin-top: 2px;">{{ mapSphere }}</div>
+                  </div>
+                </div>
+                <div style="background: rgba(255,106,0,0.07); border-left: 2px solid #FF6A00; padding: 11px 13px;">
+                  <div style="font-size: 9px; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 3px;">Оценочные потери / месяц</div>
+                  <div style="font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: #FF6A00; line-height: 1;">{{ mapTotal }} ₽</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                  <sc-for list="{{ mapLosses }}" as="loss" hint-placeholder-count="2">
+                    <div style="background: #131313; padding: 9px 11px;">
+                      <div style="display: flex; justify-content: space-between; gap: 8px; margin-bottom: 3px;">
+                        <span style="font-size: 12px; color: #B8B2A8; line-height: 1.35; flex: 1; text-wrap: pretty;">{{ loss.title }}</span>
+                        <span style="font-family: 'Bebas Neue', sans-serif; font-size: 12px; color: #FF6A00; white-space: nowrap; flex-shrink: 0;">{{ loss.fmt }} ₽</span>
+                      </div>
+                      <span style="font-size: 10px; color: #888;">{{ loss.note }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div>
+                  <div style="font-size: 9px; color: #505050; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;">AI-решения для вас</div>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <sc-for list="{{ mapAgents }}" as="agent" hint-placeholder-count="2">
+                      <div style="display: flex; gap: 8px;">
+                        <div style="width: 4px; height: 4px; background: #FF6A00; margin-top: 5px; flex-shrink: 0;"></div>
+                        <div>
+                          <div style="font-size: 12px; color: #B8B2A8; font-weight: 600; margin-bottom: 2px;">{{ agent.name }}</div>
+                          <div style="font-size: 11px; color: #888; line-height: 1.45;">{{ agent.effect }}</div>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="font-size: 11px; color: #999; border-top: 1px solid #1A1A1A; padding-top: 9px; line-height: 1.5;">{{ mapRoi }}</div>
+                <div style="font-size: 10px; color: #1E1E1E; font-style: italic; line-height: 1.4;">{{ mapDisclaimer }}</div>
+              </div>
+            </sc-if>
+
+            <!-- LEAD FORM -->
+            <sc-if value="{{ showLeadForm }}" hint-placeholder-val="{{ false }}">
+              <div style="background: #0E0E0E; border: 1px solid #1A1A1A; padding: 16px; display: flex; flex-direction: column; gap: 9px; animation: fadeUp 0.35s ease 0.15s both;">
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; color: #F0EEE8; line-height: 1.2;">ПОЛУЧИТЬ ПОЛНУЮ<br>ДИАГНОСТИКУ БЕСПЛАТНО</div>
+                <p style="font-size: 11px; color: #888; line-height: 1.5;">Составим точный план автоматизации под ваш бизнес.</p>
+                <input type="text" placeholder="Ваше имя" value="{{ lName }}" onChange="{{ onLName }}" style="background: #131313; border: 1px solid #1E1E1E; color: #F0EEE8; padding: 8px 11px; font-size: 13px; width: 100%; font-family: 'Inter', sans-serif; transition: border-color 0.18s;" style-focus="border-color: rgba(255,106,0,0.55);">
+                <input type="text" placeholder="Telegram (@username)" value="{{ lTg }}" onChange="{{ onLTg }}" style="background: #131313; border: 1px solid #1E1E1E; color: #F0EEE8; padding: 8px 11px; font-size: 13px; width: 100%; font-family: 'Inter', sans-serif; transition: border-color 0.18s;" style-focus="border-color: rgba(255,106,0,0.55);">
+                <sc-if value="{{ hasLErr }}" hint-placeholder-val="{{ false }}">
+                  <div style="font-size: 11px; color: #D95252; display: flex; align-items: center; gap: 5px;"><div style="width: 3px; height: 3px; background: #D95252; flex-shrink: 0;"></div>{{ lErr }}</div>
+                </sc-if>
+                <button onClick="{{ submitLead }}" style="background: #FF6A00; color: #090909; border: none; padding: 11px 16px; font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 1px; width: 100%;">ПОЛУЧИТЬ ДИАГНОСТИКУ →</button>
+              </div>
+            </sc-if>
+
+            <!-- DONE -->
+            <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+              <div style="background: rgba(255,106,0,0.05); border: 1px solid rgba(255,106,0,0.13); padding: 26px 18px; display: flex; flex-direction: column; align-items: center; gap: 9px; text-align: center; animation: fadeUp 0.35s ease;">
+                <div style="width: 36px; height: 36px; background: rgba(255,106,0,0.1); display: flex; align-items: center; justify-content: center;">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#FF6A00" stroke-width="2.5" stroke-linecap="square"></path></svg>
+                </div>
+                <div style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; color: #FF6A00;">ЗАЯВКА ПРИНЯТА</div>
+                <div style="font-size: 13px; color: #999; line-height: 1.65; max-width: 240px;">Напишем в Telegram в течение рабочего дня. Спасибо!</div>
+              </div>
+            </sc-if>
+
+          </div>
+
+          <!-- Input bar -->
+          <sc-if value="{{ isChatting }}" hint-placeholder-val="{{ false }}">
+            <div style="border-top: 1px solid #161616; padding: 11px 16px; display: flex; gap: 6px; background: #0C0C0C; flex-shrink: 0;">
+              <input type="text" placeholder="Введите ответ..." value="{{ inputVal }}" onChange="{{ handleInput }}" onKeyDown="{{ handleKey }}" disabled="{{ inputDisabled }}" style="flex: 1; background: #131313; border: 1px solid #1C1C1C; color: #F0EEE8; padding: 8px 12px; font-size: 13px; font-family: 'Inter', sans-serif; transition: border-color 0.18s;" style-focus="border-color: rgba(255,106,0,0.55);">
+              <button onClick="{{ sendMsg }}" style="background: #FF6A00; border: none; padding: 8px 13px; display: flex; align-items: center; justify-content: center;">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="#090909" stroke-width="2.5" stroke-linecap="square"></path></svg>
+              </button>
+            </div>
+          </sc-if>
+
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <!-- ══ TICKER ══ -->
+  <div style="overflow: hidden; background: #070707; border-top: 1px solid #0E0E0E; border-bottom: 1px solid #0E0E0E;">
+    <div style="display: flex; animation: marquee 44s linear infinite; width: max-content; align-items: center;">
+      <div style="display: flex; align-items: center; white-space: nowrap;"><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">47 КЛИЕНТОВ</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">₽2 МЛД АВТОМАТИЗИРОВАНО</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">AI-АГЕНТЫ 24/7</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">ROI ЗА 1–2 МЕСЯЦА</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">ВНЕДРЕНИЕ ПОД КЛЮЧ</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #FF6A00; padding: 11px 20px; display: inline-block;">БЕСПЛАТНАЯ ДИАГНОСТИКА</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">ОСТРЫЕ РЕШЕНИЯ ДЛЯ БИЗНЕСА</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span></div>
+      <div style="display: flex; align-items: center; white-space: nowrap;"><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">47 КЛИЕНТОВ</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">₽2 МЛД АВТОМАТИЗИРОВАНО</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">AI-АГЕНТЫ 24/7</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">ROI ЗА 1–2 МЕСЯЦА</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">ВНЕДРЕНИЕ ПОД КЛЮЧ</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #FF6A00; padding: 11px 20px; display: inline-block;">БЕСПЛАТНАЯ ДИАГНОСТИКА</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span><span style="font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2.5px; color: #505050; padding: 11px 20px; display: inline-block;">ОСТРЫЕ РЕШЕНИЯ ДЛЯ БИЗНЕСА</span><span style="color: rgba(255,106,0,0.35); padding: 0 2px; font-size: 13px; display: inline-block; line-height: 1; vertical-align: middle;">→</span></div>
+    </div>
+  </div>
+
+  <!-- ══ SERVICES TABS ══ -->
+  <div style="border-top: 1px solid #0F0F0F; padding: 68px 72px; background: #090909;">
+    <div style="display: flex; align-items: center; gap: 13px; margin-bottom: 36px;">
+      <div style="width: 4px; height: 4px; background: #FF6A00;"></div>
+      <span style="font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 2px; color: #F0EEE8; white-space: nowrap; flex-shrink: 0;">МЫ ДЕЛАЕМ ТАК</span>
+      <div style="flex: 1; height: 1px; background: #0F0F0F;"></div>
+    </div>
+    <div style="display: flex; gap: 0; border-bottom: 1px solid #141414; margin-bottom: 28px;">
+      <button onClick="{{ setTab0 }}" style="background: none; border: none; border-bottom: 2px solid {{ tab0Border }}; padding: 10px 22px; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 1.5px; color: {{ tab0Color }}; cursor: pointer; margin-bottom: -1px; white-space: nowrap;">ДИАГНОСТИКА</button>
+      <button onClick="{{ setTab1 }}" style="background: none; border: none; border-bottom: 2px solid {{ tab1Border }}; padding: 10px 22px; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 1.5px; color: {{ tab1Color }}; cursor: pointer; margin-bottom: -1px; white-space: nowrap">AI-АГЕНТЫ</button>
+      <button onClick="{{ setTab2 }}" style="background: none; border: none; border-bottom: 2px solid {{ tab2Border }}; padding: 10px 22px; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 1.5px; color: {{ tab2Color }}; cursor: pointer; margin-bottom: -1px; white-space: nowrap;">РАЗРАБОТКА ПО</button>
+      <button onClick="{{ setTab3 }}" style="background: none; border: none; border-bottom: 2px solid {{ tab3Border }}; padding: 10px 22px; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 1.5px; color: {{ tab3Color }}; cursor: pointer; margin-bottom: -1px; white-space: nowrap;">SAAS-ПЛАТФОРМЫ</button>
+    </div>
+    <sc-if value="{{ isTab0 }}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; animation: fadeUp 0.2s ease;">
+        <div style="background: #0C0C0C; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: #FF6A00; letter-spacing: 1px; line-height: 1.05;">ДИАГНОСТИКА<br>БИЗНЕС-ПРОЦЕССОВ</div>
+          <p style="font-size: 12px; color: #888; line-height: 1.7;">90% компаний внедряют AI не там, где нужно. Мы находим точки, где автоматизация принесёт измеримую прибыль — а где не принесёт.</p>
+          <div style="display: flex; flex-direction: column; gap: 7px;">
+            <div style="display: flex; gap: 9px; align-items: flex-start;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Карта бизнес-процессов с оценкой потенциала</span></div>
+            <div style="display: flex; gap: 9px; align-items: flex-start;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Расчёт ROI для каждой точки внедрения</span></div>
+            <div style="display: flex; gap: 9px; align-items: flex-start;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Приоритизированный roadmap автоматизации</span></div>
+            <div style="display: flex; gap: 9px; align-items: flex-start;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Оценка сроков и бюджета внедрения</span></div>
+          </div>
+          <div style="display: flex; gap: 24px; padding-top: 12px; border-top: 1px solid #161616;">
+            <div><div style="font-size: 9px; color: #777; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 3px;">Срок</div><div style="font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #FF6A00;">3 ДНЯ</div></div>
+            <div><div style="font-size: 9px; color: #777; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 3px;">Стоимость</div><div style="font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #FF6A00;">БЕСПЛАТНО</div></div>
+          </div>
+        </div>
+        <div style="background: #0D0D0D; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px;">
+
+          <div style="font-size: 10px; color: #2A2A2A; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">Каждый клиент получает</div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="background: #131313; padding: 10px 13px; font-size: 12px; color: #888;">Детальную карту потерь в ₽ и часах</div>
+            <div style="background: #131313; padding: 10px 13px; font-size: 12px; color: #888;">Список приоритетных точек автоматизации</div>
+            <div style="background: #131313; padding: 10px 13px; font-size: 12px; color: #888;">Предварительный план внедрения с ROI</div>
+          </div>
+          <a href="#contact" style="display: inline-flex; align-items: center; justify-content: center; background: #FF6A00; color: #090909; padding: 12px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; cursor: pointer; text-decoration: none; margin-top: auto;">ЗАКАЗАТЬ ДИАГНОСТИКУ</a>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isTab1 }}" hint-placeholder-val="{{ false }}">
+      <div style="animation: fadeUp 0.2s ease; display: flex; flex-direction: column; gap: 2px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px;">
+          <div style="background: #0C0C0C; padding: 20px 22px;"><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 9px; font-weight: 600;">Для продаж</div><div style="display: flex; flex-direction: column; gap: 5px;"><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Нейропродажник — первый контакт, квалификация, передача в CRM</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">AI-обработка заявок — мгновенные ответы 24/7</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">WhatsApp/Telegram агент — автоматизация переписки</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">AI-автодозвон — массовый обзвон с квалификацией</span></div></div></div>
+          <div style="background: #0C0C0C; padding: 20px 22px;"><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 9px; font-weight: 600;">Для поддержки</div><div style="display: flex; flex-direction: column; gap: 5px;"><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">FAQ-бот 24/7 — ответы без участия человека</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Сервис-деск триаж — маршрутизация обращений</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Анти-No-Show — напоминания о записях</span></div></div></div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px;">
+          <div style="background: #0C0C0C; padding: 20px 22px;"><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 9px; font-weight: 600;">Для аналитики</div><div style="display: flex; flex-direction: column; gap: 5px;"><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">AI-аналитик звонков — проверка 100% разговоров</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">BI-дашборд с AI — визуализация + рекомендации</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Предиктивная аналитика — прогнозы и тренды</span></div></div></div>
+          <div style="background: #0C0C0C; padding: 20px 22px;"><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 9px; font-weight: 600;">Для HR</div><div style="display: flex; flex-direction: column; gap: 5px;"><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">AI HR-скрининг — первичное интервьюирование</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Онбординг-агент — адаптация новичков</span></div></div></div>
+        </div>
+        <div style="background: #0D0D0D; padding: 16px 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+          <div style="display: flex; gap: 28px;"><div><div style="font-size: 9px; color: #777; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px;">Срок</div><div style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #FF6A00;">5–14 ДНЕЙ</div></div><div><div style="font-size: 9px; color: #777; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px;">Стоимость</div><div style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #FF6A00;">ОТ 30 000 ₽</div></div></div>
+          <a href="#contact" style="background: #FF6A00; color: #090909; padding: 10px 18px; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 1px; cursor: pointer; text-decoration: none;">ПОСМОТРЕТЬ КАТАЛОГ</a>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isTab2 }}" hint-placeholder-val="{{ false }}">
+      <div style="animation: fadeUp 0.2s ease; display: flex; flex-direction: column; gap: 2px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px;">
+          <div style="background: #0C0C0C; padding: 20px 22px;"><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 9px; font-weight: 600;">Веб-приложения</div><div style="display: flex; flex-direction: column; gap: 5px;"><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Дашборды и админ-панели</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Личные кабинеты</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">CRM-интерфейсы</span></div></div></div>
+          <div style="background: #0C0C0C; padding: 20px 22px;"><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 9px; font-weight: 600;">Мобильная разработка</div><div style="display: flex; flex-direction: column; gap: 5px;"><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">PWA-приложения</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Mini app Telegram</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Нативные приложения</span></div></div></div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px;">
+          <div style="background: #0C0C0C; padding: 20px 22px;"><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 9px; font-weight: 600;">Интеграции</div><div style="display: flex; flex-direction: column; gap: 5px;"><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">AmoCRM, Bitrix24, 1С</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Телефония, платёжные системы</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Любые API</span></div></div></div>
+          <div style="background: #0C0C0C; padding: 20px 22px;"><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 9px; font-weight: 600;">BI-аналитика</div><div style="display: flex; flex-direction: column; gap: 5px;"><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Realtime-дашборды</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Автоматические отчёты</span></div><div style="display: flex; gap: 8px;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0; margin-top: 6px;"></div><span style="font-size: 12px; color: #999;">Экспорт в Excel/PDF</span></div></div></div>
+        </div>
+        <div style="background: #0D0D0D; padding: 16px 22px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+          <div style="display: flex; gap: 28px;"><div><div style="font-size: 9px; color: #777; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px;">Срок</div><div style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #FF6A00;">ОТ 7 ДНЕЙ</div></div><div><div style="font-size: 9px; color: #777; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px;">Стоимость</div><div style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: #FF6A00">ОТ 90 000 ₽</div></div></div>
+          <a href="#contact" style="background: #FF6A00; color: #090909; padding: 10px 18px; font-family: 'Bebas Neue', sans-serif; font-size: 13px; letter-spacing: 1px; cursor: pointer; text-decoration: none;">ОБСУДИТЬ ПРОЕКТ</a>
+        </div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ isTab3 }}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; animation: fadeUp 0.2s ease;">
+        <div style="background: #0C0C0C; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: #FF6A00; letter-spacing: 1px; line-height: 1.05;">SAAS-ПЛАТФОРМЫ</div>
+          <p style="font-size: 12px; color: #888; line-height: 1.7;">Для компаний, которые хотят масштабировать AI на всю организацию или монетизировать решение.</p>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: rgba(255,106,0,0.08); border-left: 2px solid #FF6A00;"><span style="font-family: 'Bebas Neue', sans-serif; font-size: 12px; color: #FF6A00; letter-spacing: 1px;">DISCOVERY</span><span style="font-size: 11px; color: #777;">1–2 недели</span></div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #111;"><span style="font-family: 'Bebas Neue', sans-serif; font-size: 12px; color: #777; letter-spacing: 1px;">POC</span><span style="font-size: 11px; color: #333;">3–6 недель</span></div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #111;"><span style="font-family: 'Bebas Neue', sans-serif; font-size: 12px; color: #777; letter-spacing: 1px;">PILOT</span><span style="font-size: 11px; color: #333;">1–2 месяца</span></div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #111;"><span style="font-family: 'Bebas Neue', sans-serif; font-size: 12px; color: #777; letter-spacing: 1px;">SCALE</span><span style="font-size: 11px; color: #333;">2–3 месяца</span></div>
+          </div>
+          <div style="display: flex; gap: 24px; padding-top: 12px; border-top: 1px solid #161616;"><div><div style="font-size: 9px; color: #777; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px;">Срок</div><div style="font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #FF6A00;">ОТ 4 НЕДЕЛЬ</div></div><div><div style="font-size: 9px; color: #777; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px;">Стоимость</div><div style="font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: #FF6A00;">ОТ 250 000 ₽</div></div></div>
+        </div>
+        <div style="background: #0D0D0D; padding: 30px 28px; display: flex; flex-direction: column; gap: 14px;">
+          <div style="font-size: 10px; color: #333; letter-spacing: 2px; text-transform: uppercase;">Что входит в результат</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; font-weight: 600;">Архитектура</div><div style="font-size: 12px; color: #777; line-height: 1.7;">• Мультитенантность<br>• Защита данных<br>• Масштабируемость</div></div>
+            <div><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; font-weight: 600;">Бизнес-логика</div><div style="font-size: 12px; color: #777; line-height: 1.7;">• Биллинг<br>• Роли<br>• White-label</div></div>
+            <div><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; font-weight: 600;">Поддержка</div><div style="font-size: 12px; color: #777; line-height: 1.7;">• 3 мес сопровождения<br>• Документация<br>• Обучение</div></div>
+            <div><div style="font-size: 10px; color: #FF6A00; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; font-weight: 600;">Безопасность</div><div style="font-size: 12px; color: #777; line-height: 1.7;">• 152-ФЗ<br>• Хэширование<br>• Rate limit</div></div>
+          </div>
+          <a href="#contact" style="display: inline-flex; align-items: center; justify-content: center; background: #FF6A00; color: #090909; padding: 12px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; cursor: pointer; text-decoration: none; margin-top: auto;">ОБСУДИТЬ ПРОЕКТ</a>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- ══ FOR WHOM ══ -->
+  <div style="border-top: 1px solid #0F0F0F; padding: 68px 72px;">
+    <div style="display: flex; align-items: center; gap: 13px; margin-bottom: 40px;">
+      <div style="width: 4px; height: 4px; background: #FF6A00;"></div>
+      <span style="font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 2px; color: #F0EEE8;">ДЛЯ КОГО</span>
+      <div style="flex: 1; height: 1px; background: #0F0F0F;"></div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;">
+      <div style="background: #0C0C0C; padding: 30px 26px; display: flex; flex-direction: column; gap: 11px; transition: background 0.25s, transform 0.25s;" style-hover="background: #111; transform: translateY(-3px);">
+        <div style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1.5px; color: #FF6A00;">МАЛЫЙ БИЗНЕС</div>
+        <p style="font-size: 13px; color: #999; line-height: 1.75;">2–50 сотрудников. Рутина съедает время — хотите автоматизировать и освободить команду для роста.</p>
+        <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 3px;">
+          <span style="font-size: 11px; color: #888888; padding-left: 9px; border-left: 2px solid #FF6A00;">Онлайн-школы</span>
+          <span style="font-size: 11px; color: #888888; padding-left: 9px; border-left: 2px solid #FF6A00;">Агентства</span>
+          <span style="font-size: 11px; color: #888888; padding-left: 9px; border-left: 2px solid #FF6A00;">Сервисный бизнес</span>
+        </div>
+      </div>
+      <div style="background: #0C0C0C; padding: 30px 26px; display: flex; flex-direction: column; gap: 11px; transition: background 0.25s, transform 0.25s;" style-hover="background: #111; transform: translateY(-3px);">
+        <div style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1.5px; color: #FF6A00;">СРЕДНИЙ БИЗНЕС</div>
+        <p style="font-size: 13px; color: #999; line-height: 1.75;">50–500 сотрудников. Нужны системные AI-решения, которые масштабируются вместе с компанией.</p>
+        <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 3px;">
+          <span style="font-size: 11px; color: #888888; padding-left: 9px; border-left: 2px solid #FF6A00;">Торговля, e-commerce</span>
+          <span style="font-size: 11px; color: #888888; padding-left: 9px; border-left: 2px solid #FF6A00;">Медицина, клиники</span>
+          <span style="font-size: 11px; color: #888888; padding-left: 9px; border-left: 2px solid #FF6A00;">Строительство</span>
+        </div>
+      </div>
+      <div style="background: #0C0C0C; padding: 30px 26px; display: flex; flex-direction: column; gap: 11px; transition: background 0.25s, transform 0.25s;" style-hover="background: #111; transform: translateY(-3px);">
+        <div style="font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1.5px; color: #FF6A00;">ПРЕДПРИНИМАТЕЛИ</div>
+        <p style="font-size: 13px; color: #999; line-height: 1.75;">Хотите понять, где теряете деньги сейчас, и с чего начать автоматизацию с измеримым ROI.</p>
+        <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 3px;">
+          <span style="font-size: 11px; color: #888888; padding-left: 9px; border-left: 2px solid #FF6A00;">Первый AI-проект</span>
+          <span style="font-size: 11px; color: #888888; padding-left: 9px; border-left: 2px solid #FF6A00;">Оценка потенциала</span>
+          <span style="font-size: 11px; color: #888888; padding-left: 9px; border-left: 2px solid #FF6A00;">Быстрый старт</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ HOW IT WORKS ══ -->
+  <div style="background: #0A0A0A; border-top: 1px solid #0F0F0F; border-bottom: 1px solid #0F0F0F; padding: 68px 72px;">
+    <div style="display: flex; align-items: center; gap: 13px; margin-bottom: 48px;">
+      <div style="width: 4px; height: 4px; background: #FF6A00;"></div>
+      <span style="font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 2px; color: #F0EEE8;">КАК ЭТО РАБОТАЕТ</span>
+      <div style="flex: 1; height: 1px; background: #141414;"></div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative;">
+      <div style="position: absolute; top: 26px; left: 27px; right: 27px; height: 1px; background: linear-gradient(90deg, #FF6A00 0%, rgba(255,106,0,0.5) 50%, rgba(255,106,0,0.1) 100%); pointer-events: none;"></div>
+      <div style="padding: 0 26px 0 0; display: flex; flex-direction: column; gap: 13px; position: relative; overflow: hidden;">
+        <div style="position: absolute; bottom: -22px; right: -8px; font-family: 'Bebas Neue', sans-serif; font-size: 104px; line-height: 1; color: rgba(255,106,0,0.055); pointer-events: none; z-index: 0; user-select: none; letter-spacing: -4px;">01</div>
+        <div style="width: 52px; height: 52px; background: #FF6A00; display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; flex-shrink: 0;"><span style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #090909;">01</span></div>
+        <div style="font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; color: #F0EEE8; line-height: 1.2;">ЗАПУСКАЕТЕ<br>ДИАГНОСТИКУ</div>
+        <p style="font-size: 12px; color: #888; line-height: 1.65;">Кликаете кнопку "Начать диагностику" на сайте.</p>
+      </div>
+      <div style="padding: 0 26px; display: flex; flex-direction: column; gap: 13px; border-left: 1px solid #141414;">
+        <div style="width: 52px; height: 52px; background: rgba(255,106,0,0.1); border: 1px solid rgba(255,106,0,0.22); display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; flex-shrink: 0;"><span style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #FF6A00;">02</span></div>
+        <div style="font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; color: #F0EEE8; line-height: 1.2;">ОТВЕЧАЕТЕ<br>НА 2–3 ВОПРОСА</div>
+        <p style="font-size: 12px; color: #888; line-height: 1.65;">AI спрашивает о бизнесе, масштабе и главных болях. Просто и коротко.</p>
+      </div>
+      <div style="padding: 0 26px; display: flex; flex-direction: column; gap: 13px; border-left: 1px solid #141414;">
+        <div style="width: 52px; height: 52px; background: rgba(255,106,0,0.1); border: 1px solid rgba(255,106,0,0.22); display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; flex-shrink: 0;"><span style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #FF6A00;">03</span></div>
+        <div style="font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; color: #F0EEE8; line-height: 1.2;">ПОЛУЧАЕТЕ<br>КАРТУ ПОТЕРЬ</div>
+        <p style="font-size: 12px; color: #888; line-height: 1.65;">Карта показывает где теряются деньги в ₽/мес и какие AI-агенты это исправят.</p>
+      </div>
+      <div style="padding: 0 0 0 26px; display: flex; flex-direction: column; gap: 13px; border-left: 1px solid #141414; position: relative; overflow: hidden;">
+        <div style="position: absolute; bottom: -22px; right: -8px; font-family: 'Bebas Neue', sans-serif; font-size: 104px; line-height: 1; color: rgba(255,106,0,0.055); pointer-events: none; z-index: 0; user-select: none; letter-spacing: -4px;">04</div>
+        <div style="width: 52px; height: 52px; background: rgba(255,106,0,0.1); border: 1px solid rgba(255,106,0,0.22); display: flex; align-items: center; justify-content: center; position: relative; z-index: 1; flex-shrink: 0;"><span style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; color: #FF6A00;">04</span></div>
+        <div style="font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; color: #F0EEE8; line-height: 1.2;">ВНЕДРЯЕМ<br>ПОД КЛЮЧ</div>
+        <p style="font-size: 12px; color: #888; line-height: 1.65;">Команда Rhema строит AI-агентов под ваш бизнес. Берём весь цикл на себя.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FULL CYCLE ══ -->
+  <div style="background: #FF6A00; padding: 72px 72px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center;">
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 4px; height: 4px; background: #090909;"></div>
+          <span style="font-size: 10px; color: rgba(0,0,0,0.45); letter-spacing: 3px; text-transform: uppercase; font-weight: 600;">Не только диагностика</span>
+        </div>
+        <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: clamp(38px, 3.6vw, 58px); line-height: 0.9; color: #090909; letter-spacing: -0.5px;">
+          <span style="display: block;">ДИАГНОСТИКА</span>
+          <span style="display: block; opacity: 0.55;">ЭТО ТОЛЬКО</span>
+          <span style="display: block;">НАЧАЛО</span>
+        </h2>
+        <p style="font-size: 14px; color: rgba(0,0,0,0.55); line-height: 1.8; max-width: 380px;">Мы не просто показываем, где теряются деньги. Мы строим AI-агентов, которые эти потери устраняют — под ключ, от архитектуры до запуска и поддержки.</p>
+        <a href="#contact" style="display: inline-flex; align-items: center; gap: 8px; background: #090909; color: #FF6A00; padding: 13px 22px; font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1.5px; width: fit-content;">
+          ОБСУДИТЬ ПРОЕКТ
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#FF6A00" stroke-width="1.8" stroke-linecap="square"></path></svg>
+        </a>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <div style="background: rgba(0,0,0,0.08); padding: 22px 24px; display: flex; gap: 16px; align-items: flex-start;">
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: rgba(0,0,0,0.25); line-height: 1; flex-shrink: 0; width: 36px;">01</div>
+          <div>
+            <div style="font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: #090909; letter-spacing: 1px; margin-bottom: 5px;">ДИАГНОСТИКА</div>
+            <div style="font-size: 13px; color: rgba(0,0,0,0.5); line-height: 1.6;">AI-агент выявляет узкие места и строит карту потерь в ₽ и часах</div>
+          </div>
+        </div>
+        <div style="background: rgba(0,0,0,0.12); padding: 22px 24px; display: flex; gap: 16px; align-items: flex-start;">
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: rgba(0,0,0,0.25); line-height: 1; flex-shrink: 0; width: 36px;">02</div>
+          <div>
+            <div style="font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: #090909; letter-spacing: 1px; margin-bottom: 5px;">ПРОЕКТИРОВАНИЕ</div>
+            <div style="font-size: 13px; color: rgba(0,0,0,0.5); line-height: 1.6;">Разрабатываем архитектуру AI-решений с расчётом ROI под ваш бизнес</div>
+          </div>
+        </div>
+        <div style="background: rgba(0,0,0,0.17); padding: 22px 24px; display: flex; gap: 16px; align-items: flex-start;">
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: rgba(0,0,0,0.25); line-height: 1; flex-shrink: 0; width: 36px;">03</div>
+          <div>
+            <div style="font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: #090909; letter-spacing: 1px; margin-bottom: 5px;">ВНЕДРЕНИЕ ПОД КЛЮЧ</div>
+            <div style="font-size: 13px; color: rgba(0,0,0,0.5); line-height: 1.6;">Строим и запускаем AI-агентов. Интегрируем в ваши процессы за 2–6 недель</div>
+          </div>
+        </div>
+        <div style="background: rgba(0,0,0,0.22); padding: 22px 24px; display: flex; gap: 16px; align-items: flex-start;">
+          <div style="font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: rgba(0,0,0,0.25); line-height: 1; flex-shrink: 0; width: 36px;">04</div>
+          <div>
+            <div style="font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: #090909; letter-spacing: 1px; margin-bottom: 5px;">СОПРОВОЖДЕНИЕ</div>
+            <div style="font-size: 13px; color: rgba(0,0,0,0.5); line-height: 1.6;">Мониторинг, обновления и масштабирование — пока агенты растут вместе с бизнесом</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FAQ ══ -->
+  <div style="border-top: 1px solid #0F0F0F; padding: 68px 72px; background: #090909;">
+    <div style="display: flex; align-items: center; gap: 13px; margin-bottom: 48px;">
+      <div style="width: 4px; height: 4px; background: #FF6A00;"></div>
+      <span style="font-family: 'Bebas Neue', sans-serif; font-size: 34px; letter-spacing: 2px; color: #F0EEE8;">ЧАСТЫЕ ВОПРОСЫ</span>
+      <div style="flex: 1; height: 1px; background: #0F0F0F;"></div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start;">
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <sc-for list="{{ faqItems }}" as="faq" hint-placeholder-count="6">
+          <div style="background: #0C0C0C; cursor: pointer;" onClick="{{ faq.toggle }}">
+            <div style="padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; gap: 16px;">
+              <span style="font-family: 'Bebas Neue', sans-serif; font-size: 17px; letter-spacing: 1px; color: {{ faq.qColor }}; line-height: 1.2; flex: 1; transition: color 0.2s;">{{ faq.q }}</span>
+              <div style="width: 24px; height: 24px; border: 1px solid {{ faq.borderColor }}; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: border-color 0.2s;">
+                <span style="color: {{ faq.iconColor }}; font-size: 17px; line-height: 1; font-weight: 300; user-select: none; display: block;">{{ faq.icon }}</span>
+              </div>
+            </div>
+            <sc-if value="{{ faq.isOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 0 22px 20px 22px; border-top: 1px solid #141414; animation: fadeUp 0.18s ease;">
+                <p style="font-size: 14px; color: #AAAAAA; line-height: 1.85; padding-top: 15px; text-wrap: pretty;">{{ faq.a }}</p>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 22px; padding-top: 6px; position: sticky; top: 72px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div style="width: 36px; height: 1px; background: #FF6A00;"></div>
+          <span style="font-size: 10px; color: #FF6A00; letter-spacing: 3px; text-transform: uppercase; font-weight: 600;">Не нашли ответ?</span>
+        </div>
+        <p style="font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: #F0EEE8; line-height: 1.0; letter-spacing: 1px;">СПРОСИТЕ<br><span style="color: #FF6A00;">НАПРЯМУЮ</span></p>
+        <p style="font-size: 14px; color: #AAAAAA; line-height: 1.75; max-width: 280px; text-wrap: pretty;">Ответим в течение рабочего дня — в Telegram или по телефону.</p>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <a href="#contact" style="background: #FF6A00; color: #090909; padding: 12px 20px; font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 1px; text-decoration: none; display: inline-block; width: fit-content;">НАПИСАТЬ НАМ →</a>
+          <span style="font-size: 10px; color: #666;">Бесплатно · без обязательств</span>
+        </div>
+        <div style="border-top: 1px solid #141414; padding-top: 20px; display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 9px; align-items: center;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0;"></div><span style="font-size: 12px; color: #888;">10 клиентов уже работают с нами</span></div>
+          <div style="display: flex; gap: 9px; align-items: center;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0;"></div><span style="font-size: 12px; color: #888;">Средний ROI — 1–2 месяца</span></div>
+          <div style="display: flex; gap: 9px; align-items: center;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0;"></div><span style="font-size: 12px; color: #888;">Бесплатная диагностика за 2 минуты</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CONTACT ══ -->
+  <div id="contact" style="padding: 68px 72px; display: grid; grid-template-columns: 1fr 440px; gap: 68px;">
+    <div style="display: flex; flex-direction: column; gap: 18px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <div style="width: 4px; height: 4px; background: #FF6A00;"></div>
+        <span style="font-size: 10px; color: #FF6A00; letter-spacing: 3px; text-transform: uppercase; font-weight: 600;">Прямая связь</span>
+      </div>
+      <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 3.4vw, 62px); line-height: 0.9; letter-spacing: -0.5px;">
+        <span style="display: block; color: #F0EEE8;">ОСТАВЬТЕ</span>
+        <span style="display: block; color: #FF6A00;">ЗАЯВКУ</span>
+      </h2>
+      <p style="font-size: 13px; color: #888; line-height: 1.8; max-width: 340px;">Не хотите проходить диагностику — просто напишите. Свяжемся и разберём всё лично.</p>
+      <div style="display: flex; flex-direction: column; gap: 9px; margin-top: 10px; padding-top: 18px; border-top: 1px solid #0F0F0F;">
+        <div style="display: flex; gap: 9px; align-items: center;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0;"></div><span style="font-size: 12px; color: #505050;">Отвечаем в течение рабочего дня</span></div>
+        <div style="display: flex; gap: 9px; align-items: center;"><div style="width: 3px; height: 3px; background: #FF6A00; flex-shrink: 0;"></div><span style="font-size: 12px; color: #505050;">Первая консультация — бесплатно</span></div>
+      </div>
+    </div>
+    <div style="background: #0C0C0C; padding: 32px 28px; display: flex; flex-direction: column; gap: 10px;">
+      <input type="text" placeholder="Ваше имя" style="background: #131313; border: 1px solid #1C1C1C; color: #F0EEE8; padding: 11px 14px; font-size: 14px; font-family: 'Inter', sans-serif; width: 100%; transition: border-color 0.18s;" style-focus="border-color: rgba(255,106,0,0.55);">
+      <input type="text" placeholder="Telegram (@username)" style="background: #131313; border: 1px solid #1C1C1C; color: #F0EEE8; padding: 11px 14px; font-size: 14px; font-family: 'Inter', sans-serif; width: 100%; transition: border-color 0.18s;" style-focus="border-color: rgba(255,106,0,0.55);">
+      <textarea placeholder="Расскажите о вашем бизнесе..." rows="4" style="background: #131313; border: 1px solid #1C1C1C; color: #F0EEE8; padding: 11px 14px; font-size: 14px; font-family: 'Inter', sans-serif; width: 100%; resize: none; transition: border-color 0.18s;" style-focus="border-color: rgba(255,106,0,0.55);"></textarea>
+      <button style="background: #FF6A00; color: #090909; border: none; padding: 13px 22px; font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 1px; width: 100%;">ОСТАВИТЬ ЗАЯВКУ</button>
+      <p style="font-size: 10px; color: #383838; text-align: center; line-height: 1.5;">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</p>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <footer style="border-top: 1px solid #0F0F0F; padding: 24px 72px; display: flex; align-items: center; justify-content: space-between;">
+    <img src="logo.png" height="22" style="display:block;flex-shrink:0;width:auto;" alt="RHEMA AI">
+    <span style="font-size: 10px; color: #3A3A3A;">© 2026 Rhema AI. Все права защищены.</span>
+    <div style="display: flex; gap: 22px;">
+      <a href="#" style="font-size: 10px; color: #777; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;" style-hover="color:#333">Telegram</a>
+      <a href="#" style="font-size: 10px; color: #777; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 500;" style-hover="color:#333">WhatsApp</a>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  chatRef = React.createRef();
+  _timer = null;
+
+  AI_MSGS = [
+    'Здравствуйте! Расскажите, чем занимается ваш бизнес и что сейчас больше всего отнимает время или деньги?',
+    'Понял вас. А какой примерный оборот в месяц или сколько у вас клиентов? Это нужно для точной оценки потерь.',
+    'Отличная картина — уже вижу несколько зон. Дайте 15 секунд, составлю персональную карту потерь.',
+  ];
+
+  MAP = {
+    sphere: 'Ваш бизнес',
+    total: '430 000',
+    losses: [
+      { title: 'Ручная обработка заявок и повторяющихся вопросов', fmt: '220 000', note: '≈ 80 часов в месяц на типовые ответы' },
+      { title: 'Лиды уходят без ответа в нерабочее время', fmt: '180 000', note: 'Часть клиентов не ждёт и уходит к конкурентам' },
+      { title: 'Ручное ведение документов и напоминаний', fmt: '30 000', note: '≈ 15 часов менеджерской работы в месяц' },
+    ],
+    agents: [
+      { name: 'AI-ассистент поддержки 24/7', effect: 'Отвечает клиентам за 1 минуту в любое время, снимает до 70% типовых вопросов' },
+      { name: 'Агент квалификации лидов', effect: 'Доводит лид до оплаты без участия менеджера, работает круглосуточно' },
+    ],
+    roi: 'Ориентировочная окупаемость — 1–2 месяца за счёт удержания лидов и экономии 80+ часов рутины.',
+    disclaimer: 'Это предварительная оценка на основе ваших ответов. Точные цифры покажет бесплатная диагностика.',
+  };
+
+  FAQ_ITEMS = [
+    {
+      q: 'СКОЛЬКО СТОИТ ВНЕДРЕНИЕ AI-АГЕНТА?',
+      a: 'Стоимость зависит от задачи и масштаба. Базовые агенты для малого бизнеса — от 60 000 ₽. Комплексные решения — от 150 000 ₽. Точную цифру называем после бесплатной диагностики: без неё любая цена будет пальцем в небо.',
+    },
+    {
+      q: 'СКОЛЬКО ВРЕМЕНИ ЗАНИМАЕТ ЗАПУСК?',
+      a: 'Простые агенты запускаем за 5–7 рабочих дней. Полный цикл с интеграцией в CRM, телефонию и мессенджеры — 2–4 недели. У каждого проекта жёсткий дедлайн — мы не растягиваем сроки.',
+    },
+    {
+      q: 'НУЖЕН ЛИ ТЕХНИЧЕСКИЙ СПЕЦИАЛИСТ НА НАШЕЙ СТОРОНЕ?',
+      a: 'Нет. Мы берём весь технический цикл на себя — от архитектуры до деплоя. Вам нужен только один контакт, который знает бизнес-процессы. Мы сами задаём нужные вопросы и разбираемся в специфике ниши.',
+    },
+    {
+      q: 'КАК ПРОИСХОДИТ ИНТЕГРАЦИЯ С НАШИМИ СИСТЕМАМИ?',
+      a: 'Интегрируемся с AmoCRM, Bitrix24, 1С, любыми CRM через API, WhatsApp, Telegram, телефонией (Mango, Sipuni, UIS) и платёжными системами. Нестандартная система — не проблема: оценим в рамках диагностики.',
+    },
+    {
+      q: 'ЧТО ЕСЛИ AI-АГЕНТ НЕ СПРАВИТСЯ С ЗАПРОСОМ?',
+      a: 'Все агенты проектируются с эскалацией: если бот не уверен в ответе, он корректно передаёт диалог живому сотруднику. Клиент не застревает в петле — это наш стандарт. 3 месяца сопровождения после запуска входят в стоимость.',
+    },
+    {
+      q: 'КАКОЙ ROI МОЖНО ОЖИДАТЬ?',
+      a: 'По нашей статистике — окупаемость за 1–2 месяца. В среднем клиент экономит 60–120 часов рутины и сохраняет 15–30% лидов, которые раньше уходили без ответа. Точный расчёт ROI для вашей ниши покажет бесплатная диагностика.',
+    },
+  ];
+
+  state = {
+    chatState: 'idle',
+    msgs: [],
+    stream: '',
+    isStreaming: false,
+    typing: false,
+    aiTurn: 0,
+    inputVal: '',
+    inputDisabled: false,
+    lName: '',
+    lTg: '',
+    lErr: '',
+    tab: 0,
+    openFaq: -1,
+  };
+
+  componentDidUpdate() {
+    const el = this.chatRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }
+
+  componentWillUnmount() {
+    if (this._timer) clearInterval(this._timer);
+  }
+
+  addMsg(text, isUser) {
+    const msg = isUser
+      ? { text, align: 'flex-end', bg: '#FF6A00', color: '#090909' }
+      : { text, align: 'flex-start', bg: '#181818', color: '#C0BBB2' };
+    this.setState(s => ({ msgs: [...s.msgs, msg] }));
+  }
+
+  streamText(text, onDone) {
+    if (this._timer) clearInterval(this._timer);
+    let i = 0;
+    this.setState({ isStreaming: true, stream: text[0] || '', typing: false, inputDisabled: true });
+    this._timer = setInterval(() => {
+      i++;
+      if (i >= text.length) {
+        clearInterval(this._timer);
+        this._timer = null;
+        this.setState({ isStreaming: false, stream: '' }, () => onDone(text));
+      } else {
+        this.setState({ stream: text.slice(0, i + 1) });
+      }
+    }, 22);
+  }
+
+  setTab = (n) => this.setState({ tab: n });
+
+  componentDidMount() {
+    const counters = document.querySelectorAll('[data-count]');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const target = parseFloat(el.dataset.count);
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const dur = 1400;
+        const start = performance.now();
+        const isFloat = el.dataset.float === '1';
+        const step = (now) => {
+          const t = Math.min((now - start) / dur, 1);
+          const ease = 1 - Math.pow(1 - t, 3);
+          const val = target * ease;
+          el.textContent = prefix + (isFloat ? val.toFixed(1) : Math.round(val)) + suffix;
+          if (t < 1) requestAnimationFrame(step);
+        };
+        requestAnimationFrame(step);
+        io.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    counters.forEach(el => io.observe(el));
+  }
+
+  startChat = () => {
+    if (this.state.chatState !== 'idle') return;
+    this.setState({ chatState: 'active', typing: true, inputDisabled: true, msgs: [], aiTurn: 0 });
+    setTimeout(() => {
+      this.streamText(this.AI_MSGS[0], t => {
+        this.addMsg(t, false);
+        this.setState({ aiTurn: 1, inputDisabled: false });
+      });
+    }, 600);
+  };
+
+  handleInput = (e) => this.setState({ inputVal: e.target.value });
+
+  handleKey = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      this.sendMsg();
+    }
+  };
+
+  sendMsg = () => {
+    const { inputVal, aiTurn, chatState, inputDisabled } = this.state;
+    if (!inputVal.trim() || chatState !== 'active' || inputDisabled) return;
+    const text = inputVal.trim();
+    this.addMsg(text, true);
+    this.setState({ inputVal: '', typing: true, inputDisabled: true });
+    const turn = aiTurn;
+    setTimeout(() => {
+      if (turn < this.AI_MSGS.length) {
+        this.streamText(this.AI_MSGS[turn], t => {
+          this.addMsg(t, false);
+          if (turn === this.AI_MSGS.length - 1) {
+            this.setState({ chatState: 'map_loading', inputDisabled: true });
+            setTimeout(() => this.setState({ chatState: 'map_shown' }), 2600);
+          } else {
+            this.setState({ aiTurn: turn + 1, inputDisabled: false });
+          }
+        });
+      }
+    }, 900);
+  };
+
+  submitLead = () => {
+    const { lName, lTg } = this.state;
+    if (!lName.trim() || lName.trim().length < 2) {
+      this.setState({ lErr: 'Укажите имя (минимум 2 символа)' });
+      return;
+    }
+    const tg = lTg.replace(/^@/, '');
+    if (!/^[a-zA-Z0-9_]{5,32}$/.test(tg)) {
+      this.setState({ lErr: 'Некорректный Telegram-юзернейм (5–32 символа, только a–z, 0–9, _)' });
+      return;
+    }
+    this.setState({ chatState: 'done', lErr: '' });
+  };
+
+  renderVals() {
+    const s = this.state;
+    const t = s.tab;
+    const OB = '#FF6A00';
+    const DM = 'transparent';
+    return {
+      isTab0: t === 0, isTab1: t === 1, isTab2: t === 2, isTab3: t === 3,
+      tab0Border: t===0?OB:DM, tab1Border: t===1?OB:DM, tab2Border: t===2?OB:DM, tab3Border: t===3?OB:DM,
+      tab0Color: t===0?OB:'#777777', tab1Color: t===1?OB:'#777777', tab2Color: t===2?OB:'#777777', tab3Color: t===3?OB:'#777777',
+      setTab0: () => this.setTab(0), setTab1: () => this.setTab(1), setTab2: () => this.setTab(2), setTab3: () => this.setTab(3),
+      isIdle: s.chatState === 'idle',
+      chatOpen: s.chatState !== 'idle',
+      typingNS: s.typing && !s.isStreaming,
+      isStreaming: s.isStreaming,
+      stream: s.stream,
+      isChatting: s.chatState === 'active',
+      isMapLoading: s.chatState === 'map_loading',
+      showMap: s.chatState === 'map_shown' || s.chatState === 'done',
+      showLeadForm: s.chatState === 'map_shown',
+      isDone: s.chatState === 'done',
+      msgs: s.msgs,
+      inputVal: s.inputVal,
+      inputDisabled: s.inputDisabled,
+      chatRef: this.chatRef,
+      mapSphere: this.MAP.sphere,
+      mapTotal: this.MAP.total,
+      mapLosses: this.MAP.losses,
+      mapAgents: this.MAP.agents,
+      mapRoi: this.MAP.roi,
+      mapDisclaimer: this.MAP.disclaimer,
+      lName: s.lName,
+      lTg: s.lTg,
+      lErr: s.lErr,
+      hasLErr: !!s.lErr,
+      onLName: (e) => this.setState({ lName: e.target.value }),
+      onLTg: (e) => this.setState({ lTg: e.target.value }),
+      submitLead: this.submitLead,
+      startChat: this.startChat,
+      sendMsg: this.sendMsg,
+      handleInput: this.handleInput,
+      handleKey: this.handleKey,
+      faqItems: this.FAQ_ITEMS.map((f, i) => ({
+        ...f,
+        isOpen: s.openFaq === i,
+        icon: s.openFaq === i ? '−' : '+',
+        qColor: s.openFaq === i ? '#FF6A00' : '#F0EEE8',
+        borderColor: s.openFaq === i ? '#FF6A00' : '#1E1E1E',
+        iconColor: s.openFaq === i ? '#FF6A00' : '#505050',
+        toggle: () => this.setState({ openFaq: s.openFaq === i ? -1 : i }),
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>

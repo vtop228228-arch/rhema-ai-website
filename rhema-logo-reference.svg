@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 250" width="800" height="250" role="img" aria-label="RHEMA AI">
+  <rect width="800" height="250" fill="#0A0A0A"/>
+
+  <!-- A. Ichthys fish: top arc white, bottom arc + tail orange-red, arcs cross to form the tail -->
+  <g transform="translate(30,55) scale(3.4)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 17 C 8 7, 26 5, 40 14 C 44 16, 47 20, 52 25" stroke="#FFFFFF" stroke-width="2.1"/>
+    <path d="M3 17 C 8 27, 26 29, 40 20 C 44 18, 47 14, 52 9" stroke="#E85211" stroke-width="2.3"/>
+  </g>
+
+  <!-- B. Wordmark RHEMAAI — geometric bold sans, layered A overlap (orange on top of white) -->
+  <g font-family="Montserrat, 'Arial Black', Arial, sans-serif" font-weight="800" font-size="110" letter-spacing="6">
+    <!-- RHEM (white) ends at x=620 -->
+    <text x="620" y="164" text-anchor="end" fill="#FFFFFF">RHEM</text>
+    <!-- white A starts at x=620 (left leg belongs to RHEMA) -->
+    <text x="620" y="164" fill="#FFFFFF">A</text>
+    <!-- orange AI shifted right, layered on top -->
+    <text x="635" y="164" fill="#E85211">AI</text>
+  </g>
+</svg>
