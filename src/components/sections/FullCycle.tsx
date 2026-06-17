@@ -9,16 +9,16 @@ const STEPS = [
 
 export default function FullCycle() {
   return (
-    <div style={{ background: 'var(--bg2)', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)', padding: '72px 72px' }} className="fc-pad">
+    <div style={{ background: 'transparent', padding: '72px 72px' }} className="fc-pad">
       <div className="fc-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 72, alignItems: 'center' }}>
 
         {/* Левая колонка */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 28, height: 1, background: 'var(--accent)' }} />
+            <div style={{ width: 4, height: 4, background: 'var(--accent)' }} />
             <span style={{ fontSize: 10, color: 'var(--accent)', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: 600 }}>Не только диагностика</span>
           </div>
-          <h2 style={{ fontFamily: bebas, fontSize: 'clamp(38px, 3.6vw, 58px)', lineHeight: 0.92, color: 'var(--ink)', letterSpacing: '1px' }}>
+          <h2 style={{ fontFamily: bebas, fontSize: 'clamp(38px, 3.6vw, 58px)', lineHeight: 0.9, color: 'var(--ink)', letterSpacing: '-0.5px' }}>
             <span style={{ display: 'block' }}>ДИАГНОСТИКА</span>
             <span style={{ display: 'block', color: 'var(--accent)' }}>ЭТО ТОЛЬКО</span>
             <span style={{ display: 'block' }}>НАЧАЛО</span>
@@ -35,15 +35,18 @@ export default function FullCycle() {
         {/* Правая колонка — шаги */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {STEPS.map((s) => (
-            <div key={s.n} style={{
-              background: 'var(--card)',
-              borderLeft: '2px solid var(--accent)',
-              padding: '20px 24px',
-              display: 'flex',
-              gap: 16,
-              alignItems: 'flex-start',
-            }}>
-              <div style={{ fontFamily: bebas, fontSize: 26, color: 'var(--accent)', lineHeight: 1, flexShrink: 0, width: 36, opacity: 0.5 }}>{s.n}</div>
+            <div
+              key={s.n}
+              style={{
+                background: 'linear-gradient(145deg, rgba(24,24,24,0.88), rgba(18,18,18,0.88))',
+                borderLeft: '2px solid var(--accent)',
+                padding: '20px 24px',
+                display: 'flex',
+                gap: 16,
+                alignItems: 'flex-start',
+              }}
+            >
+              <div style={{ fontFamily: bebas, fontSize: 28, color: 'var(--accent)', lineHeight: 1, flexShrink: 0, width: 36, opacity: 0.5 }}>{s.n}</div>
               <div>
                 <div style={{ fontFamily: bebas, fontSize: 16, color: 'var(--ink)', letterSpacing: '1px', marginBottom: 5 }}>{s.title}</div>
                 <div style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.6 }}>{s.text}</div>

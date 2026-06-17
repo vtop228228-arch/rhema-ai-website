@@ -17,8 +17,12 @@ type Lead = z.infer<typeof leadSchema>;
 
 async function sendTelegram(lead: Lead): Promise<void> {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!botToken || !chatId) return;
+  // Поддержка нескольких получателей: TELEGRAM_CHAT_ID="123,456" (Влад и Тимофей).
+  const chatIds = (process.env.TELEGRAM_CHAT_ID ?? '')
+    .split(',')
+    .map(id => id.trim())
+    .filter(Boolean);
+  if (!botToken || chatIds.length === 0) return;
 
   const text = `🤖 <b>Лид с AI-диагностики</b>
 
@@ -30,12 +34,22 @@ async function sendTelegram(lead: Lead): Promise<void> {
 <b>Карта потерь:</b>
 ${lead.mapText.slice(0, 1500)}`;
 
-  const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
-  });
-  if (!res.ok) throw new Error(`Telegram API error: ${res.status}`);
+  // Шлём каждому получателю; сбой одного не должен ронять остальных.
+  const results = await Promise.allSettled(
+    chatIds.map(chatId =>
+      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
+      }).then(res => {
+        if (!res.ok) throw new Error(`Telegram API error (${chatId}): ${res.status}`);
+      }),
+    ),
+  );
+  // Если ни одному не доставили — пробрасываем ошибку наверх.
+  if (results.every(r => r.status === 'rejected')) {
+    throw new Error('Telegram: не доставлено ни одному получателю');
+  }
 }
 
 // Дубль в Supabase — только если заданы креды. Используем REST + service_role.
