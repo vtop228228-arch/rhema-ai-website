@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ShaderBackground from '@/components/ui/ShaderBackground';
+import CookieConsent from '@/components/ui/CookieConsent';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main>{children}</main>
           <Footer />
         </div>
+        <CookieConsent />
       </body>
     </html>
   );
