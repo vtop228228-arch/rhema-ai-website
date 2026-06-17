@@ -85,7 +85,7 @@ export default function ServiceStep() {
           </div>
 
           {/* Контент */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 48 }}>
+          <div className="step-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 48 }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               <div>
                 <h2 className="font-bebas text-ink" style={{ fontSize: 32, letterSpacing: '0.03em', margin: '0 0 4px' }}>
@@ -208,6 +208,12 @@ export default function ServiceStep() {
           </div>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 720px) {
+          .step-layout { grid-template-columns: 1fr !important; gap: 28px !important; }
+          .step-layout > div:last-child { display: none !important; }
+        }
+      `}</style>
     </section>
   );
 }

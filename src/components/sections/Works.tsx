@@ -36,7 +36,7 @@ export default function Works() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+          <div className="works-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
             {CASES.map((c, i) => (
               <div key={i} style={{
                 background: 'linear-gradient(145deg, rgba(24,24,24,0.88), rgba(18,18,18,0.88))',
@@ -111,6 +111,11 @@ export default function Works() {
           </p>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 720px) {
+          .works-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }

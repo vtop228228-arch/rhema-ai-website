@@ -39,7 +39,7 @@ export default function MethodCards() {
               <p style={{ fontSize: 14, color: 'var(--sub)', margin: 0 }}>Они работают по старой модели:</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
+            <div className="method-compare-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
               {/* Традиционно */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
@@ -85,7 +85,7 @@ export default function MethodCards() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <SectionLabel>Как мы делаем за 6 недель то, что другие — за 12 месяцев?</SectionLabel>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            <div className="method-cards-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
               {METHOD_CARDS.map((card, i) => (
                 <div key={i} style={{
                   background: 'var(--card)',
@@ -107,7 +107,7 @@ export default function MethodCards() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             <SectionLabel>Результат тот же. Путь — короче.</SectionLabel>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
+            <div className="method-compare-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
               {COMPARE.map((item, i) => (
                 <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>
@@ -139,6 +139,15 @@ export default function MethodCards() {
 
         </div>
       </div>
+      <style>{`
+        @media (max-width: 720px) {
+          .method-cards-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .method-compare-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 480px) {
+          .method-cards-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }

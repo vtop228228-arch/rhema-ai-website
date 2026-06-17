@@ -29,7 +29,7 @@ export default function Process() {
               </h2>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+            <div className="process-days-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
               {DAYS.map((d, i) => (
                 <div key={i} style={{
                   background: 'var(--card)',
@@ -93,7 +93,7 @@ export default function Process() {
               </h3>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+            <div className="process-after-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
               {AFTER.map((a, i) => (
                 <div
                   key={i}
@@ -141,6 +141,12 @@ export default function Process() {
 
         </div>
       </div>
+      <style>{`
+        @media (max-width: 720px) {
+          .process-days-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .process-after-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }

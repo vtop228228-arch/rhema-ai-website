@@ -28,7 +28,7 @@ export default function Competencies() {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+          <div className="competencies-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
             {COMPETENCIES.map((comp, i) => (
               <div key={i} style={{
                 background: 'var(--card)',
@@ -71,6 +71,11 @@ export default function Competencies() {
 
         </div>
       </div>
+      <style>{`
+        @media (max-width: 720px) {
+          .competencies-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }

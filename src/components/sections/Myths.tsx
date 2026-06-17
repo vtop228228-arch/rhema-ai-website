@@ -38,7 +38,7 @@ export default function Myths() {
           </div>
 
           {/* 4 карточки */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+          <div className="myths-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
             {MYTHS.map((item, i) => (
               <div key={i} style={{
                 background: 'linear-gradient(145deg, rgba(24,24,24,0.88), rgba(18,18,18,0.88))',
@@ -77,7 +77,7 @@ export default function Myths() {
           }}>
             <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--ink)', margin: 0 }}>Результат:</p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+            <div className="myths-results-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               {RESULTS.map((r, i) => (
                 <div key={i} style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                   <span style={{ color: 'var(--red)', fontSize: 16, flexShrink: 0, marginTop: 1 }}>✕</span>
@@ -96,6 +96,15 @@ export default function Myths() {
 
         </div>
       </div>
+      <style>{`
+        @media (max-width: 720px) {
+          .myths-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .myths-results-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 480px) {
+          .myths-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }

@@ -2,7 +2,7 @@ import DiagnosticAgent from '@/components/sections/DiagnosticAgent';
 
 export default function HeroMain() {
   return (
-    <section className="hero-wrap" style={{ display: 'flex', minHeight: 640 }}>
+    <section className="hero-wrap" id="diagnose" style={{ display: 'flex', minHeight: 640 }}>
       {/* LEFT: МОНОЛИТ */}
       <div
         className="hero-left"
@@ -58,8 +58,8 @@ export default function HeroMain() {
 
       <style>{`
         @media (max-width: 900px) {
-          .hero-wrap { flex-direction: column; }
-          .hero-left { padding: 48px 22px 40px; }
+          .hero-wrap { flex-direction: column; min-height: auto !important; }
+          .hero-left { padding: 48px 22px 32px !important; }
           .hero-divider { display: none; }
         }
       `}</style>

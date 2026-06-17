@@ -151,7 +151,7 @@ export default function ServicesTabs() {
           </div>
           <div style={{ background: 'var(--card2)', padding: '30px 28px', display: 'flex', flexDirection: 'column', gap: 14 }}>
             <div style={{ fontSize: 11, color: '#888', letterSpacing: '2px', textTransform: 'uppercase' }}>Что входит в результат</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <div className="saas-inner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
               {[
                 ['Архитектура', 'Мультитенантность', 'Защита данных', 'Масштабируемость'],
                 ['Бизнес-логика', 'Биллинг', 'Роли', 'White-label'],
@@ -172,6 +172,7 @@ export default function ServicesTabs() {
       <style>{`
         @media (max-width: 720px) {
           .svc-grid { grid-template-columns: 1fr !important; }
+          .saas-inner-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </div>

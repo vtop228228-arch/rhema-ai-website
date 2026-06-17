@@ -93,10 +93,10 @@ export default function Cases() {
 
           <SectionLabel>Кейсы — проекты Rhema AI</SectionLabel>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 32 }}>
+          <div className="cases-layout" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 32 }}>
 
             {/* Левая колонка — названия кейсов */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+            <div className="cases-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
               {CASES.map((cas, i) => (
                 <button
                   key={i}
@@ -114,6 +114,7 @@ export default function Cases() {
                     borderLeft: active === i ? '2px solid var(--accent)' : '2px solid transparent',
                     paddingLeft: active === i ? 12 : 0,
                     transition: 'all 0.2s',
+                    minHeight: 44,
                   }}
                 >
                   {cas.title}
@@ -125,7 +126,7 @@ export default function Cases() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
 
               {/* Верхние два блока */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <div className="cases-inner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 {/* Что думал */}
                 <div style={{
                   background: 'var(--card)',
@@ -158,7 +159,7 @@ export default function Cases() {
               </div>
 
               {/* Нижние два блока */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <div className="cases-inner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 {/* Что сделали */}
                 <div style={{
                   background: 'var(--card)',
@@ -194,6 +195,15 @@ export default function Cases() {
 
             </div>
           </div>
+
+          <style>{`
+            @media (max-width: 720px) {
+              .cases-layout { grid-template-columns: 1fr !important; gap: 20px !important; }
+              .cases-sidebar { flex-direction: row !important; overflow-x: auto; gap: 0; }
+              .cases-sidebar button { min-width: 140px; white-space: nowrap; flex-shrink: 0; }
+              .cases-inner-grid { grid-template-columns: 1fr !important; }
+            }
+          `}</style>
         </div>
       </div>
     </section>

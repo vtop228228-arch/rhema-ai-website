@@ -67,7 +67,7 @@ export default function DiagnosticPricing() {
           <SectionLabel>Состав диагностик</SectionLabel>
 
           {/* 3 карточки */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+          <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
             {PLANS.map((plan, i) => (
               <div key={i} style={{
                 background: plan.popular ? 'var(--card)' : 'var(--bg)',
@@ -154,6 +154,11 @@ export default function DiagnosticPricing() {
 
         </div>
       </div>
+      <style>{`
+        @media (max-width: 720px) {
+          .pricing-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 }

@@ -9,10 +9,11 @@ export default function Stats() {
   return (
     <section className="section">
       <div className="container">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }}>
+        <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0 }}>
           {STATS.map((stat, i) => (
             <div
               key={i}
+              className={`stat-cell stat-cell-${i}`}
               style={{
                 padding: '40px 32px',
                 display: 'flex',
@@ -31,6 +32,15 @@ export default function Stats() {
           ))}
         </div>
       </div>
+      <style>{`
+        @media (max-width: 720px) {
+          .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          .stat-cell { padding: 28px 20px !important; }
+          .stat-cell-1 { border-right: none !important; }
+          .stat-cell-2 { border-right: 1px solid var(--line) !important; }
+          .stat-cell-0, .stat-cell-1 { border-bottom: 1px solid var(--line); }
+        }
+      `}</style>
     </section>
   );
 }
