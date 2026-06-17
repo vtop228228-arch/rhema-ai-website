@@ -12,7 +12,7 @@ export default function Footer() {
 
       <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap', justifyContent: 'center' }}>
         <a href="https://t.me/RhemaAI_support" target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: '#888', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 500 }}>Telegram</a>
-        <a href="mailto:rhemaaiagency@gmail.com" style={{ fontSize: 12, color: '#888', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 500 }}>Email</a>
+        <a href="mailto:rhemaaiagency@gmail.com" style={{ fontSize: 12, color: '#888', letterSpacing: '0.5px', fontWeight: 400 }}>rhemaaiagency@gmail.com</a>
         <Link href="/privacy" style={{ fontSize: 12, color: '#666', letterSpacing: '1px', textTransform: 'uppercase' }}>Политика</Link>
         <Link href="/offer" style={{ fontSize: 12, color: '#666', letterSpacing: '1px', textTransform: 'uppercase' }}>Оферта</Link>
       </div>
