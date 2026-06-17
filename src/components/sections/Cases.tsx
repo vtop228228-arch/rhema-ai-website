@@ -95,31 +95,57 @@ export default function Cases() {
 
           <div className="cases-layout" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: 32 }}>
 
-            {/* Левая колонка — названия кейсов */}
-            <div className="cases-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {CASES.map((cas, i) => (
-                <button
-                  key={i}
-                  onClick={() => setActive(i)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    borderBottom: '1px solid var(--line)',
-                    padding: '16px 0',
-                    cursor: 'pointer',
-                    textAlign: 'left',
-                    fontSize: 14,
-                    color: active === i ? 'var(--ink)' : 'var(--sub)',
-                    fontWeight: active === i ? 600 : 400,
-                    borderLeft: active === i ? '2px solid var(--accent)' : '2px solid transparent',
-                    paddingLeft: active === i ? 12 : 0,
-                    transition: 'all 0.2s',
-                    minHeight: 44,
-                  }}
-                >
-                  {cas.title}
-                </button>
-              ))}
+            {/* Левая колонка — кейсы-карточки */}
+            <div className="cases-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              {CASES.map((cas, i) => {
+                const isActive = active === i;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => setActive(i)}
+                    className={`case-btn${isActive ? ' case-btn-active' : ''}`}
+                    style={{
+                      background: isActive ? 'rgba(255,106,0,0.07)' : 'var(--card)',
+                      border: `1px solid ${isActive ? 'rgba(255,106,0,0.45)' : 'var(--line)'}`,
+                      borderLeft: `3px solid ${isActive ? 'var(--accent)' : 'transparent'}`,
+                      padding: '14px 14px 14px 12px',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                      width: '100%',
+                      boxShadow: isActive ? '0 0 18px rgba(255,106,0,0.18), inset 0 0 24px rgba(255,106,0,0.04)' : 'none',
+                      transition: 'all 0.22s',
+                      minHeight: 52,
+                    }}
+                  >
+                    <span style={{
+                      fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif',
+                      fontSize: 15,
+                      color: isActive ? 'var(--accent)' : '#3a3a3a',
+                      lineHeight: 1,
+                      flexShrink: 0,
+                      transition: 'color 0.22s',
+                    }}>0{i + 1}</span>
+                    <span style={{
+                      fontSize: 13,
+                      color: isActive ? 'var(--ink)' : '#666',
+                      fontWeight: isActive ? 600 : 400,
+                      lineHeight: 1.35,
+                      flex: 1,
+                      transition: 'color 0.22s',
+                    }}>{cas.title}</span>
+                    <span style={{
+                      color: isActive ? 'var(--accent)' : '#2a2a2a',
+                      fontSize: 14,
+                      flexShrink: 0,
+                      transition: 'color 0.22s, transform 0.22s',
+                      transform: isActive ? 'translateX(2px)' : 'none',
+                    }}>→</span>
+                  </button>
+                );
+              })}
             </div>
 
             {/* Правая колонка — детали кейса */}
@@ -197,10 +223,21 @@ export default function Cases() {
           </div>
 
           <style>{`
+            .case-btn:hover:not(.case-btn-active) {
+              background: rgba(255,106,0,0.03) !important;
+              border-color: rgba(255,106,0,0.2) !important;
+            }
+            .case-btn:hover:not(.case-btn-active) span:last-child {
+              color: #555 !important;
+            }
             @media (max-width: 720px) {
-              .cases-layout { grid-template-columns: 1fr !important; gap: 20px !important; }
-              .cases-sidebar { flex-direction: row !important; overflow-x: auto; gap: 0; }
-              .cases-sidebar button { min-width: 140px; white-space: nowrap; flex-shrink: 0; }
+              .cases-layout { grid-template-columns: 1fr !important; gap: 16px !important; }
+              .cases-sidebar { flex-direction: row !important; overflow-x: auto; gap: 6px !important; padding-bottom: 4px; }
+              .cases-sidebar::-webkit-scrollbar { height: 2px; }
+              .cases-sidebar::-webkit-scrollbar-track { background: var(--bg); }
+              .cases-sidebar::-webkit-scrollbar-thumb { background: rgba(255,106,0,0.3); }
+              .case-btn { min-width: 130px !important; white-space: normal !important; flex-shrink: 0 !important; flex-direction: column !important; align-items: flex-start !important; padding: 10px 12px !important; min-height: 60px !important; }
+              .case-btn span:last-child { display: none !important; }
               .cases-inner-grid { grid-template-columns: 1fr !important; }
             }
           `}</style>
