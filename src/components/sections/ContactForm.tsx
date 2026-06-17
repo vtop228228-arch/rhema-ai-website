@@ -59,7 +59,7 @@ export default function ContactForm() {
           <div className="bar" style={{ width: 'auto', flex: 'none' }} />
           <span className="text">Прямая связь</span>
         </div>
-        <h2 style={{ fontFamily: bebas, fontSize: 'clamp(40px, 3.4vw, 62px)', lineHeight: 0.9, letterSpacing: '-0.5px' }}>
+        <h2 style={{ fontFamily: bebas, fontSize: 'clamp(28px, 7.5vw, 62px)', lineHeight: 0.9, letterSpacing: '-0.5px' }}>
           <span style={{ display: 'block', color: 'var(--ink)' }}>ОСТАВЬТЕ</span>
           <span style={{ display: 'block', color: 'var(--accent)' }}>ЗАЯВКУ</span>
         </h2>

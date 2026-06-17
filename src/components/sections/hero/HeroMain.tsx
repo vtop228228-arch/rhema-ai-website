@@ -38,10 +38,10 @@ export default function HeroMain() {
         </div>
 
         {/* H1 */}
-        <h1 style={{ fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 'clamp(42px, 4.4vw, 76px)', lineHeight: 0.87, position: 'relative', zIndex: 1 }}>
+        <h1 className="hero-h1" style={{ fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 'clamp(28px, 8vw, 76px)', lineHeight: 0.87, position: 'relative', zIndex: 1, overflowWrap: 'break-word' }}>
           <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>ОТ ДИАГНОСТИКИ</span>
           <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>ДО МАСШТАБИРОВАНИЯ</span>
-          <span style={{ display: 'block', color: '#999', fontSize: '0.43em', letterSpacing: '5px', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>ЗА 2 МИНУТЫ — БЕСПЛАТНО</span>
+          <span className="hero-sub" style={{ display: 'block', color: '#999', fontSize: '0.43em', letterSpacing: '5px', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>ЗА 2 МИНУТЫ — БЕСПЛАТНО</span>
         </h1>
 
         {/* Body */}
@@ -61,6 +61,9 @@ export default function HeroMain() {
           .hero-wrap { flex-direction: column; min-height: auto !important; }
           .hero-left { padding: 48px 22px 32px !important; }
           .hero-divider { display: none; }
+        }
+        @media (max-width: 480px) {
+          .hero-sub { letter-spacing: 2px !important; }
         }
       `}</style>
     </section>

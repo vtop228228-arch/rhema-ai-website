@@ -17,7 +17,7 @@ export default function HeroAbout() {
         <span className="text">О компании</span>
       </div>
 
-      <h1 style={{ fontFamily: bebas, fontSize: 'clamp(40px, 5vw, 72px)', lineHeight: 0.92, letterSpacing: '1.5px', marginBottom: 28 }}>
+      <h1 style={{ fontFamily: bebas, fontSize: 'clamp(26px, 7.5vw, 72px)', lineHeight: 0.92, letterSpacing: '1.5px', marginBottom: 28, overflowWrap: 'break-word' }}>
         <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.15s both' }}>МЫ СТРОИМ AI-СИСТЕМЫ,</span>
         <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.25s both' }}>А НЕ ПОДКЛЮЧАЕМ CHATGPT</span>
       </h1>

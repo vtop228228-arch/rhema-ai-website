@@ -16,7 +16,7 @@ export default function HeroHowWeWork() {
         <span className="text">Как мы работаем</span>
       </div>
 
-      <h1 style={{ fontFamily: bebas, fontSize: 'clamp(44px, 5.2vw, 76px)', lineHeight: 0.92, letterSpacing: '1.5px', marginBottom: 28 }}>
+      <h1 style={{ fontFamily: bebas, fontSize: 'clamp(28px, 8vw, 76px)', lineHeight: 0.92, letterSpacing: '1.5px', marginBottom: 28, overflowWrap: 'break-word' }}>
         <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.15s both' }}>Ваш бизнес теряет</span>
         <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.25s both' }}>20–40% прибыли.</span>
         <span style={{ display: 'block', color: '#666', fontSize: '0.48em', letterSpacing: '4px', marginTop: 8, animation: 'fadeUp 0.6s ease 0.35s both' }}>НО ВЫ НЕ ВИДИТЕ ГДЕ</span>
