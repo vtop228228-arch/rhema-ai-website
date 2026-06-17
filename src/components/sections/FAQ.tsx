@@ -35,7 +35,7 @@ export default function FAQ() {
   const [open, setOpen] = useState<number>(-1);
 
   return (
-    <div className="section-pad" style={{ borderTop: '1px solid var(--line)', background: 'var(--bg)' }}>
+    <div className="section-pad" style={{ borderTop: '1px solid var(--line)', background: 'transparent' }}>
       <div className="section-head" style={{ marginBottom: 48 }}>
         <div className="dot" />
         <span className="title">ЧАСТЫЕ ВОПРОСЫ</span>

@@ -9,7 +9,7 @@ export default function HeroMain() {
         style={{
           flex: 1,
           minWidth: 0,
-          background: 'var(--bg)',
+          background: 'transparent',
           padding: '60px 40px 60px 72px',
           display: 'flex',
           flexDirection: 'column',

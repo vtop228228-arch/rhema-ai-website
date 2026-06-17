@@ -228,7 +228,7 @@ h1, h2, h3, h4 {
 
 /* ── Legacy section/container layout ── */
 .section     { padding: 68px 72px; }
-.section-alt { padding: 68px 72px; background: var(--bg2); }
+.section-alt { padding: 68px 72px; background: transparent; }
 .container   { max-width: 1120px; margin-left: auto; margin-right: auto; }
 
 @media (max-width: 720px) {

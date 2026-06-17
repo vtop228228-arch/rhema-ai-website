@@ -49,7 +49,7 @@ export default function ServicesTabs() {
   const grid2: React.CSSProperties = { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 };
 
   return (
-    <div className="section-pad" style={{ borderTop: '1px solid var(--line)', background: 'var(--bg)' }}>
+    <div className="section-pad" style={{ borderTop: '1px solid var(--line)', background: 'transparent' }}>
       <div className="section-head">
         <div className="dot" />
         <span className="title">МЫ ДЕЛАЕМ ТАК</span>
