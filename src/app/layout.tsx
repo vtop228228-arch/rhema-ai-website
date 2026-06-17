@@ -1,22 +1,14 @@
 import type { Metadata } from 'next';
-import { Bebas_Neue, Inter } from 'next/font/google';
+import { DM_Sans } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ShaderBackground from '@/components/ui/ShaderBackground';
 
-const bebasNeue = Bebas_Neue({
-  weight: '400',
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  variable: '--font-bebas',
-  display: 'swap',
-});
-
-// Шрифт тела — Inter (как в дизайн-макете Rhema AI).
-const inter = Inter({
-  subsets: ['latin', 'cyrillic'],
-  weight: ['400', '500', '600'],
-  variable: '--font-inter',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-dm',
   display: 'swap',
 });
 
@@ -28,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${bebasNeue.variable} ${inter.variable}`}>
+    <html lang="ru" className={dmSans.variable}>
       <body>
         <ShaderBackground />
         <div style={{ position: 'relative', zIndex: 1 }}>

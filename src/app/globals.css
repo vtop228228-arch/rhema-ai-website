@@ -46,8 +46,8 @@
   --color-blue:    #FF6A00;
   --color-line:    #0F0F0F;
   --color-line2:   #141414;
-  --font-bebas:    var(--font-bebas), 'Bebas Neue', sans-serif;
-  --font-inter:    var(--font-inter), 'Inter', system-ui, sans-serif;
+  --font-bebas:    var(--font-dm), 'DM Sans', sans-serif;
+  --font-inter:    var(--font-dm), 'DM Sans', sans-serif;
 }
 
 /* ── Reset ── */
@@ -57,12 +57,15 @@
   padding: 0;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background: #090909;
+}
 
 body {
   background: transparent;
   color: var(--ink);
-  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  font-family: var(--font-dm), 'DM Sans', sans-serif;
   font-size: 14px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -101,7 +104,7 @@ button { cursor: pointer; }
   flex-shrink: 0;
 }
 .section-head .title {
-  font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
+  font-family: var(--font-dm), 'DM Sans', sans-serif;
   font-size: 34px;
   letter-spacing: 2px;
   color: var(--ink);
@@ -138,7 +141,7 @@ button { cursor: pointer; }
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
+  font-family: var(--font-dm), 'DM Sans', sans-serif;
   letter-spacing: 1px;
   cursor: pointer;
   white-space: nowrap;
@@ -189,7 +192,7 @@ button { cursor: pointer; }
   color: var(--ink);
   padding: 11px 14px;
   font-size: 14px;
-  font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+  font-family: var(--font-dm), 'DM Sans', sans-serif;
   width: 100%;
   outline: none;
   transition: border-color 0.18s;
@@ -202,11 +205,11 @@ button { cursor: pointer; }
 
 /* ── TYPOGRAPHY ── */
 h1, h2, h3, h4 {
-  font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
-  letter-spacing: 0.02em;
-  line-height: 1.04;
+  font-family: var(--font-dm), 'DM Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
   color: var(--ink);
-  font-weight: 400;
 }
 
 /* ── SCROLLBAR ── */
@@ -234,7 +237,7 @@ h1, h2, h3, h4 {
 
 /* ── Stat number ── */
 .stat-number {
-  font-family: var(--font-bebas), 'Bebas Neue', sans-serif;
+  font-family: var(--font-dm), 'DM Sans', sans-serif;
   font-size: 56px;
   color: var(--accent);
   line-height: 1;

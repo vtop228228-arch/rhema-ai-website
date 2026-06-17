@@ -68,10 +68,6 @@ const FS = `
 
     vec4 lines = vec4(0.0);
 
-    // #090909 base, лёгкий тёплый сдвиг справа — ощущение глубины
-    vec4 bgColor1 = vec4(0.035, 0.035, 0.035, 1.0);
-    vec4 bgColor2 = vec4(0.048, 0.032, 0.016, 1.0);
-
     for (int l = 0; l < linesPerGroup; l++) {
       float ni           = float(l) / float(linesPerGroup);
       float offsetTime   = iTime * offsetSpeed;
@@ -91,12 +87,8 @@ const FS = `
       lines += (line + circle) * lineColor * rand;
     }
 
-    vec4 color  = mix(bgColor1, bgColor2, uv.x);
-    color      *= vFade;
-    color.a     = 1.0;
-    color      += lines;
-
-    gl_FragColor = color;
+    lines *= vFade;
+    gl_FragColor = vec4(lines.rgb, lines.a);
   }
 `;
 
@@ -132,7 +124,7 @@ export default function ShaderBackground() {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const gl = canvas.getContext('webgl');
+    const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false });
     if (!gl) return;
 
     const program = initProgram(gl);
@@ -163,7 +155,7 @@ export default function ShaderBackground() {
 
     const render = () => {
       const t = (Date.now() - start) / 1000;
-      gl.clearColor(0, 0, 0, 1);
+      gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.useProgram(program);
       gl.uniform2f(resLoc, canvas.width, canvas.height);
@@ -193,7 +185,7 @@ export default function ShaderBackground() {
         height: '100%',
         zIndex: 0,
         pointerEvents: 'none',
-        opacity: 0.55,
+        opacity: 1,
       }}
     />
   );
