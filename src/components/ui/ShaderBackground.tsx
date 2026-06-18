@@ -191,6 +191,7 @@ export default function ShaderBackground() {
   return (
     <canvas
       ref={canvasRef}
+      className="shader-bg"
       style={{
         position: 'fixed',
         top: 0,
@@ -199,7 +200,6 @@ export default function ShaderBackground() {
         height: '100%',
         zIndex: 0,
         pointerEvents: 'none',
-        opacity: 1,
       }}
     />
   );
