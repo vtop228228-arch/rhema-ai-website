@@ -57,14 +57,14 @@ export default function ContactForm() {
       <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
         <div className="eyebrow">
           <div className="bar" style={{ width: 'auto', flex: 'none' }} />
-          <span className="text">Прямая связь</span>
+          <span className="text">Первый шаг</span>
         </div>
         <h2 style={{ fontFamily: bebas, fontSize: 'clamp(28px, 7.5vw, 62px)', lineHeight: 0.9, letterSpacing: '-0.5px' }}>
-          <span style={{ display: 'block', color: 'var(--ink)' }}>ОСТАВЬТЕ</span>
-          <span style={{ display: 'block', color: 'var(--accent)' }}>ЗАЯВКУ</span>
+          <span style={{ display: 'block', color: 'var(--ink)' }}>ОБСУДИМ</span>
+          <span style={{ display: 'block', color: 'var(--accent)' }}>ВАШУ ЗАДАЧУ</span>
         </h2>
         <p style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.8, maxWidth: 340 }}>
-          Не хотите проходить диагностику — просто напишите. Свяжемся и разберём всё лично.
+          Расскажите про бизнес — за один звонок разберёмся, что принесёт первый результат и во сколько это обойдётся.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginTop: 10, paddingTop: 18, borderTop: '1px solid var(--line)' }}>
           {['Отвечаем в течение рабочего дня', 'Первая консультация — бесплатно'].map((t, i) => (

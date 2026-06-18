@@ -52,7 +52,7 @@ export default function HeroMain() {
 
         {/* Body */}
         <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 400, lineHeight: 1.85, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.52s both' }}>
-          Пройдите 2-минутную диагностику прямо здесь — AI покажет карту потерь вашего бизнеса в рублях и что внедрить первым.
+          Ответьте на 2–3 вопроса справа — AI покажет, где конкретно уходят деньги и что внедрить первым. Бесплатно, без регистрации.
         </p>
       </div>
 
