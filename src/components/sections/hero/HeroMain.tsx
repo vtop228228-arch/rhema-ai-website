@@ -52,7 +52,7 @@ export default function HeroMain() {
 
         {/* Body */}
         <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 400, lineHeight: 1.85, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
-          Задайте 2–3 вопроса о своём бизнесе прямо здесь. AI покажет персональную карту потерь в ₽ и порекомендует, что внедрить.
+          AI-агент задаст вам 2–3 вопроса о бизнесе и покажет персональную карту потерь в ₽ — что теряете и что внедрить первым.
         </p>
       </div>
 
