@@ -111,7 +111,7 @@ button { cursor: pointer; }
 }
 .section-head .dot {
   width: 4px; height: 4px;
-  background: var(--accent-blue);
+  background: var(--accent);
   flex-shrink: 0;
 }
 .section-head .title {
@@ -128,7 +128,7 @@ button { cursor: pointer; }
   background: var(--line);
 }
 
-/* ── Eyebrow (синяя линия + текст) ── */
+/* ── Eyebrow (линия + текст) ── */
 .eyebrow {
   display: flex;
   align-items: center;
@@ -136,14 +136,15 @@ button { cursor: pointer; }
 }
 .eyebrow .bar {
   width: 36px; height: 1px;
-  background: var(--accent-blue);
+  background: rgba(255,255,255,0.2);
 }
 .eyebrow .text {
   font-size: 10px;
-  color: var(--accent-blue);
+  color: rgba(255,255,255,0.55);
   letter-spacing: 3px;
   text-transform: uppercase;
   font-weight: 600;
+  text-shadow: 0 0 14px rgba(255,255,255,0.3);
 }
 
 /* ── КНОПКИ — плоская оранжевая заливка (стиль макета) ── */
@@ -235,10 +236,26 @@ h1, h2, h3, h4 {
   h1, h2 { hyphens: auto; }
 }
 
-/* ── SHADER BACKGROUND ── */
-.shader-bg { opacity: 1; }
+/* ── BACKGROUNDS: desktop = WebGL shader, mobile = Canvas 2D constellation ── */
+.shader-bg { opacity: 1; display: block; }
+.mobile-constellation { display: none; }
+
 @media (max-width: 767px) {
-  .shader-bg { opacity: 0.18; }
+  .shader-bg { display: none; }
+  .mobile-constellation { display: block; }
+
+  /* Единый чистый фон на мобиле: убираем серые card-подложки секций */
+  :root {
+    --card:  rgba(10,10,11,0.25);
+    --card2: rgba(10,10,11,0.25);
+    --bg:    transparent;
+    --bg2:   transparent;
+  }
+  .section-pad,
+  .section,
+  .section-alt {
+    background: transparent !important;
+  }
 }
 
 /* ── SCROLLBAR ── */
@@ -279,16 +296,17 @@ h1, h2, h3, h4 {
   align-items: center;
   gap: 9px;
   font-size: 10px;
-  color: var(--accent-blue);
+  color: rgba(255,255,255,0.5);
   letter-spacing: 3px;
   text-transform: uppercase;
   font-weight: 600;
   margin-bottom: 6px;
+  text-shadow: 0 0 12px rgba(255,255,255,0.25);
 }
 .section-label::before {
   content: '';
   width: 22px;
   height: 1px;
-  background: var(--accent-blue);
+  background: var(--accent);
   flex-shrink: 0;
 }

@@ -4,6 +4,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ShaderBackground from '@/components/ui/ShaderBackground';
+import MobileBackground from '@/components/ui/MobileBackground';
 import CookieConsent from '@/components/ui/CookieConsent';
 
 const dmSans = DM_Sans({
@@ -24,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ru" className={dmSans.variable}>
       <body>
         <ShaderBackground />
+        <MobileBackground />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <Header />
           <main>{children}</main>

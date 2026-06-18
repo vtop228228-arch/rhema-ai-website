@@ -18,13 +18,14 @@ export default function HeroAbout() {
       </div>
 
       <h1 style={{ fontFamily: bebas, fontSize: 'clamp(26px, 7.5vw, 72px)', lineHeight: 0.92, letterSpacing: '1.5px', marginBottom: 28, overflowWrap: 'break-word' }}>
-        <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.15s both' }}>МЫ СТРОИМ AI-СИСТЕМЫ,</span>
-        <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.25s both' }}>А НЕ ПОДКЛЮЧАЕМ CHATGPT</span>
+        <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.15s both' }}>RHEMA AI —</span>
+        <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.22s both' }}>КОМАНДА, КОТОРАЯ</span>
+        <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>СЧИТАЕТ ROI</span>
       </h1>
 
-      <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 560, lineHeight: 1.82, marginBottom: 48, animation: 'fadeUp 0.6s ease 0.35s both' }}>
-        Полноценные решения с интерфейсами, аналитикой и интеграциями — за недели, не за месяцы.
-        Enterprise-quality по цене стартапа.
+      <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 560, lineHeight: 1.82, marginBottom: 48, animation: 'fadeUp 0.6s ease 0.38s both' }}>
+        Не перепродаём ChatGPT и не консультируем ни к чему не обязывающими отчётами.
+        Строим работающие AI-системы с интеграциями, аналитикой и поддержкой — и показываем ROI до старта.
       </p>
 
       {/* Stat strip */}

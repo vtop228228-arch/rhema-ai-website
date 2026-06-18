@@ -1,12 +1,12 @@
 import SectionLabel from '@/components/ui/SectionLabel';
 
 const ROWS = [
-  { criterion: 'Понимание AI', studio: 'Подключат ChatGPT', freelancer: 'Скопирует с YouTube', diy: 'Пробы и ошибки', rhema: 'Строим AI-системы' },
-  { criterion: 'Сроки', studio: '4-12 месяцев', freelancer: '1-3 месяца', diy: '∞', rhema: '2-8 недель' },
-  { criterion: 'Стоимость', studio: '500K-3МР', freelancer: '100-300КР', diy: 'Время = деньги', rhema: '100-500КР' },
-  { criterion: 'Качество', studio: 'Среднее', freelancer: 'Лотерея', diy: 'Низкое', rhema: 'Корпоративное' },
-  { criterion: 'Интеграции', studio: 'За доп. плату', freelancer: '«Не умею»', diy: '«Разберусь»', rhema: 'Включены' },
-  { criterion: 'Поддержка', studio: 'Почасовая', freelancer: 'Пропал', diy: 'Вы сами', rhema: '30 дней бесплатно' },
+  { criterion: 'Подход', studio: 'Шаблонный', freelancer: 'Ситуативный', diy: 'Самостоятельно', rhema: 'Под задачу бизнеса' },
+  { criterion: 'Сроки', studio: '3–12 месяцев', freelancer: '2–6 месяцев', diy: 'Неограниченно', rhema: '3–6 недель' },
+  { criterion: 'Стоимость', studio: 'Высокая', freelancer: 'Средняя', diy: 'Время = деньги', rhema: 'Фикс. стоимость' },
+  { criterion: 'ROI до старта', studio: '—', freelancer: '—', diy: '—', rhema: 'Считаем сразу' },
+  { criterion: 'Интеграции', studio: 'Платно', freelancer: 'Редко', diy: '«Разберусь»', rhema: 'Включены' },
+  { criterion: 'Поддержка', studio: 'По тарифу', freelancer: 'Недоступен', diy: 'Сами', rhema: '30 дней в цене' },
 ];
 
 export default function ComparisonTable() {
@@ -16,7 +16,7 @@ export default function ComparisonTable() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <SectionLabel>Представьте: через 2 недели ваш бизнес работает по-другому</SectionLabel>
+            <SectionLabel>Почему выбирают Rhema AI, а не других</SectionLabel>
             <p style={{ fontSize: 14, color: 'var(--sub)', margin: 0 }}>Таблица трансформации</p>
           </div>
 

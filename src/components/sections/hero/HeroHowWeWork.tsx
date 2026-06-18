@@ -1,8 +1,8 @@
 const bebas = 'var(--font-bebas), Bebas Neue, sans-serif';
 
 const META = [
-  ['3 дня', 'Срок'],
-  ['Гарантия', 'Результата'],
+  ['3–6 нед', 'До запуска'],
+  ['0 ₽', 'Диагностика'],
 ];
 
 export default function HeroHowWeWork() {
@@ -17,14 +17,15 @@ export default function HeroHowWeWork() {
       </div>
 
       <h1 style={{ fontFamily: bebas, fontSize: 'clamp(28px, 8vw, 76px)', lineHeight: 0.92, letterSpacing: '1.5px', marginBottom: 28, overflowWrap: 'break-word' }}>
-        <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.15s both' }}>Ваш бизнес теряет</span>
-        <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.25s both' }}>20–40% прибыли.</span>
-        <span style={{ display: 'block', color: '#666', fontSize: '0.48em', letterSpacing: '4px', marginTop: 8, animation: 'fadeUp 0.6s ease 0.35s both' }}>НО ВЫ НЕ ВИДИТЕ ГДЕ</span>
+        <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.15s both' }}>ДИАГНОСТИКА.</span>
+        <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.22s both' }}>РЕШЕНИЕ.</span>
+        <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>РЕЗУЛЬТАТ.</span>
+        <span style={{ display: 'block', color: '#666', fontSize: '0.42em', letterSpacing: '4px', marginTop: 10, animation: 'fadeUp 0.6s ease 0.38s both' }}>ПРОЗРАЧНО · В СРОК · С ИЗМЕРИМЫМ ROI</span>
       </h1>
 
-      <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 540, lineHeight: 1.82, marginBottom: 36, animation: 'fadeUp 0.6s ease 0.4s both' }}>
-        За 3 дня покажем каждую «дыру» в вашем бизнесе и точно скажем, как её закрыть.
-        От диагностики до полного решения — под ключ.
+      <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 540, lineHeight: 1.82, marginBottom: 36, animation: 'fadeUp 0.6s ease 0.45s both' }}>
+        Находим, где теряются деньги → строим AI-систему → запускаем за 3–6 недель.
+        Платите за результат, а не за процесс. Бесплатная диагностика за 2 минуты — прямо сейчас.
       </p>
 
       {/* Meta strip */}
@@ -38,7 +39,7 @@ export default function HeroHowWeWork() {
       </div>
 
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-        <a href="#contact" className="btn btn-blue btn-md">Получить диагностику</a>
+        <a href="/#diagnose" className="btn btn-blue btn-md">Пройти диагностику →</a>
         <a href="#process" className="btn btn-line btn-md">Как это работает</a>
       </div>
 

@@ -125,9 +125,7 @@ export default function ShaderBackground() {
     if (!canvas) return;
 
     const isMobile = window.innerWidth < 768;
-
-    // Mobile: lower opacity so text stays readable, desktop stays vivid
-    canvas.style.opacity = isMobile ? '0.22' : '1';
+    // Opacity controlled via CSS class .shader-bg (globals.css)
 
     const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false });
     if (!gl) return;
@@ -148,8 +146,8 @@ export default function ShaderBackground() {
     const timeLoc = gl.getUniformLocation(program, 'iTime');
 
     const resize = () => {
-      // Mobile: render at half resolution for performance
-      const scale = isMobile ? 0.5 : 1;
+      // Mobile: 0.75x resolution (sharp enough, saves GPU)
+      const scale = isMobile ? 0.75 : 1;
       canvas.width = window.innerWidth * scale;
       canvas.height = window.innerHeight * scale;
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -163,8 +161,8 @@ export default function ShaderBackground() {
 
     const render = () => {
       frameCount++;
-      // Mobile: render every 3rd frame (saves battery, smoother scroll)
-      if (isMobile && frameCount % 3 !== 0) {
+      // Mobile: render every 2nd frame (saves battery)
+      if (isMobile && frameCount % 2 !== 0) {
         raf = requestAnimationFrame(render);
         return;
       }
