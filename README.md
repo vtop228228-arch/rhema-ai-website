@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Rhema AI — Маркетинговый сайт
 
-## Getting Started
+Сайт AI-агентства Rhema AI с встроенным AI-агентом бесплатной диагностики бизнеса.
 
-First, run the development server:
+## Стек
+
+- **Next.js 15** App Router + TypeScript
+- **Tailwind CSS v4**
+- **Anthropic Claude** — AI-агент диагностики
+- **Telegram Bot API** — уведомления о заявках
+
+---
+
+## Быстрый старт
+
+### 1. Клонировать репозиторий
+
+```bash
+git clone https://github.com/vtop228228-arch/rhema-ai-website.git
+cd rhema-ai-website
+```
+
+### 2. Установить зависимости
+
+```bash
+npm install
+```
+
+### 3. Настроить переменные окружения
+
+```bash
+cp .env.example .env.local
+```
+
+Открой `.env.local` и заполни:
+
+| Переменная                                   | Где взять                                                       |
+| -------------------------------------------- | --------------------------------------------------------------- |
+| `TELEGRAM_BOT_TOKEN`                         | [@BotFather](https://t.me/BotFather) в Telegram → создать бота |
+| `TELEGRAM_CHAT_ID`                           | [@userinfobot](https://t.me/userinfobot) → твой ID              |
+| `ANTHROPIC_API_KEY`                          | [console.anthropic.com](https://console.anthropic.com)          |
+| `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` | [supabase.com](https://supabase.com) — опционально              |
+
+### 4. Запустить локально
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Открой [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Деплой на Vercel
 
-## Learn More
+```bash
+npm install -g vercel
+vercel login
+vercel deploy --prod
+```
 
-To learn more about Next.js, take a look at the following resources:
+Или подключи репозиторий напрямую через [vercel.com/new](https://vercel.com/new) — Vercel автоматически подхватит Next.js.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+> Не забудь добавить переменные окружения в настройках проекта на Vercel (Settings → Environment Variables).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Структура
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+src/
+├── app/
+│   ├── page.tsx              # Главная + AI-диагностика
+│   ├── how-we-work/          # Как работаем
+│   ├── about/                # О нас
+│   ├── cases/                # Кейсы
+│   └── api/
+│       ├── contact/          # Форма заявки → Telegram
+│       ├── diagnose/         # AI-агент диагностики
+│       └── diagnose/lead/    # Сохранение лида
+├── components/
+│   ├── layout/               # Header, Footer
+│   ├── sections/             # Все секции страниц
+│   └── ui/                   # Shared компоненты
+└── app/globals.css           # Design system
+```
