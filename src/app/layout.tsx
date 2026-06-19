@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <MobileBackground />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <Header />
-          <main>{children}</main>
+          <main style={{ paddingTop: 54 }}>{children}</main>
           <Footer />
         </div>
         <StickyDiagCTA />
