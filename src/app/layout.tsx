@@ -6,7 +6,6 @@ import Footer from '@/components/layout/Footer';
 import ShaderBackground from '@/components/ui/ShaderBackground';
 import MobileBackground from '@/components/ui/MobileBackground';
 import CookieConsent from '@/components/ui/CookieConsent';
-import StickyDiagCTA from '@/components/ui/StickyDiagCTA';
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -34,7 +33,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main>{children}</main>
           <Footer />
         </div>
-        <StickyDiagCTA />
         <CookieConsent />
       </body>
     </html>

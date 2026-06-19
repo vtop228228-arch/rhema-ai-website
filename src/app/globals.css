@@ -216,7 +216,7 @@ button { cursor: pointer; }
   border: 1px solid #1C1C1C;
   color: var(--ink);
   padding: 11px 14px;
-  font-size: 14px;
+  font-size: 16px; /* ≥16px — иначе iOS/Telegram зумирует при фокусе */
   font-family: var(--font-dm), 'DM Sans', sans-serif;
   width: 100%;
   outline: none;
@@ -263,11 +263,6 @@ h1, h2, h3, h4 {
   .section-alt {
     background: transparent !important;
   }
-}
-
-/* ── Sticky CTA: отступ снизу на мобиле чтобы кнопка не перекрывала контент ── */
-@media (max-width: 900px) {
-  body { padding-bottom: 52px; }
 }
 
 /* ── SCROLLBAR ── */

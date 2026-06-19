@@ -326,7 +326,7 @@ export default function DiagnosticAgent() {
                 type="text" placeholder="Введите ответ..." value={inputVal}
                 onChange={e => setInputVal(e.target.value)} onKeyDown={handleKey} disabled={inputDisabled}
                 onFocus={focusOrange} onBlur={blurInput}
-                style={{ flex: 1, background: 'rgba(19,19,19,0.88)', border: '1px solid #1C1C1C', color: 'var(--ink)', padding: '8px 12px', fontSize: 13, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', transition: 'border-color 0.18s' }}
+                style={{ flex: 1, background: 'rgba(19,19,19,0.88)', border: '1px solid #1C1C1C', color: 'var(--ink)', padding: '8px 12px', fontSize: 16, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', transition: 'border-color 0.18s' }}
               />
               <button onClick={handleSend} disabled={inputDisabled} style={{ background: 'var(--accent)', border: 'none', padding: '8px 13px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: inputDisabled ? 0.5 : 1 }}>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="#090909" strokeWidth="2.5" strokeLinecap="square" /></svg>
