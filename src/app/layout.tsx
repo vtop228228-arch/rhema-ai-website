@@ -27,9 +27,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <ShaderBackground />
         <MobileBackground />
-        <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* scroll-root — прокручиваемый контейнер.
+            sticky внутри него работает надёжно в любом WebView (в т.ч. Telegram) */}
+        <div id="scroll-root" style={{ position: 'relative', zIndex: 1, height: '100dvh', overflowY: 'auto', overflowX: 'hidden' }}>
           <Header />
-          <main style={{ paddingTop: 54 }}>{children}</main>
+          <main>{children}</main>
           <Footer />
         </div>
         <StickyDiagCTA />

@@ -33,17 +33,11 @@ export default function Header() {
           display: 'flex',
           alignItems: 'center',
           gap: 36,
-          position: 'fixed',
+          position: 'sticky',
           top: 0,
-          left: 0,
-          right: 0,
           zIndex: 100,
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
-          // Фикс position:fixed в Telegram WebView (WKWebView)
-          transform: 'translateZ(0)',
-          WebkitTransform: 'translateZ(0)',
-          willChange: 'transform',
         }}
         className="header-bar"
       >

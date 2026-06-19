@@ -68,18 +68,21 @@
   padding: 0;
 }
 
-html {
-  scroll-behavior: smooth;
-  background: #0A0A0B;
-  /* Фикс position:fixed в Telegram WebView */
+html, body {
   height: 100%;
+  background: #0A0A0B;
+}
+
+/* scroll-root — единый прокручиваемый контейнер.
+   sticky внутри него работает в Telegram WebView, Safari, Chrome */
+#scroll-root {
+  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
 
 body {
   background: transparent;
   color: var(--ink);
-  min-height: 100%;
   font-family: var(--font-dm), 'DM Sans', sans-serif;
   font-size: 14px;
   line-height: 1.6;
