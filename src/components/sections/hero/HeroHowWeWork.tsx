@@ -20,7 +20,7 @@ export default function HeroHowWeWork() {
         <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.15s both' }}>ДИАГНОСТИКА.</span>
         <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.22s both' }}>РЕШЕНИЕ.</span>
         <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>РЕЗУЛЬТАТ.</span>
-        <span style={{ display: 'block', color: '#666', fontSize: '0.42em', letterSpacing: '4px', marginTop: 10, animation: 'fadeUp 0.6s ease 0.38s both' }}>ПРОЗРАЧНО · В СРОК · С ИЗМЕРИМЫМ ROI</span>
+        <span className="hero-sub-line" style={{ display: 'block', color: '#666', fontSize: '0.42em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.38s both' }}>ПРОЗРАЧНО · В СРОК · С ИЗМЕРИМЫМ ROI</span>
       </h1>
 
       <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 540, lineHeight: 1.82, marginBottom: 36, animation: 'fadeUp 0.6s ease 0.45s both' }}>
@@ -45,8 +45,10 @@ export default function HeroHowWeWork() {
 
       <style>{`
         .hero-hww { padding: 72px 72px 60px; }
+        .hero-sub-line { letter-spacing: 4px; }
         @media (max-width: 720px) {
           .hero-hww { padding: 48px 22px 40px; }
+          .hero-sub-line { letter-spacing: 1.5px; }
         }
       `}</style>
     </section>

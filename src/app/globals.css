@@ -233,7 +233,7 @@ h1, h2, h3, h4 {
 }
 
 @media (max-width: 720px) {
-  h1, h2 { hyphens: auto; }
+  h1, h2 { hyphens: none; word-break: keep-all; }
 }
 
 /* ── BACKGROUNDS: desktop = WebGL shader, mobile = Canvas 2D constellation ── */
@@ -256,6 +256,11 @@ h1, h2, h3, h4 {
   .section-alt {
     background: transparent !important;
   }
+}
+
+/* ── Sticky CTA: отступ снизу на мобиле чтобы кнопка не перекрывала контент ── */
+@media (max-width: 900px) {
+  body { padding-bottom: 52px; }
 }
 
 /* ── SCROLLBAR ── */
