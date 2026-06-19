@@ -1,9 +1,5 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
 
 const NAV_LINKS = [
   { href: '/how-we-work', label: 'Как работаем' },
@@ -13,17 +9,6 @@ const NAV_LINKS = [
 ];
 
 export default function Header() {
-  const [open, setOpen] = useState(false);
-  const pathname = usePathname();
-
-  // Close menu on route change
-  useEffect(() => { setOpen(false); }, [pathname]);
-
-  // Prevent body scroll when menu is open
-  useEffect(() => {
-    document.body.style.overflow = open ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [open]);
 
   return (
     <>
@@ -75,17 +60,6 @@ export default function Header() {
           ДИАГНОСТИКА
         </Link>
 
-        {/* Hamburger — mobile only */}
-        <button
-          className="burger-btn"
-          onClick={() => setOpen((v) => !v)}
-          aria-label={open ? 'Закрыть меню' : 'Открыть меню'}
-        >
-          <span className={`burger-line ${open ? 'open' : ''}`} />
-          <span className={`burger-line ${open ? 'open' : ''}`} />
-          <span className={`burger-line ${open ? 'open' : ''}`} />
-        </button>
-
         <style>{`
           .header-bar { padding: 0 72px; }
           @media (max-width: 720px) {
@@ -93,88 +67,8 @@ export default function Header() {
             .header-links { display: none !important; }
             .header-cta { display: none !important; }
           }
-          /* Hamburger */
-          .burger-btn {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            gap: 5px;
-            width: 36px;
-            height: 36px;
-            background: rgba(255,106,0,0.08);
-            border: 1px solid rgba(255,106,0,0.22);
-            cursor: pointer;
-            padding: 8px;
-            flex-shrink: 0;
-          }
-          @media (max-width: 720px) {
-            .burger-btn { display: flex; }
-          }
-          .burger-line {
-            display: block;
-            width: 100%;
-            height: 1.5px;
-            background: var(--ink);
-            transition: transform 0.22s, opacity 0.22s;
-            transform-origin: center;
-          }
-          .burger-line.open:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
-          .burger-line.open:nth-child(2) { opacity: 0; transform: scaleX(0); }
-          .burger-line.open:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
         `}</style>
       </nav>
-
-      {/* Mobile drawer backdrop */}
-      {open && (
-        <div
-          onClick={() => setOpen(false)}
-          style={{
-            position: 'fixed', inset: 0,
-            background: 'rgba(0,0,0,0.55)',
-            zIndex: 98,
-          }}
-        />
-      )}
-
-      {/* Mobile drawer */}
-      <div
-        style={{
-          position: 'fixed',
-          top: 54,
-          left: 0,
-          right: 0,
-          background: '#0A0A0B',
-          borderBottom: '1px solid var(--line2)',
-          zIndex: 99,
-          transform: open ? 'translateY(0)' : 'translateY(-105%)',
-          transition: 'transform 0.28s cubic-bezier(0.4,0,0.2,1)',
-          padding: '12px 0 20px',
-        }}
-      >
-        {NAV_LINKS.map((link, i) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            onClick={() => setOpen(false)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 14,
-              padding: '14px 22px',
-              fontSize: 13,
-              color: '#C0BBB2',
-              letterSpacing: '1.5px',
-              textTransform: 'uppercase',
-              fontWeight: 500,
-              borderBottom: i < NAV_LINKS.length - 1 ? '1px solid var(--line)' : 'none',
-              transition: 'color 0.18s, background 0.18s',
-            }}
-          >
-            <span style={{ width: 3, height: 3, background: 'var(--accent)', flexShrink: 0, display: 'block' }} />
-            {link.label}
-          </Link>
-        ))}
-      </div>
     </>
   );
 }
