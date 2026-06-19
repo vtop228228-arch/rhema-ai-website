@@ -174,26 +174,6 @@ export default function Header() {
             {link.label}
           </Link>
         ))}
-        <Link
-          href="/#diagnose"
-          onClick={() => setOpen(false)}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 14,
-            padding: '14px 22px',
-            fontSize: 13,
-            color: 'var(--accent)',
-            letterSpacing: '1.5px',
-            textTransform: 'uppercase',
-            fontWeight: 600,
-            borderBottom: 'none',
-            transition: 'opacity 0.18s',
-          }}
-        >
-          <span style={{ width: 3, height: 3, background: 'var(--accent)', flexShrink: 0, display: 'block' }} />
-          Диагностика бизнеса
-        </Link>
       </div>
     </>
   );
