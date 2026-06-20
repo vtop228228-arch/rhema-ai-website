@@ -98,7 +98,7 @@ export default function ResultsPreview() {
             transition: 'opacity 0.15s',
           }}
         >
-          НАЧАТЬ ДИАГНОСТИКУ →
+          ПОЛУЧИТЬ КАРТУ ПОТЕРЬ →
         </a>
       </div>
 

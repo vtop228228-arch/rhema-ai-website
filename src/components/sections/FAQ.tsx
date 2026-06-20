@@ -55,7 +55,7 @@ export default function FAQ() {
                 }}
                 onClick={() => setOpen(isOpen ? -1 : i)}
                 onMouseEnter={(e) => {
-                  if (!isOpen) (e.currentTarget as HTMLElement).style.borderLeftColor = 'rgba(255,106,0,0.3)';
+                  if (!isOpen) (e.currentTarget as HTMLElement).style.borderLeftColor = 'rgba(37,99,235,0.3)';
                 }}
                 onMouseLeave={(e) => {
                   if (!isOpen) (e.currentTarget as HTMLElement).style.borderLeftColor = 'transparent';
@@ -105,7 +105,7 @@ export default function FAQ() {
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <a href="#contact" className="btn btn-blue btn-md" style={{ width: 'fit-content' }}>
-              НАПИСАТЬ НАМ →
+              ОБСУДИТЬ МОЙ ПРОЕКТ →
             </a>
             <span style={{ fontSize: 11, color: '#555' }}>Бесплатно · без обязательств</span>
           </div>

@@ -60,14 +60,14 @@ export default function ContactForm() {
           <span className="text">Первый шаг</span>
         </div>
         <h2 style={{ fontFamily: bebas, fontSize: 'clamp(28px, 7.5vw, 62px)', lineHeight: 0.9, letterSpacing: '-0.5px' }}>
-          <span style={{ display: 'block', color: 'var(--ink)' }}>ОБСУДИМ</span>
-          <span style={{ display: 'block', color: 'var(--accent)' }}>ВАШУ ЗАДАЧУ</span>
+          <span style={{ display: 'block', color: 'var(--ink)' }}>Получите расчёт</span>
+          <span style={{ display: 'block', color: 'var(--accent)' }}>окупаемости</span>
         </h2>
         <p style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.8, maxWidth: 340 }}>
-          Расскажите про бизнес — за один звонок разберёмся, что принесёт первый результат и во сколько это обойдётся.
+          Расскажите о бизнесе — посчитаем, где теряются деньги, что автоматизировать первым и какой ROI ожидать. Конкретные цифры под вашу ситуацию.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginTop: 10, paddingTop: 18, borderTop: '1px solid var(--line)' }}>
-          {['Отвечаем в течение рабочего дня', 'Первая консультация — бесплатно'].map((t, i) => (
+          {['Отвечаем в течение рабочего дня', 'Расчёт ROI — бесплатно и без обязательств'].map((t, i) => (
             <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'center' }}>
               <div style={{ width: 3, height: 3, background: 'var(--accent)', flexShrink: 0 }} />
               <span style={{ fontSize: 13, color: '#888' }}>{t}</span>
@@ -103,7 +103,7 @@ export default function ContactForm() {
             </label>
             {err && <span style={{ fontSize: 13, color: 'var(--red)' }}>{err}</span>}
             <button type="submit" disabled={loading || !consent} style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '13px 22px', fontFamily: bebas, fontSize: 19, letterSpacing: 1, width: '100%', opacity: (loading || !consent) ? 0.5 : 1, cursor: (!consent || loading) ? 'not-allowed' : 'pointer' }}>
-              {loading ? 'ОТПРАВЛЯЮ…' : 'ОСТАВИТЬ ЗАЯВКУ'}
+              {loading ? 'ОТПРАВЛЯЮ…' : 'ПОЛУЧИТЬ РАСЧЁТ ОКУПАЕМОСТИ'}
             </button>
           </form>
         )}

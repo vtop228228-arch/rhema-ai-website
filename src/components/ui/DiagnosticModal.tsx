@@ -229,7 +229,7 @@ export default function DiagnosticModal({ open, onClose }: Props) {
                 marginTop: 4,
               }}
             >
-              {loading ? 'ОТПРАВЛЯЮ…' : 'ОТПРАВИТЬ →'}
+              {loading ? 'ОТПРАВЛЯЮ…' : 'ЗАПИСАТЬСЯ НА ДИАГНОСТИКУ →'}
             </button>
           </form>
         )}
