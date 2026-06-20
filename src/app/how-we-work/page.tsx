@@ -1,5 +1,6 @@
 import HeroHowWeWork from '@/components/sections/hero/HeroHowWeWork';
 import Process from '@/components/sections/Process';
+import Cases from '@/components/sections/Cases';
 import DiagnosticPricing from '@/components/sections/DiagnosticPricing';
 import Stats from '@/components/sections/Stats';
 import FAQ from '@/components/sections/FAQ';
@@ -17,6 +18,8 @@ export default function HowWeWork() {
       <HeroHowWeWork />
       <GradientDivider />
       <Process />
+      <GradientDivider />
+      <Cases />
       <GradientDivider />
       <DiagnosticPricing />
       <GradientDivider />

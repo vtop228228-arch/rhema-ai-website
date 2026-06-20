@@ -44,14 +44,14 @@ export default function HeroMain() {
           overflowWrap: 'break-word',
           wordBreak: 'normal',
         }}>
-          <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>СТРОИМ AI СИСТЕМЫ →</span>
-          <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>УСКОРЯЕМ РОСТ БИЗНЕСА</span>
-          <span className="hero-sub hero-sub-xs" style={{ display: 'block', color: '#999', fontSize: '0.43em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>ЗА 3–6 НЕДЕЛЬ · ИЗМЕРИМАЯ ДОХОДНОСТЬ</span>
+          <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>СТРОИМ AI-СИСТЕМУ →</span>
+          <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>ПОД ВАШИ ПРОЦЕССЫ</span>
+          <span className="hero-sub hero-sub-xs" style={{ display: 'block', color: '#999', fontSize: '0.43em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>АГЕНТ С ПАМЯТЬЮ · НЕ ШАБЛОН · ВАШИ ДАННЫЕ</span>
         </h1>
 
         {/* Body */}
         <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 400, lineHeight: 1.85, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
-          Ответьте на 2–3 вопроса — AI покажет, где бизнес теряет деньги и что внедрить первым, чтобы окупилось. Бесплатно и без регистрации.
+          90% автоматизаций не приживаются — шаблонный бот не знает ваших процессов и не помнит клиентов. Ответьте на 2–3 вопроса — AI покажет, где теряются деньги и что внедрить первым.
         </p>
       </div>
 
