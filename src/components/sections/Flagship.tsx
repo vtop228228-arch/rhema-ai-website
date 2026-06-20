@@ -1,5 +1,4 @@
 import SectionLabel from '@/components/ui/SectionLabel';
-import Button from '@/components/ui/Button';
 
 const STATS = [
   { value: '3', label: 'месяца от идеи до запуска' },
@@ -93,12 +92,6 @@ export default function Flagship() {
                 ЮKassa (оплата)<br />Kinescope (видео)<br />Telegram Login
               </p>
             </div>
-          </div>
-
-          <div>
-            <Button href="/how-we-work#contact" variant="blue" size="lg">
-              Построим что-то похожее для вас
-            </Button>
           </div>
 
         </div>

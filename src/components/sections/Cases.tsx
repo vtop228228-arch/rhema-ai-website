@@ -64,6 +64,25 @@ const CASES = [
     provisional: true,
   },
   {
+    title: 'Besty — Telegram mini-app для фитнес-школы',
+    thought: '«Всё держалось на чатах, таблицах и ручной работе куратора. Нужно единое приложение под бренд»',
+    diagnosis: [
+      'Куратор вручную отвечал на одни и те же вопросы про КБЖУ и тренировки',
+      'Без напоминаний и контроля ученицы тихо отваливались, доходимость падала',
+      'Тренировки, питание и замеры были раскиданы по разным чатам',
+      'Не было своего продукта — только безликие конструкторы-боты',
+    ],
+    solution: 'Собрал мини-приложение Besty в Telegram под бренд эксперта: КБЖУ-калькулятор, видеотренировки, рецепты, челленджи с отчётами, трекер замеров, AI-наставник 24/7 и панель эксперта. Вся школа в одном окне — открывается прямо в Telegram, ставить ничего не нужно.',
+    results: [
+      'AI-наставник отвечает 24/7 и разгружает куратора от рутины',
+      'Тренировки, КБЖУ, рецепты и замеры — в одном окне Telegram',
+      'Напоминания и челленджи держат учениц в процессе до результата',
+      'Ученица видит динамику, эксперт — всю базу участниц через панель',
+    ],
+    roi: 'Школа из набора чатов превратилась в брендированный продукт',
+    provisional: false,
+  },
+  {
     title: 'LifesystemA — AI-коуч в Telegram',
     thought: '«Знаю что надо делать — питание, тренировки. Но через неделю всё разваливается»',
     diagnosis: [
@@ -169,7 +188,7 @@ export default function Cases() {
                       Что думал клиент
                     </span>
                   </div>
-                  <p style={{ fontSize: 14, color: '#888', margin: 0, lineHeight: 1.7, fontStyle: 'italic' }}>
+                  <p style={{ fontSize: 14, color: 'var(--ink)', margin: 0, lineHeight: 1.7, fontStyle: 'italic' }}>
                     {c.thought}
                   </p>
                 </div>
@@ -190,7 +209,7 @@ export default function Cases() {
                   {c.diagnosis.map((d, i) => (
                     <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 7 }}>
                       <span style={{ color: 'rgba(255,106,0,0.4)', fontSize: 12, flexShrink: 0, marginTop: 2 }}>→</span>
-                      <span style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.55 }}>{d}</span>
+                      <span style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.55 }}>{d}</span>
                     </div>
                   ))}
                 </div>
