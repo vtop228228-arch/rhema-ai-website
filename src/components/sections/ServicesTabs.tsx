@@ -39,7 +39,7 @@ function Meta({ term, price, cta }: { term: string; price: string; cta: string }
           <div style={{ fontFamily: bebas, fontSize: 22, color: 'var(--accent)' }}>{price}</div>
         </div>
       </div>
-      <a href="#contact" style={{ background: 'var(--accent)', color: '#090909', padding: '11px 22px', fontFamily: bebas, fontSize: 15, letterSpacing: '1px' }}>{cta}</a>
+      <a href="#contact" style={{ background: 'var(--accent)', color: '#ffffff', padding: '11px 22px', fontFamily: bebas, fontSize: 15, letterSpacing: '1px' }}>{cta}</a>
     </div>
   );
 }
@@ -97,7 +97,7 @@ export default function ServicesTabs() {
                 <div key={i} style={{ background: 'rgba(19,19,19,0.88)', padding: '10px 13px', fontSize: 13, color: 'var(--ink2)' }}>{t}</div>
               ))}
             </div>
-            <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'var(--accent)', color: '#090909', padding: '12px 20px', fontFamily: bebas, fontSize: 15, letterSpacing: '1px', marginTop: 'auto' }}>ЗАКАЗАТЬ ДИАГНОСТИКУ</a>
+            <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'var(--accent)', color: '#ffffff', padding: '12px 20px', fontFamily: bebas, fontSize: 15, letterSpacing: '1px', marginTop: 'auto' }}>ЗАКАЗАТЬ ДИАГНОСТИКУ</a>
           </div>
         </div>
       )}
@@ -164,7 +164,7 @@ export default function ServicesTabs() {
                 </div>
               ))}
             </div>
-            <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'var(--accent)', color: '#090909', padding: '12px 20px', fontFamily: bebas, fontSize: 15, letterSpacing: '1px', marginTop: 'auto' }}>ОБСУДИТЬ ПРОЕКТ</a>
+            <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', background: 'var(--accent)', color: '#ffffff', padding: '12px 20px', fontFamily: bebas, fontSize: 15, letterSpacing: '1px', marginTop: 'auto' }}>ОБСУДИТЬ ПРОЕКТ</a>
           </div>
         </div>
       )}

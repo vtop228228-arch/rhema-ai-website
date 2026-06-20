@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { DM_Sans } from 'next/font/google';
+import { Manrope, Inter } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -7,10 +7,17 @@ import ShaderBackground from '@/components/ui/ShaderBackground';
 import MobileBackground from '@/components/ui/MobileBackground';
 import CookieConsent from '@/components/ui/CookieConsent';
 
-const dmSans = DM_Sans({
-  subsets: ['latin'],
+const manrope = Manrope({
+  subsets: ['latin', 'cyrillic'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-heading',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin', 'cyrillic'],
   weight: ['400', '500', '600', '700'],
-  variable: '--font-dm',
+  variable: '--font-body',
   display: 'swap',
 });
 
@@ -22,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={dmSans.variable}>
+    <html lang="ru" className={`${manrope.variable} ${inter.variable}`}>
       <body>
         <ShaderBackground />
         <MobileBackground />

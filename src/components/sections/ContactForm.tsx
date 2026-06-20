@@ -102,7 +102,7 @@ export default function ContactForm() {
               </span>
             </label>
             {err && <span style={{ fontSize: 13, color: 'var(--red)' }}>{err}</span>}
-            <button type="submit" disabled={loading || !consent} style={{ background: 'var(--accent)', color: '#090909', border: 'none', padding: '13px 22px', fontFamily: bebas, fontSize: 19, letterSpacing: 1, width: '100%', opacity: (loading || !consent) ? 0.5 : 1, cursor: (!consent || loading) ? 'not-allowed' : 'pointer' }}>
+            <button type="submit" disabled={loading || !consent} style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '13px 22px', fontFamily: bebas, fontSize: 19, letterSpacing: 1, width: '100%', opacity: (loading || !consent) ? 0.5 : 1, cursor: (!consent || loading) ? 'not-allowed' : 'pointer' }}>
               {loading ? 'ОТПРАВЛЯЮ…' : 'ОСТАВИТЬ ЗАЯВКУ'}
             </button>
           </form>

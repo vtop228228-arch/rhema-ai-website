@@ -26,9 +26,9 @@ export default function FullCycle() {
           <p style={{ fontSize: 15, color: 'var(--ink2)', lineHeight: 1.8, maxWidth: 380 }}>
             Мы не просто показываем, где теряются деньги. Мы строим AI-агентов, которые эти потери устраняют — под ключ, от архитектуры до запуска и поддержки.
           </p>
-          <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--accent)', color: '#090909', padding: '13px 22px', fontFamily: bebas, fontSize: 16, letterSpacing: '1.5px', width: 'fit-content' }}>
+          <a href="#contact" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'var(--accent)', color: '#ffffff', padding: '13px 22px', fontFamily: bebas, fontSize: 16, letterSpacing: '1.5px', width: 'fit-content' }}>
             ОБСУДИТЬ ПРОЕКТ
-            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#090909" strokeWidth="1.8" strokeLinecap="square" /></svg>
+            <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="square" /></svg>
           </a>
         </div>
 

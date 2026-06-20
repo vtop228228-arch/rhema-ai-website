@@ -36,7 +36,7 @@ export default function HowItWorks() {
               border: s.filled ? 'none' : '1px solid rgba(255,106,0,0.22)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', zIndex: 1, flexShrink: 0,
             }}>
-              <span style={{ fontFamily: bebas, fontSize: 22, color: s.filled ? '#090909' : 'var(--accent)' }}>{s.n}</span>
+              <span style={{ fontFamily: bebas, fontSize: 22, color: s.filled ? '#ffffff' : 'var(--accent)' }}>{s.n}</span>
             </div>
             <Title text={s.title} />
             <p style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.65, position: 'relative', zIndex: 1 }}>{s.text}</p>

@@ -104,8 +104,8 @@ export default function Header() {
             gap: 5px;
             width: 36px;
             height: 36px;
-            background: rgba(255,106,0,0.08);
-            border: 1px solid rgba(255,106,0,0.22);
+            background: rgba(37,99,235,0.08);
+            border: 1px solid rgba(37,99,235,0.22);
             cursor: pointer;
             padding: 8px;
             flex-shrink: 0;
@@ -181,7 +181,7 @@ export default function Header() {
               display: 'block',
               width: '100%',
               background: 'var(--accent)',
-              color: '#090909',
+              color: '#ffffff',
               border: 'none',
               padding: '13px 22px',
               fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif',

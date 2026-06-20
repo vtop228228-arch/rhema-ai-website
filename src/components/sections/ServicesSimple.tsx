@@ -50,15 +50,15 @@ export default function ServicesSimple() {
           <div
             key={s.num}
             style={{
-              background: s.accent ? 'rgba(255,106,0,0.05)' : 'var(--card)',
-              border: `1px solid ${s.accent ? 'rgba(255,106,0,0.28)' : 'var(--line)'}`,
+              background: s.accent ? 'rgba(37,99,235,0.05)' : 'var(--card)',
+              border: `1px solid ${s.accent ? 'rgba(37,99,235,0.28)' : 'var(--line)'}`,
               padding: '30px 26px',
               display: 'flex',
               flexDirection: 'column',
               gap: 16,
             }}
           >
-            <div style={{ fontFamily: bebas, fontSize: 42, color: s.accent ? 'var(--accent)' : 'rgba(255,106,0,0.15)', lineHeight: 1, letterSpacing: '2px' }}>
+            <div style={{ fontFamily: bebas, fontSize: 42, color: s.accent ? 'var(--accent)' : 'rgba(37,99,235,0.15)', lineHeight: 1, letterSpacing: '2px' }}>
               {s.num}
             </div>
 
@@ -86,8 +86,8 @@ export default function ServicesSimple() {
               style={{
                 display: 'block',
                 background: s.accent ? 'var(--accent)' : 'transparent',
-                border: `1px solid ${s.accent ? 'transparent' : 'rgba(255,106,0,0.35)'}`,
-                color: s.accent ? '#090909' : 'var(--accent)',
+                border: `1px solid ${s.accent ? 'transparent' : 'rgba(37,99,235,0.35)'}`,
+                color: s.accent ? '#ffffff' : 'var(--accent)',
                 padding: '11px 18px',
                 fontFamily: bebas,
                 fontSize: 14,

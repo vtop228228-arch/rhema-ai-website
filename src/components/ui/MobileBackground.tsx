@@ -76,8 +76,8 @@ export default function MobileBackground() {
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.shadowBlur = 6;
-            ctx.shadowColor = 'rgba(255,106,0,0.7)';
-            ctx.strokeStyle = `rgba(255,106,0,${alpha})`;
+            ctx.shadowColor = 'rgba(37,99,235,0.7)';
+            ctx.strokeStyle = `rgba(37,99,235,${alpha})`;
             ctx.lineWidth = 0.8;
             ctx.stroke();
           }
@@ -86,7 +86,7 @@ export default function MobileBackground() {
 
       // Glowing dots
       ctx.shadowBlur = 12;
-      ctx.shadowColor = 'rgba(255,106,0,0.9)';
+      ctx.shadowColor = 'rgba(37,99,235,0.9)';
       for (const p of particles) {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);

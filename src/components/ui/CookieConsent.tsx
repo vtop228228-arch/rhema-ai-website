@@ -47,7 +47,7 @@ export default function CookieConsent() {
         onClick={accept}
         style={{
           background: 'var(--accent)',
-          color: '#090909',
+          color: '#ffffff',
           border: 'none',
           padding: '8px 18px',
           fontSize: 12,

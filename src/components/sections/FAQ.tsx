@@ -73,7 +73,7 @@ export default function FAQ() {
                     transition: 'background 0.22s, border-color 0.22s',
                   }}>
                     <span style={{
-                      color: isOpen ? '#090909' : '#888',
+                      color: isOpen ? '#ffffff' : '#888',
                       fontSize: 20, lineHeight: 1, fontWeight: 300, userSelect: 'none',
                       display: 'block',
                       transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',

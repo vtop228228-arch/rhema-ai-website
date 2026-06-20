@@ -9,7 +9,7 @@ const VS = `
   }
 `;
 
-// Адаптировано под Rhema AI: #090909 фон + оранжевые (#FF6A00) плазма-линии
+// Адаптировано под Rhema AI: #090909 фон + синие (#2563EB) плазма-линии (TEST)
 const FS = `
   precision highp float;
   uniform vec2 iResolution;
@@ -24,7 +24,7 @@ const FS = `
   const float minorLineFreq    = 1.0;
   const float scale            = 5.0;
 
-  const vec4  lineColor        = vec4(1.0, 0.416, 0.0, 0.55);
+  const vec4  lineColor        = vec4(0.145, 0.388, 0.922, 0.55);
   const float minLineWidth     = 0.006;
   const float maxLineWidth     = 0.09;
   const float lineSpeed        = 1.0  * overallSpeed;

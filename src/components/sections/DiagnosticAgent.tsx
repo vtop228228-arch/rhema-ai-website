@@ -192,9 +192,9 @@ export default function DiagnosticAgent() {
           <div>
             <button
               onClick={startChat}
-              style={{ background: 'var(--accent)', color: '#090909', border: 'none', padding: '14px 24px', fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 22, letterSpacing: 1, display: 'flex', alignItems: 'center', gap: 8, animation: 'ctaGlow 3s ease-in-out infinite' }}
+              style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '14px 24px', fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 22, letterSpacing: 1, display: 'flex', alignItems: 'center', gap: 8, animation: 'ctaGlow 3s ease-in-out infinite' }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#090909" /></svg>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#ffffff" /></svg>
               НАЧАТЬ ДИАГНОСТИКУ
             </button>
             <p style={{ fontSize: 13, color: '#888', marginTop: 10 }}>Бесплатно · без регистрации</p>
@@ -301,7 +301,7 @@ export default function DiagnosticAgent() {
                     <div style={{ width: 3, height: 3, background: 'var(--red)', flexShrink: 0 }} />{leadErr}
                   </div>
                 )}
-                <button onClick={submitLead} style={{ background: 'var(--accent)', color: '#090909', border: 'none', padding: '11px 16px', fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 17, letterSpacing: 1, width: '100%' }}>
+                <button onClick={submitLead} style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '11px 16px', fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 17, letterSpacing: 1, width: '100%' }}>
                   ПОЛУЧИТЬ ДИАГНОСТИКУ →
                 </button>
               </div>
@@ -329,7 +329,7 @@ export default function DiagnosticAgent() {
                 style={{ flex: 1, background: 'rgba(19,19,19,0.88)', border: '1px solid #1C1C1C', color: 'var(--ink)', padding: '8px 12px', fontSize: 16, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', transition: 'border-color 0.18s' }}
               />
               <button onClick={handleSend} disabled={inputDisabled} style={{ background: 'var(--accent)', border: 'none', padding: '8px 13px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: inputDisabled ? 0.5 : 1 }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="#090909" strokeWidth="2.5" strokeLinecap="square" /></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="square" /></svg>
               </button>
             </div>
           )}

@@ -12,9 +12,9 @@ const PROOFS = [
     sub: 'AI-агент в LifesystemA обрабатывает каждого клиента 24/7 — ни одной упущенной продажи.',
   },
   {
-    num: '3×',
-    label: 'дешевле агентства',
-    sub: 'Тот же результат и качество — экономия сотен тысяч ₽ на разработке.',
+    num: '70%',
+    label: 'экономии на ФОТ',
+    sub: 'Исключаем раздутый штат: AI-агент заменяет рутинную работу менеджеров и экономит сотни тысяч ₽ в месяц.',
   },
 ];
 
@@ -56,7 +56,7 @@ export default function ResultsPreview() {
       <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 28 }}>
         <a
           href="/how-we-work#cases"
-          style={{ fontFamily: bebas, fontSize: 14, letterSpacing: '1.5px', color: 'var(--accent)', textDecoration: 'none', borderBottom: '1px solid rgba(255,106,0,0.4)', paddingBottom: 2 }}
+          style={{ fontFamily: bebas, fontSize: 14, letterSpacing: '1.5px', color: 'var(--accent)', textDecoration: 'none', borderBottom: '1px solid rgba(37,99,235,0.4)', paddingBottom: 2 }}
         >
           СМОТРЕТЬ ВСЕ КЕЙСЫ →
         </a>
@@ -70,15 +70,15 @@ export default function ResultsPreview() {
         justifyContent: 'space-between',
         gap: 24,
         padding: '22px 26px',
-        background: 'rgba(255,106,0,0.04)',
-        border: '1px solid rgba(255,106,0,0.18)',
+        background: 'rgba(37,99,235,0.04)',
+        border: '1px solid rgba(37,99,235,0.18)',
       }}>
         <div>
           <div style={{ fontFamily: bebas, fontSize: 18, color: 'var(--ink)', letterSpacing: '0.5px', lineHeight: 1 }}>
             УЗНАЙТЕ, ГДЕ ТЕРЯЕТЕ ДЕНЬГИ
           </div>
           <div style={{ fontSize: 13, color: '#666', marginTop: 5 }}>
-            Диагностика бесплатно — карта потерь за 4 дня
+            Диагностика бесплатно — ответим в течение рабочего дня
           </div>
         </div>
         <a
@@ -87,7 +87,7 @@ export default function ResultsPreview() {
           style={{
             display: 'inline-block',
             background: 'var(--accent)',
-            color: '#090909',
+            color: '#ffffff',
             fontFamily: bebas,
             fontSize: 13,
             letterSpacing: '1px',

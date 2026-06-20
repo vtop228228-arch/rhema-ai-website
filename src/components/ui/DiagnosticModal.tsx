@@ -116,7 +116,7 @@ export default function DiagnosticModal({ open, onClose }: Props) {
           transform: 'translate(-50%, -50%)',
           zIndex: 301,
           background: '#0C0C0C',
-          border: '1px solid rgba(255,106,0,0.22)',
+          border: '1px solid rgba(37,99,235,0.22)',
           borderTop: '3px solid var(--accent)',
           width: 'min(460px, 92vw)',
           padding: '28px 24px',
@@ -131,7 +131,7 @@ export default function DiagnosticModal({ open, onClose }: Props) {
         {/* Шапка */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
           <div>
-            <div style={{ fontSize: 10, color: 'rgba(255,106,0,0.6)', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, marginBottom: 6 }}>
+            <div style={{ fontSize: 10, color: 'rgba(37,99,235,0.85)', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, marginBottom: 6 }}>
               Бесплатно · без обязательств
             </div>
             <h2 style={{ fontFamily: bebas, fontSize: 28, color: 'var(--ink)', letterSpacing: '1px', lineHeight: 1, margin: 0 }}>
@@ -179,7 +179,7 @@ export default function DiagnosticModal({ open, onClose }: Props) {
               placeholder="Ваше имя"
               value={form.name}
               onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
-              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(255,106,0,0.5)'; }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.5)'; }}
               onBlur={(e) => { e.currentTarget.style.borderColor = '#252525'; }}
               style={inputStyle}
               autoComplete="name"
@@ -189,7 +189,7 @@ export default function DiagnosticModal({ open, onClose }: Props) {
               placeholder="+7 999 999 99 99 или @telegram"
               value={form.contact}
               onChange={e => setForm(p => ({ ...p, contact: e.target.value }))}
-              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(255,106,0,0.5)'; }}
+              onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.5)'; }}
               onBlur={(e) => { e.currentTarget.style.borderColor = '#252525'; }}
               style={inputStyle}
               autoComplete="tel"
@@ -216,7 +216,7 @@ export default function DiagnosticModal({ open, onClose }: Props) {
               disabled={loading}
               style={{
                 background: 'var(--accent)',
-                color: '#090909',
+                color: '#ffffff',
                 border: 'none',
                 padding: '15px 22px',
                 fontFamily: bebas,
@@ -238,7 +238,7 @@ export default function DiagnosticModal({ open, onClose }: Props) {
       <style>{`
         @keyframes diagFadeIn { from { opacity: 0 } to { opacity: 1 } }
         @keyframes diagSlideUp { from { opacity: 0; transform: translate(-50%, -47%) } to { opacity: 1; transform: translate(-50%, -50%) } }
-        .diag-close-btn:hover { border-color: rgba(255,106,0,0.3) !important; color: var(--ink) !important; }
+        .diag-close-btn:hover { border-color: rgba(37,99,235,0.3) !important; color: var(--ink) !important; }
       `}</style>
     </>
   );

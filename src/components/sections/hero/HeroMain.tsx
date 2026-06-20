@@ -44,14 +44,14 @@ export default function HeroMain() {
           overflowWrap: 'break-word',
           wordBreak: 'normal',
         }}>
-          <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>СТРОИМ AI-СИСТЕМУ →</span>
-          <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>ПОД ВАШИ ПРОЦЕССЫ</span>
-          <span className="hero-sub hero-sub-xs" style={{ display: 'block', color: '#999', fontSize: '0.43em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>АГЕНТ С ПАМЯТЬЮ · НЕ ШАБЛОН · ВАШИ ДАННЫЕ</span>
+          <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>Проектирование и внедрение</span>
+          <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>AI-агентов под ваш бизнес</span>
+          <span className="hero-sub hero-sub-xs" style={{ display: 'block', color: '#999', fontSize: '0.43em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>Агент с памятью · Не шаблон · Ваши данные</span>
         </h1>
 
         {/* Body */}
         <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 400, lineHeight: 1.85, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
-          90% автоматизаций не приживаются — шаблонный бот не знает ваших процессов и не помнит клиентов. Ответьте на 2–3 вопроса — AI покажет, где теряются деньги и что внедрить первым.
+          Интегрируем AI в вашу CRM и внутренние системы. Заменим рутину на агентов, которые помнят каждого клиента, работают 24/7 и полностью окупаются за 1–2 месяца.
         </p>
       </div>
 

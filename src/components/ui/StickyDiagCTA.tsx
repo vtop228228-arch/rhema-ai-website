@@ -3,7 +3,7 @@ export default function StickyDiagCTA() {
     <>
       <a href="/#diagnose" className="sticky-diag-cta">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
-          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#090909" />
+          <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#ffffff" />
         </svg>
         НАЧАТЬ ДИАГНОСТИКУ →
       </a>
