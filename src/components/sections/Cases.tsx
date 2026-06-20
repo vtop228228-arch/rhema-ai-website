@@ -151,73 +151,95 @@ export default function Cases() {
             </div>
 
             {/* Правая колонка — детали кейса */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
 
               {/* Верхние два блока */}
-              <div className="cases-inner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                {/* Что думал */}
+              <div className="cases-inner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3 }}>
+
+                {/* Блок 1: Что думал клиент — нейтральный, серый (это ОШИБОЧНОЕ мнение) */}
                 <div style={{
-                  background: 'var(--card)',
-                  border: '1px solid var(--line)',
-                  borderRadius: 0,
-                  padding: 20,
+                  background: '#0B0B0B',
+                  border: '1px solid #161616',
+                  borderLeft: '3px solid #232323',
+                  padding: '20px 20px 20px 18px',
                 }}>
-                  <p style={{ fontSize: 12, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 10px', fontWeight: 700 }}>
-                    Что думал клиент:
-                  </p>
-                  <p style={{ fontSize: 14, color: 'var(--ink)', margin: 0, lineHeight: 1.5 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                    <div style={{ width: 5, height: 5, background: '#3A3A3A', flexShrink: 0 }} />
+                    <span style={{ fontSize: 10, color: '#555', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700 }}>
+                      Что думал клиент
+                    </span>
+                  </div>
+                  <p style={{ fontSize: 14, color: '#888', margin: 0, lineHeight: 1.7, fontStyle: 'italic' }}>
                     {c.thought}
                   </p>
                 </div>
 
-                {/* Что показала */}
+                {/* Блок 2: Диагностика — оранжевый акцент (это ОТКРОВЕНИЕ, поворотный момент) */}
                 <div style={{
-                  background: 'var(--card)',
-                  border: '1px solid var(--line)',
-                  borderRadius: 0,
-                  padding: 20,
+                  background: 'rgba(255,106,0,0.03)',
+                  border: '1px solid rgba(255,106,0,0.14)',
+                  borderLeft: '3px solid rgba(255,106,0,0.45)',
+                  padding: '20px 20px 20px 18px',
                 }}>
-                  <p style={{ fontSize: 12, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 10px', fontWeight: 700 }}>
-                    Что показала диагностика:
-                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                    <div style={{ width: 5, height: 5, background: 'rgba(255,106,0,0.55)', flexShrink: 0 }} />
+                    <span style={{ fontSize: 10, color: 'rgba(255,106,0,0.65)', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700 }}>
+                      Что показала диагностика
+                    </span>
+                  </div>
                   {c.diagnosis.map((d, i) => (
-                    <p key={i} style={{ fontSize: 13, color: 'var(--sub2)', margin: '0 0 4px' }}>• {d}</p>
+                    <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 7 }}>
+                      <span style={{ color: 'rgba(255,106,0,0.4)', fontSize: 12, flexShrink: 0, marginTop: 2 }}>→</span>
+                      <span style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.55 }}>{d}</span>
+                    </div>
                   ))}
                 </div>
               </div>
 
               {/* Нижние два блока */}
-              <div className="cases-inner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-                {/* Что сделали */}
+              <div className="cases-inner-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3 }}>
+
+                {/* Блок 3: Что сделали — нейтральный, чуть светлее (профессиональное решение) */}
                 <div style={{
-                  background: 'var(--card)',
-                  border: '1px solid var(--line)',
-                  borderRadius: 0,
+                  background: '#0D0D0D',
+                  border: '1px solid #1A1A1A',
+                  borderTop: '2px solid #222',
                   padding: 20,
                 }}>
-                  <p style={{ fontSize: 12, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 10px', fontWeight: 700 }}>
-                    Что мы сделали:
-                  </p>
-                  <p style={{ fontSize: 14, color: 'var(--ink)', margin: 0 }}>{c.solution}</p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                    <div style={{ width: 5, height: 5, background: '#505050', flexShrink: 0 }} />
+                    <span style={{ fontSize: 10, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700 }}>
+                      Что мы сделали
+                    </span>
+                  </div>
+                  <p style={{ fontSize: 14, color: 'var(--ink)', margin: 0, lineHeight: 1.75 }}>{c.solution}</p>
                 </div>
 
-                {/* Результат */}
+                {/* Блок 4: Результат — ГЛАВНЫЙ БЛОК, максимальный акцент */}
                 <div style={{
-                  background: 'var(--card)',
-                  border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
-                  borderRadius: 0,
+                  background: 'rgba(255,106,0,0.07)',
+                  border: '1px solid rgba(255,106,0,0.3)',
+                  borderTop: '3px solid var(--accent)',
                   padding: 20,
                 }}>
-                  <p style={{ fontSize: 12, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 10px', fontWeight: 700 }}>
-                    Результат через месяц:
-                  </p>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
+                    <div style={{ width: 7, height: 7, background: 'var(--accent)', flexShrink: 0 }} />
+                    <span style={{ fontSize: 10, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700 }}>
+                      Результат через месяц
+                    </span>
+                  </div>
                   {c.results.map((r, i) => (
-                    <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
-                      <span style={{ color: 'var(--accent)', fontSize: 12, flexShrink: 0 }}>✓</span>
-                      <span style={{ fontSize: 13, color: 'var(--ink)' }}>{r}</span>
+                    <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+                      <span style={{ color: 'var(--accent)', fontSize: 13, flexShrink: 0, marginTop: 1 }}>✓</span>
+                      <span style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.55 }}>{r}</span>
                     </div>
                   ))}
-                  <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', margin: '12px 0 0' }}>{c.roi}</p>
+                  <div style={{ borderTop: '1px solid rgba(255,106,0,0.2)', marginTop: 14, paddingTop: 14 }}>
+                    <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', margin: 0, lineHeight: 1.3 }}>{c.roi}</p>
+                    {c.provisional && (
+                      <p style={{ fontSize: 11, color: '#353535', margin: '5px 0 0' }}>* ориентир — уточняется после завершения внедрения</p>
+                    )}
+                  </div>
                 </div>
               </div>
 
