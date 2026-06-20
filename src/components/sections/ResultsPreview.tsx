@@ -53,7 +53,7 @@ export default function ResultsPreview() {
         ))}
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 28 }}>
         <a
           href="/how-we-work#cases"
           style={{ fontFamily: bebas, fontSize: 14, letterSpacing: '1.5px', color: 'var(--accent)', textDecoration: 'none', borderBottom: '1px solid rgba(255,106,0,0.4)', paddingBottom: 2 }}
@@ -63,9 +63,50 @@ export default function ResultsPreview() {
         <span style={{ fontSize: 12, color: '#505050' }}>4 реальных проекта с описанием</span>
       </div>
 
+      {/* Bridge CTA: увидел результаты → следующий шаг */}
+      <div className="results-bridge" style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 24,
+        padding: '22px 26px',
+        background: 'rgba(255,106,0,0.04)',
+        border: '1px solid rgba(255,106,0,0.18)',
+      }}>
+        <div>
+          <div style={{ fontFamily: bebas, fontSize: 18, color: 'var(--ink)', letterSpacing: '0.5px', lineHeight: 1 }}>
+            УЗНАЙТЕ, ГДЕ ТЕРЯЕТЕ ДЕНЬГИ
+          </div>
+          <div style={{ fontSize: 13, color: '#666', marginTop: 5 }}>
+            Диагностика бесплатно — карта потерь за 4 дня
+          </div>
+        </div>
+        <a
+          href="#diagnose"
+          className="results-bridge-btn"
+          style={{
+            display: 'inline-block',
+            background: 'var(--accent)',
+            color: '#090909',
+            fontFamily: bebas,
+            fontSize: 13,
+            letterSpacing: '1px',
+            padding: '10px 20px',
+            textDecoration: 'none',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
+            transition: 'opacity 0.15s',
+          }}
+        >
+          НАЧАТЬ ДИАГНОСТИКУ →
+        </a>
+      </div>
+
       <style>{`
+        .results-bridge-btn:hover { opacity: 0.82; }
         @media (max-width: 720px) {
           .results-grid { grid-template-columns: 1fr !important; }
+          .results-bridge { flex-direction: column !important; align-items: flex-start !important; }
         }
       `}</style>
     </div>
