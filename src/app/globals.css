@@ -109,17 +109,19 @@ button { cursor: pointer; }
   .section-pad { padding: 48px 22px; }
 }
 
-/* Заголовок секции: маркер + Bebas + линия */
+/* Заголовок секции: вертикальная полоса + Bebas + линия */
 .section-head {
   display: flex;
   align-items: center;
-  gap: 13px;
+  gap: 14px;
   margin-bottom: 36px;
 }
 .section-head .dot {
-  width: 4px; height: 4px;
+  width: 3px;
+  height: 24px;
   background: var(--accent);
   flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(255,106,0,0.55);
 }
 .section-head .title {
   font-family: var(--font-dm), 'DM Sans', sans-serif;
@@ -128,11 +130,12 @@ button { cursor: pointer; }
   color: var(--ink);
   white-space: nowrap;
   flex-shrink: 0;
+  text-shadow: 0 0 40px rgba(255,106,0,0.18);
 }
 .section-head .rule {
   flex: 1;
   height: 1px;
-  background: var(--line);
+  background: linear-gradient(to right, rgba(255,106,0,0.25), transparent 60%);
 }
 
 /* ── Eyebrow (линия + текст) ── */
@@ -143,7 +146,9 @@ button { cursor: pointer; }
 }
 .eyebrow .bar {
   width: 36px; height: 1px;
-  background: rgba(255,255,255,0.2);
+  background: var(--accent);
+  opacity: 0.65;
+  box-shadow: 0 0 6px rgba(255,106,0,0.5);
 }
 .eyebrow .text {
   font-size: 10px;

@@ -1,6 +1,5 @@
 import HeroMain from '@/components/sections/hero/HeroMain';
 import Marquee from '@/components/ui/Marquee';
-import ClientJourney from '@/components/ui/ClientJourney';
 import ServicesSimple from '@/components/sections/ServicesSimple';
 import ResultsPreview from '@/components/sections/ResultsPreview';
 import FAQ from '@/components/sections/FAQ';
@@ -12,7 +11,6 @@ export default function Home() {
     <div>
       <HeroMain />
       <Marquee />
-      <ClientJourney />
       <GradientDivider />
       <ServicesSimple />
       <GradientDivider />
