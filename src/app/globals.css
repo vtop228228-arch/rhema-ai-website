@@ -28,9 +28,9 @@
 
   /* Text hierarchy */
   --ink:   #FFFFFF;
-  --ink2:  #C0BBB2;
-  --sub:   #505050;
-  --sub2:  #888888;
+  --ink2:  #C8C3BB;
+  --sub:   #7A7A7A;
+  --sub2:  #AAAAAA;
 
   /* Status */
   --green: #22C55E;
@@ -52,8 +52,8 @@
   --color-red:          #D95252;
   --color-ink:          #FFFFFF;
   --color-ink2:         #C0BBB2;
-  --color-sub:          #505050;
-  --color-sub2:         #888888;
+  --color-sub:          #7A7A7A;
+  --color-sub2:         #AAAAAA;
   --color-blue:         #FF6A00;
   --color-line:         #1E1E22;
   --color-line2:        #26262B;
@@ -251,17 +251,19 @@ h1, h2, h3, h4 {
   .shader-bg { display: none; }
   .mobile-constellation { display: block; }
 
-  /* Единый чистый фон на мобиле: убираем серые card-подложки секций */
+  /* Мобайл: тёмная подложка + blur чтобы текст читался поверх декора */
   :root {
-    --card:  rgba(10,10,11,0.25);
-    --card2: rgba(10,10,11,0.25);
-    --bg:    transparent;
-    --bg2:   transparent;
+    --card:  rgba(0,0,0,0.72);
+    --card2: rgba(0,0,0,0.72);
+    --bg:    rgba(0,0,0,0.55);
+    --bg2:   rgba(0,0,0,0.55);
   }
   .section-pad,
   .section,
   .section-alt {
-    background: transparent !important;
+    background: rgba(0,0,0,0.55) !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
   }
 }
 

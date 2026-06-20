@@ -41,7 +41,7 @@ export default function ServicesSimple() {
         <div className="rule" />
       </div>
 
-      <p style={{ fontSize: 14, color: '#666', lineHeight: 1.7, maxWidth: 560, marginBottom: 24, borderLeft: '2px solid var(--accent)', paddingLeft: 14 }}>
+      <p style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.7, maxWidth: 560, marginBottom: 24, borderLeft: '2px solid var(--accent)', paddingLeft: 14 }}>
         AI-модель — это процессор. Ценность — в среде вокруг неё: задокументированные процессы, данные клиентов, память агентов. Именно это мы строим — не шаблонный бот, а систему, которую не скопировать.
       </p>
 
@@ -74,7 +74,7 @@ export default function ServicesSimple() {
               {s.tags.map((t) => (
                 <span
                   key={t}
-                  style={{ fontSize: 11, color: '#777', background: 'rgba(255,255,255,0.03)', border: '1px solid #1E1E1E', padding: '3px 9px', letterSpacing: '0.5px' }}
+                  style={{ fontSize: 11, color: 'var(--sub2)', background: 'rgba(255,255,255,0.03)', border: '1px solid #1E1E1E', padding: '3px 9px', letterSpacing: '0.5px' }}
                 >
                   {t}
                 </span>
