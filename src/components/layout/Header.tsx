@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import DiagnosticModal from '@/components/ui/DiagnosticModal';
 
 const NAV_LINKS = [
   { href: '/how-we-work', label: 'Как работаем' },
@@ -14,6 +15,7 @@ const NAV_LINKS = [
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const [diagOpen, setDiagOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => { setOpen(false); }, [pathname]);
@@ -69,9 +71,13 @@ export default function Header() {
           ))}
         </div>
 
-        <Link href="/#diagnose" className="btn btn-blue btn-sm header-cta">
+        <button
+          onClick={() => setDiagOpen(true)}
+          className="btn btn-blue btn-sm header-cta"
+          style={{ cursor: 'pointer', border: 'none' }}
+        >
           ДИАГНОСТИКА
-        </Link>
+        </button>
 
         {/* Бургер — только мобайл */}
         <button
@@ -159,7 +165,7 @@ export default function Header() {
               letterSpacing: '1.5px',
               textTransform: 'uppercase',
               fontWeight: 500,
-              borderBottom: i < NAV_LINKS.length - 1 ? '1px solid var(--line)' : 'none',
+              borderBottom: '1px solid var(--line)',
               transition: 'color 0.18s',
             }}
           >
@@ -167,7 +173,29 @@ export default function Header() {
             {link.label}
           </Link>
         ))}
+        {/* ДИАГНОСТИКА в мобильном меню */}
+        <div style={{ padding: '14px 22px' }}>
+          <button
+            onClick={() => { setOpen(false); setDiagOpen(true); }}
+            style={{
+              display: 'block',
+              width: '100%',
+              background: 'var(--accent)',
+              color: '#090909',
+              border: 'none',
+              padding: '13px 22px',
+              fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif',
+              fontSize: 16,
+              letterSpacing: '2px',
+              cursor: 'pointer',
+            }}
+          >
+            ПОЛУЧИТЬ ДИАГНОСТИКУ →
+          </button>
+        </div>
       </div>
+
+      <DiagnosticModal open={diagOpen} onClose={() => setDiagOpen(false)} />
     </>
   );
 }
