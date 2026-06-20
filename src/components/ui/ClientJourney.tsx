@@ -12,9 +12,9 @@ export default function ClientJourney() {
     <div
       className="journey-strip"
       style={{
-        borderTop: '1px solid var(--line)',
-        borderBottom: '1px solid var(--line)',
-        background: 'var(--bg2)',
+        borderTop: '1px solid #1A1A1A',
+        borderBottom: '1px solid #1A1A1A',
+        background: '#080808',
       }}
     >
       <div
@@ -33,8 +33,8 @@ export default function ClientJourney() {
               display: 'flex',
               alignItems: 'center',
               flex: 1,
-              minWidth: 110,
-              borderLeft: i > 0 ? '1px solid var(--line)' : 'none',
+              minWidth: 140,
+              borderLeft: i > 0 ? '1px solid #1A1A1A' : 'none',
             }}
           >
             <a
@@ -44,27 +44,27 @@ export default function ClientJourney() {
                 flex: 1,
                 display: 'flex',
                 alignItems: 'center',
-                gap: 10,
-                padding: '14px 18px',
+                gap: 14,
+                padding: '22px 24px',
                 textDecoration: 'none',
                 transition: 'background 0.15s',
               }}
             >
               <span style={{
                 fontFamily: bebas,
-                fontSize: 26,
-                color: s.active ? 'var(--accent)' : 'rgba(255,106,0,0.14)',
+                fontSize: 40,
+                color: s.active ? 'var(--accent)' : 'rgba(255,106,0,0.22)',
                 lineHeight: 1,
                 letterSpacing: '1px',
                 flexShrink: 0,
               }}>
                 {s.num}
               </span>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                 <span style={{
                   fontFamily: bebas,
-                  fontSize: 13,
-                  color: s.active ? 'var(--ink)' : 'var(--sub)',
+                  fontSize: 17,
+                  color: s.active ? 'var(--ink)' : '#555',
                   letterSpacing: '1.5px',
                   lineHeight: 1,
                   whiteSpace: 'nowrap',
@@ -72,8 +72,8 @@ export default function ClientJourney() {
                   {s.label}
                 </span>
                 <span style={{
-                  fontSize: 10,
-                  color: s.active ? '#555' : '#2E2E2E',
+                  fontSize: 12,
+                  color: s.active ? '#666' : '#333',
                   whiteSpace: 'nowrap',
                 }}>
                   {s.sub}
@@ -82,8 +82,8 @@ export default function ClientJourney() {
             </a>
             {i < STEPS.length - 1 && (
               <span style={{
-                color: 'rgba(255,106,0,0.18)',
-                fontSize: 12,
+                color: s.active ? 'rgba(255,106,0,0.35)' : 'rgba(255,106,0,0.12)',
+                fontSize: 16,
                 flexShrink: 0,
                 fontFamily: bebas,
                 userSelect: 'none',
@@ -96,10 +96,10 @@ export default function ClientJourney() {
         ))}
       </div>
       <style>{`
-        .journey-link:hover { background: rgba(255,106,0,0.04) !important; }
+        .journey-link:hover { background: rgba(255,106,0,0.05) !important; }
         @media (max-width: 720px) {
           .journey-inner { padding: 0 16px !important; }
-          .journey-link { padding: 12px 10px !important; gap: 7px !important; }
+          .journey-link { padding: 16px 12px !important; gap: 10px !important; }
         }
       `}</style>
     </div>
