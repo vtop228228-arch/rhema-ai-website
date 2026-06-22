@@ -48,33 +48,48 @@ export default function DiagnosticAgent() {
     setMsgs(prev => [...prev, { role, text }]);
   }
 
-  // Один ход к агенту: отправляем историю, получаем реплику + варианты + стадию.
-  async function callAgent(history: ApiMsg[]) {
-    setOptions([]);
-    setChatState('thinking');
+  // Один запрос к агенту с таймаутом. Возвращает ход или null (осечка).
+  async function fetchTurn(history: ApiMsg[]): Promise<AgentTurn | null> {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 30000);
     try {
       const res = await fetch('/api/diagnose', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ history: history.slice(-24) }),
+        signal: ctrl.signal,
       });
-      if (!res.ok) { goFallback(); return; }
+      if (!res.ok) return null;
       const json = await res.json() as { data?: AgentTurn };
-      const turn = json.data;
-      if (!turn?.reply) { goFallback(); return; }
-
-      historyRef.current = [...history, { role: 'assistant', content: turn.reply }];
-
-      if (turn.stage === 'map') {
-        setMapText(turn.reply);
-        setChatState('map_shown');
-      } else {
-        addMsg('ai', turn.reply);
-        setOptions(turn.options);
-        setChatState('active');
-      }
+      return json.data?.reply ? json.data : null;
     } catch {
-      goFallback();
+      return null;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  // Один ход к агенту: до 3 попыток (NIM изредка отдаёт осечку), и только потом фолбэк.
+  async function callAgent(history: ApiMsg[]) {
+    setOptions([]);
+    setChatState('thinking');
+
+    let turn: AgentTurn | null = null;
+    for (let attempt = 0; attempt < 3 && !turn; attempt++) {
+      if (attempt > 0) await new Promise(r => setTimeout(r, 700));
+      turn = await fetchTurn(history);
+    }
+    if (!turn) { goFallback(); return; }
+
+    historyRef.current = [...history, { role: 'assistant', content: turn.reply }];
+
+    if (turn.stage === 'map') {
+      setMapText(turn.reply);
+      setChatState('map_shown');
+    } else {
+      addMsg('ai', turn.reply);
+      setOptions(turn.options);
+      setChatState('active');
     }
   }
 
