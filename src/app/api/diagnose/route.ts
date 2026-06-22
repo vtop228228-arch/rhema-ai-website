@@ -62,25 +62,23 @@ export async function POST(req: NextRequest) {
     const system = isMap ? MAP_SYSTEM : QUESTIONS_SYSTEM;
     const userPrompt = buildUserPrompt(body.mode, body.sphere, body.pain, body.qa);
 
-    const anthropicStream = client.messages.stream({
+    const nvidiaStream = await client.chat.completions.create({
       model,
       max_tokens: isMap ? 450 : 250,
-      // Стабильный системный префикс кешируем — повторные вызовы дешевле.
-      system: [{ type: 'text', text: system, cache_control: { type: 'ephemeral' } }],
-      messages: [{ role: 'user', content: userPrompt }],
+      messages: [
+        { role: 'system', content: system },
+        { role: 'user', content: userPrompt },
+      ],
+      stream: true,
     });
 
     const encoder = new TextEncoder();
     const stream = new ReadableStream<Uint8Array>({
       async start(controller) {
         try {
-          for await (const event of anthropicStream) {
-            if (
-              event.type === 'content_block_delta' &&
-              event.delta.type === 'text_delta'
-            ) {
-              controller.enqueue(encoder.encode(event.delta.text));
-            }
+          for await (const chunk of nvidiaStream) {
+            const text = chunk.choices[0]?.delta?.content;
+            if (text) controller.enqueue(encoder.encode(text));
           }
         } catch {
           controller.enqueue(encoder.encode('\n\n[Не удалось завершить ответ. Оставьте контакт — пришлём диагностику вручную.]'));
