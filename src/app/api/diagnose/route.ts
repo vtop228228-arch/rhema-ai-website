@@ -111,15 +111,19 @@ export async function POST(req: NextRequest) {
     const raw = await callAgent(apiKey, messages);
     let turn = raw ? parseTurn(raw) : null;
 
-    // На форс-ходу карта обязана иметь структуру (буллеты/стрелки). Если модель снова задала
-    // вопрос — одна повторная попытка. И в любом случае фиксируем stage:"map", чтобы диалог завершился.
-    const looksLikeMap = (t: AgentTurn) => /[•→]/.test(t.reply) || /ТЕРЯЕТЕ/i.test(t.reply);
-    if (realAnswers >= 4 && turn && !looksLikeMap(turn)) {
-      const raw2 = await callAgent(apiKey, messages);
-      const turn2 = raw2 ? parseTurn(raw2) : null;
-      if (turn2 && looksLikeMap(turn2)) turn = turn2;
+    // На форс-ходу карта обязана иметь структуру — маркеры • или → (в вопросах их нет).
+    // Если модель снова задала вопрос — повторяем (до 3 попыток всего). В любом случае фиксируем stage:"map".
+    const looksLikeMap = (t: AgentTurn) => /[•→]/.test(t.reply);
+    if (realAnswers >= 4) {
+      let tries = 0;
+      while (turn && !looksLikeMap(turn) && tries < 2) {
+        const r = await callAgent(apiKey, messages);
+        const t2 = r ? parseTurn(r) : null;
+        if (t2) turn = t2;
+        tries++;
+      }
+      if (turn) { turn.stage = 'map'; turn.options = []; }
     }
-    if (realAnswers >= 4 && turn) { turn.stage = 'map'; turn.options = []; }
 
     if (!turn) {
       return NextResponse.json(
