@@ -61,15 +61,56 @@ export async function POST(req: NextRequest) {
     const system = isMap ? MAP_SYSTEM : QUESTIONS_SYSTEM;
     const userPrompt = buildUserPrompt(body.mode, body.sphere, body.pain, body.qa);
 
+    // ── QUESTIONS: non-streaming, return structured JSON ──────────────────
+    if (!isMap) {
+      const nvidiaRes = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model,
+          max_tokens: 400,
+          messages: [
+            { role: 'system', content: system },
+            { role: 'user', content: userPrompt },
+          ],
+          stream: false,
+        }),
+      });
+
+      if (!nvidiaRes.ok) {
+        const txt = await nvidiaRes.text().catch(() => '');
+        console.error('[POST /api/diagnose] NVIDIA questions error', nvidiaRes.status, txt);
+        return NextResponse.json(
+          { error: { code: 'AGENT_UNAVAILABLE', message: 'Агент временно недоступен' } },
+          { status: 503 },
+        );
+      }
+
+      type NvidiaJson = { choices?: { message?: { content?: string } }[] };
+      const json = await nvidiaRes.json() as NvidiaJson;
+      const content = json.choices?.[0]?.message?.content ?? '[]';
+
+      try {
+        // AI иногда оборачивает JSON в ```json блок — зачищаем.
+        const cleaned = content.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+        const questions = JSON.parse(cleaned) as { q: string; opts: string[] }[];
+        return NextResponse.json({ data: { questions } });
+      } catch {
+        console.error('[POST /api/diagnose] JSON parse failed:', content);
+        return NextResponse.json(
+          { error: { code: 'PARSE_ERROR', message: 'Не удалось получить вопросы' } },
+          { status: 503 },
+        );
+      }
+    }
+
+    // ── MAP: streaming SSE → pipe to client ───────────────────────────────
     const nvidiaRes = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model,
-        max_tokens: isMap ? 450 : 250,
+        max_tokens: 450,
         messages: [
           { role: 'system', content: system },
           { role: 'user', content: userPrompt },
@@ -79,15 +120,14 @@ export async function POST(req: NextRequest) {
     });
 
     if (!nvidiaRes.ok || !nvidiaRes.body) {
-      const errText = await nvidiaRes.text().catch(() => '');
-      console.error('[POST /api/diagnose] NVIDIA error', nvidiaRes.status, errText);
+      const txt = await nvidiaRes.text().catch(() => '');
+      console.error('[POST /api/diagnose] NVIDIA map error', nvidiaRes.status, txt);
       return NextResponse.json(
         { error: { code: 'AGENT_UNAVAILABLE', message: 'Агент временно недоступен' } },
         { status: 503 },
       );
     }
 
-    // Парсим SSE поток от NVIDIA и пробрасываем текст клиенту.
     const reader = nvidiaRes.body.getReader();
     const decoder = new TextDecoder();
     const encoder = new TextEncoder();
@@ -110,9 +150,7 @@ export async function POST(req: NextRequest) {
                 const chunk = JSON.parse(payload) as { choices?: { delta?: { content?: string } }[] };
                 const text = chunk.choices?.[0]?.delta?.content;
                 if (text) controller.enqueue(encoder.encode(text));
-              } catch {
-                // пропускаем невалидный chunk
-              }
+              } catch { /* skip invalid chunk */ }
             }
           }
         } catch {
@@ -124,11 +162,9 @@ export async function POST(req: NextRequest) {
     });
 
     return new Response(stream, {
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'no-store',
-      },
+      headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' },
     });
+
   } catch (err) {
     if (err instanceof z.ZodError) {
       return NextResponse.json(

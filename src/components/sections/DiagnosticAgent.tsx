@@ -3,15 +3,15 @@
 import { useEffect, useRef, useState } from 'react';
 import { z } from 'zod';
 
-type ChatState = 'idle' | 'active' | 'map_loading' | 'map_shown' | 'done';
+type ChatState = 'idle' | 'active' | 'quiz_loading' | 'quiz' | 'map_loading' | 'map_shown' | 'done';
 type Msg = { role: 'user' | 'ai'; text: string };
+type QuizQuestion = { q: string; opts: string[] };
 
 const leadSchema = z.object({
   name: z.string().min(2, 'Укажите имя (минимум 2 символа)').max(100),
   contact: z.string().min(3, 'Укажите контакт').max(255),
 });
 
-// Стримит ответ роута в onChunk. false → агент недоступен (нужен fallback).
 async function streamPost(url: string, body: unknown, onChunk: (t: string) => void): Promise<boolean> {
   const res = await fetch(url, {
     method: 'POST',
@@ -38,55 +38,39 @@ export default function DiagnosticAgent() {
 
   const [chatState, setChatState] = useState<ChatState>('idle');
   const [msgs, setMsgs] = useState<Msg[]>([]);
-  const [turn, setTurn] = useState(0); // 0 — описание бизнеса, 1 — ответы на уточнения
-  const [typing, setTyping] = useState(false);
-  const [stream, setStream] = useState('');
   const [isStreaming, setIsStreaming] = useState(false);
+  const [stream, setStream] = useState('');
   const [inputVal, setInputVal] = useState('');
   const [inputDisabled, setInputDisabled] = useState(false);
   const [fallback, setFallback] = useState(false);
 
-  // Данные диагностики
   const [sphere, setSphere] = useState('');
   const [pain, setPain] = useState('');
-  const [questionsText, setQuestionsText] = useState('');
+
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
+  const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
+  const [customMode, setCustomMode] = useState<Record<number, boolean>>({});
+  const [customTexts, setCustomTexts] = useState<Record<number, string>>({});
+
   const [mapText, setMapText] = useState('');
   const [mapDone, setMapDone] = useState(false);
 
-  // Лид
   const [lead, setLead] = useState({ name: '', contact: '' });
   const [leadErr, setLeadErr] = useState('');
 
-  // Авто-скролл ленты
   useEffect(() => {
     const el = chatRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [msgs, stream, chatState, mapText]);
+  }, [msgs, stream, chatState, mapText, quizQuestions]);
 
   function addMsg(role: 'user' | 'ai', text: string) {
     setMsgs(prev => [...prev, { role, text }]);
-  }
-
-  // Стрим текста в живой пузырь, затем коллбэк с финальным текстом.
-  async function streamBubble(url: string, body: unknown): Promise<{ ok: boolean; text: string }> {
-    setTyping(false);
-    setIsStreaming(true);
-    setStream('');
-    let acc = '';
-    const ok = await streamPost(url, body, t => {
-      acc += t;
-      setStream(acc);
-    });
-    setIsStreaming(false);
-    setStream('');
-    return { ok, text: acc };
   }
 
   function startChat() {
     if (chatState !== 'idle') return;
     setChatState('active');
     setMsgs([{ role: 'ai', text: GREETING }]);
-    setTurn(0);
     setInputDisabled(false);
   }
 
@@ -97,62 +81,73 @@ export default function DiagnosticAgent() {
     setInputVal('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
     setInputDisabled(true);
-    setTyping(true);
 
-    if (turn === 0) {
-      // Первый ответ = описание бизнеса (сфера + боль)
-      const sph = text.slice(0, 200);
-      setSphere(sph);
-      setPain(text);
-      const { ok, text: q } = await streamBubble('/api/diagnose', { mode: 'questions', sphere: sph, pain: text });
-      if (!ok) { goFallback(); return; }
-      setQuestionsText(q);
-      addMsg('ai', q);
-      setTurn(1);
-      setTyping(false);
-      setInputDisabled(false);
-    } else {
-      // Второй ответ = ответы на уточняющие вопросы → карта потерь
-      setTyping(false);
-      setChatState('map_loading');
-      setMapText('');
-      setMapDone(false);
-      const qa = [{ question: questionsText.slice(0, 500), answer: text.slice(0, 1000) }];
-      let firstChunk = true;
-      let acc = '';
-      const ok = await streamPost('/api/diagnose', { mode: 'map', sphere, pain, qa }, t => {
-        acc += t;
-        if (firstChunk) { firstChunk = false; setChatState('map_shown'); }
-        setMapText(acc);
+    const sph = text.slice(0, 200);
+    setSphere(sph);
+    setPain(text);
+    setChatState('quiz_loading');
+
+    try {
+      const res = await fetch('/api/diagnose', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'questions', sphere: sph, pain: text }),
       });
-      if (!ok) { goFallback(); return; }
-      setChatState('map_shown');
-      setMapDone(true);
+      if (!res.ok) { goFallback(); return; }
+      const json = await res.json() as { data?: { questions: QuizQuestion[] } };
+      const questions = json.data?.questions;
+      if (!questions?.length) { goFallback(); return; }
+      setQuizQuestions(questions);
+      setQuizAnswers({});
+      setCustomMode({});
+      setCustomTexts({});
+      setChatState('quiz');
+    } catch {
+      goFallback();
     }
+  }
+
+  async function handleQuizSubmit() {
+    const qa = quizQuestions.map((item, i) => ({
+      question: item.q,
+      answer: customMode[i] ? (customTexts[i] ?? '').trim() : (quizAnswers[i] ?? ''),
+    })).filter(a => a.answer);
+
+    setChatState('map_loading');
+    setMapText('');
+    setMapDone(false);
+    setIsStreaming(true);
+
+    let firstChunk = true;
+    let acc = '';
+    const ok = await streamPost('/api/diagnose', { mode: 'map', sphere, pain, qa }, t => {
+      acc += t;
+      if (firstChunk) { firstChunk = false; setChatState('map_shown'); }
+      setMapText(acc);
+    });
+
+    setIsStreaming(false);
+    setStream('');
+    if (!ok) { goFallback(); return; }
+    setChatState('map_shown');
+    setMapDone(true);
   }
 
   function goFallback() {
     setFallback(true);
     setIsStreaming(false);
-    setTyping(false);
     setChatState('map_shown');
     setMapDone(true);
     setMapText('');
   }
 
   function handleKey(e: React.KeyboardEvent) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
   }
 
   async function submitLead() {
     const parsed = leadSchema.safeParse(lead);
-    if (!parsed.success) {
-      setLeadErr(parsed.error.issues[0]?.message ?? 'Проверьте данные');
-      return;
-    }
+    if (!parsed.success) { setLeadErr(parsed.error.issues[0]?.message ?? 'Проверьте данные'); return; }
     setLeadErr('');
     await fetch('/api/diagnose/lead', {
       method: 'POST',
@@ -162,8 +157,9 @@ export default function DiagnosticAgent() {
     setChatState('done');
   }
 
-  const focusOrange = (e: React.FocusEvent<HTMLInputElement>) => { e.currentTarget.style.borderColor = 'rgba(255,106,0,0.55)'; };
-  const blurInput = (e: React.FocusEvent<HTMLInputElement>) => { e.currentTarget.style.borderColor = '#1E1E1E'; };
+  const allAnswered = quizQuestions.length > 0 && quizQuestions.every((_, qi) =>
+    customMode[qi] ? (customTexts[qi] ?? '').trim().length > 0 : !!quizAnswers[qi]
+  );
 
   return (
     <div
@@ -184,7 +180,7 @@ export default function DiagnosticAgent() {
             Узнайте за 2 минуты,<br />где теряете деньги
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {['2–3 вопроса, ~2 минуты', 'Персональная карта потерь в ₽', 'AI-решения для вашей ниши', 'Ориентир ROI для вашей сферы'].map((t, i) => (
+            {['2–3 вопроса с вариантами ответов', 'Персональная карта потерь', 'AI-решения для вашей ниши', 'Ориентир эффекта для вашей сферы'].map((t, i) => (
               <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'center' }}>
                 <div style={{ width: 4, height: 4, background: 'var(--accent)', flexShrink: 0 }} />
                 <span style={{ fontSize: 15, color: 'var(--ink2)' }}>{t}</span>
@@ -194,7 +190,7 @@ export default function DiagnosticAgent() {
           <div>
             <button
               onClick={startChat}
-              style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '14px 24px', fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 22, letterSpacing: 1, display: 'flex', alignItems: 'center', gap: 8, animation: 'ctaGlow 3s ease-in-out infinite' }}
+              style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '14px 24px', fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 22, letterSpacing: 1, display: 'flex', alignItems: 'center', gap: 8, animation: 'ctaGlow 3s ease-in-out infinite', cursor: 'pointer' }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#ffffff" /></svg>
               НАЧАТЬ ДИАГНОСТИКУ
@@ -204,12 +200,12 @@ export default function DiagnosticAgent() {
         </div>
       )}
 
-      {/* CHAT OPEN */}
+      {/* CHAT */}
       {chatState !== 'idle' && (
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
-          <div ref={chatRef} style={{ flex: 1, overflowY: 'auto', padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 9, minHeight: 0 }}>
+          <div ref={chatRef} style={{ flex: 1, overflowY: 'auto', padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 0 }}>
 
-            {/* Message list */}
+            {/* Message bubbles */}
             {msgs.map((m, i) => (
               <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', animation: 'fadeUp 0.2s ease' }}>
                 <div style={{ maxWidth: '87%', padding: '9px 13px', background: m.role === 'user' ? 'var(--accent)' : 'rgba(24,24,24,0.88)' }}>
@@ -218,22 +214,96 @@ export default function DiagnosticAgent() {
               </div>
             ))}
 
-            {/* Typing dots */}
-            {typing && !isStreaming && (
-              <div style={{ display: 'flex', gap: 5, alignItems: 'center', padding: '10px 13px', background: 'rgba(24,24,24,0.88)', width: 'fit-content' }}>
-                {[0, 0.18, 0.36].map((d, i) => (
-                  <div key={i} style={{ width: 5, height: 5, background: '#333', borderRadius: '50%', animation: `blink 1.1s ease-in-out infinite ${d}s` }} />
-                ))}
+            {/* Quiz loading */}
+            {chatState === 'quiz_loading' && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '6px 0', animation: 'fadeUp 0.2s ease' }}>
+                <div style={{ width: 11, height: 11, border: '1.5px solid var(--accent)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.8s linear infinite', flexShrink: 0 }} />
+                <span style={{ fontSize: 13, color: '#666' }}>Анализирую ваш бизнес...</span>
               </div>
             )}
 
-            {/* Streaming bubble */}
-            {isStreaming && (
-              <div style={{ display: 'flex', justifyContent: 'flex-start', animation: 'fadeUp 0.18s ease' }}>
-                <div style={{ maxWidth: '87%', padding: '9px 13px', background: 'rgba(24,24,24,0.88)' }}>
-                  <span style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--ink2)', whiteSpace: 'pre-wrap' }}>{stream}</span>
-                  <span style={{ display: 'inline-block', width: 1.5, height: 13, background: 'var(--accent)', marginLeft: 1, animation: 'blink 0.65s ease-in-out infinite', verticalAlign: 'text-bottom' }} />
-                </div>
+            {/* Quiz */}
+            {chatState === 'quiz' && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 20, animation: 'fadeUp 0.25s ease' }}>
+                <span style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.5 }}>Уточните несколько деталей:</span>
+
+                {quizQuestions.map((item, qi) => (
+                  <div key={qi} style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+                    <div style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.55, fontWeight: 600 }}>
+                      {qi + 1}. {item.q}
+                    </div>
+
+                    {!customMode[qi] ? (
+                      <>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                          {item.opts.map((opt, oi) => {
+                            const sel = quizAnswers[qi] === opt;
+                            return (
+                              <button
+                                key={oi}
+                                onClick={() => setQuizAnswers(prev => ({ ...prev, [qi]: opt }))}
+                                style={{
+                                  padding: '6px 11px',
+                                  border: `1px solid ${sel ? 'var(--accent)' : '#222'}`,
+                                  background: sel ? 'rgba(255,106,0,0.1)' : 'rgba(14,14,14,0.9)',
+                                  color: sel ? 'var(--accent)' : '#999',
+                                  fontSize: 12,
+                                  lineHeight: 1.45,
+                                  cursor: 'pointer',
+                                  textAlign: 'left',
+                                  transition: 'border-color 0.15s, color 0.15s, background 0.15s',
+                                }}
+                              >
+                                {opt}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        <button
+                          onClick={() => setCustomMode(prev => ({ ...prev, [qi]: true }))}
+                          style={{ background: 'none', border: 'none', color: '#555', fontSize: 11, cursor: 'pointer', textAlign: 'left', padding: 0, textDecoration: 'underline', width: 'fit-content' }}
+                        >
+                          ✏ Напишу сам
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <textarea
+                          placeholder="Ваш ответ..."
+                          value={customTexts[qi] ?? ''}
+                          rows={2}
+                          onChange={e => setCustomTexts(prev => ({ ...prev, [qi]: e.target.value }))}
+                          style={{ background: 'rgba(14,14,14,0.9)', border: '1px solid #222', color: 'var(--ink)', padding: '8px 11px', fontSize: 13, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', resize: 'none', lineHeight: 1.5, width: '100%', boxSizing: 'border-box' }}
+                        />
+                        <button
+                          onClick={() => setCustomMode(prev => ({ ...prev, [qi]: false }))}
+                          style={{ background: 'none', border: 'none', color: '#555', fontSize: 11, cursor: 'pointer', textAlign: 'left', padding: 0, textDecoration: 'underline', width: 'fit-content' }}
+                        >
+                          ← Выбрать из вариантов
+                        </button>
+                      </>
+                    )}
+                  </div>
+                ))}
+
+                <button
+                  onClick={handleQuizSubmit}
+                  disabled={!allAnswered}
+                  style={{
+                    background: allAnswered ? 'var(--accent)' : '#141414',
+                    color: allAnswered ? '#fff' : '#333',
+                    border: 'none',
+                    padding: '12px 16px',
+                    fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif',
+                    fontSize: 18,
+                    letterSpacing: 1,
+                    cursor: allAnswered ? 'pointer' : 'not-allowed',
+                    transition: 'background 0.15s, color 0.15s',
+                    marginTop: 4,
+                  }}
+                >
+                  ПОЛУЧИТЬ КАРТУ ПОТЕРЬ →
+                </button>
               </div>
             )}
 
@@ -245,11 +315,11 @@ export default function DiagnosticAgent() {
                   <span style={{ fontSize: 12, color: '#999' }}>Генерирую карту потерь...</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {[['Анализ бизнеса', '88%', 0], ['Расчёт потерь', '58%', 0.35], ['Рекомендации', '34%', 0.7]].map(([label, w, delay], i) => (
+                  {(['Анализ бизнеса', 'Расчёт потерь', 'Рекомендации'] as const).map((label, i) => (
                     <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'center' }}>
                       <span style={{ fontSize: 10, color: '#505050', width: 76, flexShrink: 0 }}>{label}</span>
                       <div style={{ flex: 1, height: 2, background: '#161616', overflow: 'hidden', position: 'relative' }}>
-                        <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: w as string, background: 'var(--accent)', animation: `shimmer 1.4s ease-in-out infinite ${delay}s` }} />
+                        <div style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: ['88%', '58%', '34%'][i], background: 'var(--accent)', animation: `shimmer 1.4s ease-in-out infinite ${[0, 0.35, 0.7][i]}s` }} />
                       </div>
                     </div>
                   ))}
@@ -272,13 +342,13 @@ export default function DiagnosticAgent() {
                   {!mapDone && <span style={{ display: 'inline-block', width: 1.5, height: 13, background: 'var(--accent)', marginLeft: 1, animation: 'blink 0.65s ease-in-out infinite', verticalAlign: 'text-bottom' }} />}
                 </div>
                 <div style={{ fontSize: 10, color: '#3a3a3a', fontStyle: 'italic', lineHeight: 1.4, borderTop: '1px solid #1A1A1A', paddingTop: 9 }}>
-                  Это предварительная оценка на основе ваших ответов. Точные цифры покажет бесплатная диагностика.
+                  Предварительная оценка на основе ваших ответов. Точные цифры — на бесплатной диагностике.
                 </div>
               </div>
             )}
 
             {/* Lead form */}
-            {chatState === 'map_shown' && mapDone && (
+            {(chatState === 'map_shown') && mapDone && (
               <div style={{ background: 'rgba(14,14,14,0.88)', border: '1px solid #1A1A1A', padding: 16, display: 'flex', flexDirection: 'column', gap: 9, animation: 'fadeUp 0.35s ease 0.15s both' }}>
                 <div style={{ fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 15, letterSpacing: 1, color: 'var(--ink)', lineHeight: 1.2 }}>
                   ПОЛУЧИТЬ ПОЛНУЮ<br />ДИАГНОСТИКУ БЕСПЛАТНО
@@ -289,13 +359,15 @@ export default function DiagnosticAgent() {
                 <input
                   className="input-base" placeholder="Ваше имя" value={lead.name}
                   onChange={e => setLead(p => ({ ...p, name: e.target.value }))}
-                  onFocus={focusOrange} onBlur={blurInput}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,106,0,0.55)'; }}
+                  onBlur={e => { e.currentTarget.style.borderColor = '#1E1E1E'; }}
                   style={{ borderColor: '#1E1E1E' }}
                 />
                 <input
                   className="input-base" placeholder="Telegram (@username) или телефон" value={lead.contact}
                   onChange={e => setLead(p => ({ ...p, contact: e.target.value }))}
-                  onFocus={focusOrange} onBlur={blurInput}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,106,0,0.55)'; }}
+                  onBlur={e => { e.currentTarget.style.borderColor = '#1E1E1E'; }}
                   style={{ borderColor: '#1E1E1E' }}
                 />
                 {leadErr && (
@@ -303,7 +375,7 @@ export default function DiagnosticAgent() {
                     <div style={{ width: 3, height: 3, background: 'var(--red)', flexShrink: 0 }} />{leadErr}
                   </div>
                 )}
-                <button onClick={submitLead} style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '11px 16px', fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 17, letterSpacing: 1, width: '100%' }}>
+                <button onClick={submitLead} style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '11px 16px', fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 17, letterSpacing: 1, width: '100%', cursor: 'pointer' }}>
                   ПОЛУЧИТЬ ДИАГНОСТИКУ →
                 </button>
               </div>
@@ -319,11 +391,12 @@ export default function DiagnosticAgent() {
                 <div style={{ fontSize: 13, color: '#999', lineHeight: 1.65, maxWidth: 240 }}>Напишем в Telegram в течение рабочего дня. Спасибо!</div>
               </div>
             )}
+
           </div>
 
-          {/* Input bar */}
+          {/* Input — только на первом шаге */}
           {chatState === 'active' && (
-            <div style={{ borderTop: '1px solid #161616', padding: '11px 16px', display: 'flex', gap: 6, background: 'var(--card)', flexShrink: 0 }}>
+            <div style={{ borderTop: '1px solid #161616', padding: '11px 16px', display: 'flex', gap: 6, background: 'var(--card)', flexShrink: 0, alignItems: 'flex-end' }}>
               <textarea
                 ref={textareaRef}
                 placeholder="Введите ответ..." value={inputVal}
@@ -339,7 +412,7 @@ export default function DiagnosticAgent() {
                 onBlur={e => { e.currentTarget.style.borderColor = '#1C1C1C'; }}
                 style={{ flex: 1, background: 'rgba(19,19,19,0.88)', border: '1px solid #1C1C1C', color: 'var(--ink)', padding: '8px 12px', fontSize: 16, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', transition: 'border-color 0.18s', resize: 'none', overflow: 'hidden', lineHeight: '1.55', minHeight: 36, maxHeight: 120 }}
               />
-              <button onClick={handleSend} disabled={inputDisabled} style={{ background: 'var(--accent)', border: 'none', padding: '8px 13px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: inputDisabled ? 0.5 : 1 }}>
+              <button onClick={handleSend} disabled={inputDisabled} style={{ background: 'var(--accent)', border: 'none', padding: '8px 13px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: inputDisabled ? 0.5 : 1, flexShrink: 0, height: 36, cursor: 'pointer' }}>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="square" /></svg>
               </button>
             </div>
