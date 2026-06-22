@@ -1,6 +1,9 @@
 // Ключ NVIDIA NIM — только на сервере.
+// Зачищаем BOM (U+FEFF) — PowerShell добавляет его при записи через pipe в vercel env add.
 export function getNvidiaKey(): string | null {
-  return process.env.NVIDIA_API_KEY ?? null;
+  const key = process.env.NVIDIA_API_KEY;
+  if (!key) return null;
+  return key.replace(/\uFEFF/g, '').trim();
 }
 
 // 8B — диалог (быстро); 70B — карта потерь (качество).
