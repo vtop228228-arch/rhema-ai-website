@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getNvidiaKey, CHAT_MODEL, CHAT_SYSTEM } from '@/lib/anthropic';
+import { getNvidiaKey, CHAT_MODEL, CHAT_SYSTEM, MAP_SYSTEM } from '@/lib/anthropic';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
@@ -85,48 +85,43 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Принуждение к финалу: первый user-ход — скрытый opener, поэтому реальных ответов = (user-ходы − 1).
-    // После 4 содержательных ответов заставляем модель выдать карту, чтобы диалог не тянулся.
-    // ВАЖНО: добавляем инструкцию в ЕДИНСТВЕННЫЙ системный промпт (второй system-message в середине NIM отклоняет).
+    // Первый user-ход — скрытый opener, поэтому реальных ответов = (user-ходы − 1).
     const realAnswers = history.filter(m => m.role === 'user').length - 1;
-    const forceMap = `${CHAT_SYSTEM}
-
-СЕЙЧАС ЗАВЕРШАЙ ДИАГНОСТИКУ. Информации достаточно. НЕ задавай больше ни одного вопроса.
-Верни stage:"map", options:[], а в поле reply — ТОЛЬКО карту потерь строго в этом формате (с реальными переносами строк):
-ГДЕ ВЫ ТЕРЯЕТЕ
-• <первая точка утечки>
-• <вторая точка утечки>
-
-ЧТО МОЖНО ВНЕДРИТЬ
-→ <решение языком результата>
-→ <решение языком результата>
-
-<одна строка-приглашение: оставьте контакт — на бесплатном созвоне покажем точную карту внедрения и посчитаем эффект в деньгах>
-
-В reply НЕ должно быть вопросов. Опирайся на то, что человек уже рассказал.
-
-ПРИМЕР правильного ответа (формат JSON с экранированными переносами):
-{"reply":"Давайте подведём итог.\\nГДЕ ВЫ ТЕРЯЕТЕ\\n• Заявки теряются из-за долгого ответа\\n• Менеджеры тонут в ручной рутине\\n\\nЧТО МОЖНО ВНЕДРИТЬ\\n→ Бот, который мгновенно отвечает клиенту, пока менеджер занят\\n→ Система, которая сама ведёт заявки без ошибок\\n\\nОставьте контакт — на бесплатном созвоне покажем точную карту внедрения под ваш бизнес и посчитаем эффект в деньгах.","options":[],"stage":"map"}`;
-    const systemContent = realAnswers >= 4 ? forceMap : CHAT_SYSTEM;
-
-    const messages: { role: string; content: string }[] = [{ role: 'system', content: systemContent }, ...history];
-
-    const raw = await callAgent(apiKey, messages);
-    let turn = raw ? parseTurn(raw) : null;
-
-    // На форс-ходу карта обязана иметь структуру — маркеры • или → (в вопросах их нет).
-    // Если модель снова задала вопрос — повторяем (до 3 попыток всего). В любом случае фиксируем stage:"map".
     const looksLikeMap = (t: AgentTurn) => /[•→]/.test(t.reply);
+
+    // ── ФИНАЛ: после 4 ответов — отдельный фокусный вызов карты (без разговорной болтливости) ──
     if (realAnswers >= 4) {
-      let tries = 0;
-      while (turn && !looksLikeMap(turn) && tries < 2) {
-        const r = await callAgent(apiKey, messages);
-        const t2 = r ? parseTurn(r) : null;
-        if (t2) turn = t2;
-        tries++;
+      const transcript = history
+        .slice(1) // убираем скрытый opener
+        .map(m => `${m.role === 'user' ? 'Клиент' : 'Рема'}: ${m.content}`)
+        .join('\n');
+      const mapMessages = [
+        { role: 'system', content: MAP_SYSTEM },
+        { role: 'user', content: `Диалог диагностики:\n${transcript}\n\nСоставь карту потерь по этому диалогу.` },
+      ];
+
+      let turn: AgentTurn | null = null;
+      for (let i = 0; i < 2 && (!turn || !looksLikeMap(turn)); i++) {
+        const r = await callAgent(apiKey, mapMessages);
+        const t = r ? parseTurn(r) : null;
+        if (t) turn = t;
       }
-      if (turn) { turn.stage = 'map'; turn.options = []; }
+
+      if (!turn) {
+        return NextResponse.json(
+          { error: { code: 'AGENT_UNAVAILABLE', message: 'Агент временно недоступен' } },
+          { status: 503 },
+        );
+      }
+      turn.stage = 'map';
+      turn.options = [];
+      return NextResponse.json({ data: turn });
     }
+
+    // ── РАЗГОВОР: обычный ход диалога ──
+    const messages = [{ role: 'system', content: CHAT_SYSTEM }, ...history];
+    const raw = await callAgent(apiKey, messages);
+    const turn = raw ? parseTurn(raw) : null;
 
     if (!turn) {
       return NextResponse.json(
@@ -134,6 +129,9 @@ export async function POST(req: NextRequest) {
         { status: 503 },
       );
     }
+
+    // Разговорная модель не должна сама закрывать карту раньше времени — держим её в режиме вопросов.
+    if (turn.stage === 'map' && !looksLikeMap(turn)) turn.stage = 'ask';
 
     return NextResponse.json({ data: turn });
 
