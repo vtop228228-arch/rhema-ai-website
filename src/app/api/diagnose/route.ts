@@ -24,7 +24,7 @@ async function callAgent(apiKey: string, messages: { role: string; content: stri
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: CHAT_MODEL,
-        max_tokens: 800,
+        max_tokens: 1000,
         temperature: 0.6,
         messages,
         stream: false,
@@ -103,7 +103,10 @@ export async function POST(req: NextRequest) {
 
 <одна строка-приглашение: оставьте контакт — на бесплатном созвоне покажем точную карту внедрения и посчитаем эффект в деньгах>
 
-В reply НЕ должно быть вопросов. Опирайся на то, что человек уже рассказал.`;
+В reply НЕ должно быть вопросов. Опирайся на то, что человек уже рассказал.
+
+ПРИМЕР правильного ответа (формат JSON с экранированными переносами):
+{"reply":"Давайте подведём итог.\\nГДЕ ВЫ ТЕРЯЕТЕ\\n• Заявки теряются из-за долгого ответа\\n• Менеджеры тонут в ручной рутине\\n\\nЧТО МОЖНО ВНЕДРИТЬ\\n→ Бот, который мгновенно отвечает клиенту, пока менеджер занят\\n→ Система, которая сама ведёт заявки без ошибок\\n\\nОставьте контакт — на бесплатном созвоне покажем точную карту внедрения под ваш бизнес и посчитаем эффект в деньгах.","options":[],"stage":"map"}`;
     const systemContent = realAnswers >= 4 ? forceMap : CHAT_SYSTEM;
 
     const messages: { role: string; content: string }[] = [{ role: 'system', content: systemContent }, ...history];
