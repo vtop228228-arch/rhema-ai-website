@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getNvidiaKey, CHAT_MODEL, FALLBACK_MODEL, CHAT_SYSTEM, MAP_SYSTEM } from '@/lib/anthropic';
+import { getNvidiaKey, MODELS, CHAT_SYSTEM, MAP_SYSTEM } from '@/lib/anthropic';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
@@ -43,12 +43,14 @@ async function callModel(apiKey: string, model: string, messages: { role: string
   }
 }
 
-// Основная модель (быстрый таймаут) → сразу резервная модель. Без долгого зависания.
-// Суммарно максимум ~21с, обычно 2-3с. Дальше клиент/фолбэк подхватят.
+// Каскад: перебираем модели по очереди с жёстким таймаутом на каждую. Первый рабочий ответ выигрывает.
+// Зависшая/перегруженная модель аборитися по таймауту и сразу пробуем следующую — без долгого ожидания.
 async function callAgent(apiKey: string, messages: { role: string; content: string }[]): Promise<string> {
-  const primary = await callModel(apiKey, CHAT_MODEL, messages, 16000);
-  if (primary) return primary;
-  return callModel(apiKey, FALLBACK_MODEL, messages, 7000);
+  for (const model of MODELS) {
+    const content = await callModel(apiKey, model, messages, 9000);
+    if (content) return content;
+  }
+  return '';
 }
 
 // Достаём JSON-объект из ответа модели (на случай обёрток ```json или текста вокруг).
