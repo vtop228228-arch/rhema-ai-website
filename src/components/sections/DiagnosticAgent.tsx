@@ -48,7 +48,7 @@ export default function DiagnosticAgent() {
   const [pain, setPain] = useState('');
 
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
-  const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
+  const [quizAnswers, setQuizAnswers] = useState<Record<number, string[]>>({});
   const [customMode, setCustomMode] = useState<Record<number, boolean>>({});
   const [customTexts, setCustomTexts] = useState<Record<number, string>>({});
 
@@ -110,7 +110,9 @@ export default function DiagnosticAgent() {
   async function handleQuizSubmit() {
     const qa = quizQuestions.map((item, i) => ({
       question: item.q,
-      answer: customMode[i] ? (customTexts[i] ?? '').trim() : (quizAnswers[i] ?? ''),
+      answer: customMode[i]
+        ? (customTexts[i] ?? '').trim()
+        : (quizAnswers[i] ?? []).join(', '),
     })).filter(a => a.answer);
 
     setChatState('map_loading');
@@ -158,7 +160,7 @@ export default function DiagnosticAgent() {
   }
 
   const allAnswered = quizQuestions.length > 0 && quizQuestions.every((_, qi) =>
-    customMode[qi] ? (customTexts[qi] ?? '').trim().length > 0 : !!quizAnswers[qi]
+    customMode[qi] ? (customTexts[qi] ?? '').trim().length > 0 : (quizAnswers[qi] ?? []).length > 0
   );
 
   return (
@@ -237,11 +239,14 @@ export default function DiagnosticAgent() {
                       <>
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                           {item.opts.map((opt, oi) => {
-                            const sel = quizAnswers[qi] === opt;
+                            const sel = (quizAnswers[qi] ?? []).includes(opt);
                             return (
                               <button
                                 key={oi}
-                                onClick={() => setQuizAnswers(prev => ({ ...prev, [qi]: opt }))}
+                                onClick={() => setQuizAnswers(prev => {
+                                  const cur = prev[qi] ?? [];
+                                  return { ...prev, [qi]: sel ? cur.filter(o => o !== opt) : [...cur, opt] };
+                                })}
                                 style={{
                                   padding: '6px 11px',
                                   border: `1px solid ${sel ? 'var(--accent)' : '#222'}`,
@@ -261,7 +266,7 @@ export default function DiagnosticAgent() {
                         </div>
                         <button
                           onClick={() => setCustomMode(prev => ({ ...prev, [qi]: true }))}
-                          style={{ background: 'none', border: 'none', color: '#555', fontSize: 11, cursor: 'pointer', textAlign: 'left', padding: 0, textDecoration: 'underline', width: 'fit-content' }}
+                          style={{ background: 'none', border: 'none', color: 'rgba(255,106,0,0.75)', fontSize: 13, cursor: 'pointer', textAlign: 'left', padding: 0, width: 'fit-content', marginTop: 2 }}
                         >
                           ✏ Напишу сам
                         </button>
@@ -277,7 +282,7 @@ export default function DiagnosticAgent() {
                         />
                         <button
                           onClick={() => setCustomMode(prev => ({ ...prev, [qi]: false }))}
-                          style={{ background: 'none', border: 'none', color: '#555', fontSize: 11, cursor: 'pointer', textAlign: 'left', padding: 0, textDecoration: 'underline', width: 'fit-content' }}
+                          style={{ background: 'none', border: 'none', color: 'rgba(255,106,0,0.75)', fontSize: 13, cursor: 'pointer', textAlign: 'left', padding: 0, width: 'fit-content', marginTop: 2 }}
                         >
                           ← Выбрать из вариантов
                         </button>
