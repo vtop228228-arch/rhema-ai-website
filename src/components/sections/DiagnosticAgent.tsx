@@ -34,6 +34,7 @@ const GREETING = 'Здравствуйте! Расскажите, чем зан�
 export default function DiagnosticAgent() {
   const sessionId = useRef<string>(typeof crypto !== 'undefined' ? crypto.randomUUID() : String(Date.now()));
   const chatRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [chatState, setChatState] = useState<ChatState>('idle');
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -94,6 +95,7 @@ export default function DiagnosticAgent() {
     if (!text || chatState !== 'active' || inputDisabled) return;
     addMsg('user', text);
     setInputVal('');
+    if (textareaRef.current) textareaRef.current.style.height = 'auto';
     setInputDisabled(true);
     setTyping(true);
 
@@ -322,11 +324,20 @@ export default function DiagnosticAgent() {
           {/* Input bar */}
           {chatState === 'active' && (
             <div style={{ borderTop: '1px solid #161616', padding: '11px 16px', display: 'flex', gap: 6, background: 'var(--card)', flexShrink: 0 }}>
-              <input
-                type="text" placeholder="Введите ответ..." value={inputVal}
-                onChange={e => setInputVal(e.target.value)} onKeyDown={handleKey} disabled={inputDisabled}
-                onFocus={focusOrange} onBlur={blurInput}
-                style={{ flex: 1, background: 'rgba(19,19,19,0.88)', border: '1px solid #1C1C1C', color: 'var(--ink)', padding: '8px 12px', fontSize: 16, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', transition: 'border-color 0.18s' }}
+              <textarea
+                ref={textareaRef}
+                placeholder="Введите ответ..." value={inputVal}
+                rows={1}
+                onChange={e => {
+                  setInputVal(e.target.value);
+                  e.target.style.height = 'auto';
+                  e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
+                }}
+                onKeyDown={handleKey}
+                disabled={inputDisabled}
+                onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,106,0,0.55)'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = '#1C1C1C'; }}
+                style={{ flex: 1, background: 'rgba(19,19,19,0.88)', border: '1px solid #1C1C1C', color: 'var(--ink)', padding: '8px 12px', fontSize: 16, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', transition: 'border-color 0.18s', resize: 'none', overflow: 'hidden', lineHeight: '1.55', minHeight: 36, maxHeight: 120 }}
               />
               <button onClick={handleSend} disabled={inputDisabled} style={{ background: 'var(--accent)', border: 'none', padding: '8px 13px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: inputDisabled ? 0.5 : 1 }}>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="square" /></svg>
