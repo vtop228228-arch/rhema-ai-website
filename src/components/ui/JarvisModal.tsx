@@ -150,7 +150,7 @@ export default function JarvisModal({ open, onClose }: Props) {
             Хотите такого же агента? Пройдите диагностику — покажем, как это работает именно в вашем бизнесе.
           </p>
           <a
-            href="#diagnose"
+            href="#contact"
             onClick={onClose}
             style={{
               display: 'block', background: 'var(--accent)', color: '#ffffff',
