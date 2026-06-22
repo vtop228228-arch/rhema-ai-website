@@ -85,7 +85,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const messages = [{ role: 'system', content: CHAT_SYSTEM }, ...history];
+    const messages: { role: string; content: string }[] = [{ role: 'system', content: CHAT_SYSTEM }, ...history];
+
+    // Принуждение к финалу: первый user-ход — скрытый opener, поэтому реальных ответов = (user-ходы − 1).
+    // После 4 содержательных ответов заставляем модель выдать карту, чтобы диалог не тянулся.
+    const realAnswers = history.filter(m => m.role === 'user').length - 1;
+    if (realAnswers >= 4) {
+      messages.push({
+        role: 'system',
+        content: 'Информации уже достаточно. В ЭТОМ ответе ОБЯЗАТЕЛЬНО верни stage:"map" с картой потерь и пустым options. Больше не задавай вопросов.',
+      });
+    }
+
     const raw = await callAgent(apiKey, messages);
     const turn = raw ? parseTurn(raw) : null;
 
