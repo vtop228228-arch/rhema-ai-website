@@ -1,16 +1,9 @@
-import OpenAI from 'openai';
-
-// Серверный клиент NVIDIA NIM (OpenAI-compatible). Ключ только в ENV.
-export function createAnthropic(): OpenAI | null {
-  const apiKey = process.env.NVIDIA_API_KEY;
-  if (!apiKey) return null;
-  return new OpenAI({
-    baseURL: 'https://integrate.api.nvidia.com/v1',
-    apiKey,
-  });
+// Ключ NVIDIA NIM — только на сервере.
+export function getNvidiaKey(): string | null {
+  return process.env.NVIDIA_API_KEY ?? null;
 }
 
-// 8B — быстро и дёшево для диалога; 70B — качество для карты потерь.
+// 8B — диалог (быстро); 70B — карта потерь (качество).
 export const DIALOG_MODEL = 'meta/llama-3.1-8b-instruct';
 export const MAP_MODEL = 'meta/llama-3.3-70b-instruct';
 

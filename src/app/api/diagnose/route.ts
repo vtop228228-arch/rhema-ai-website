@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import {
-  createAnthropic,
+  getNvidiaKey,
   DIALOG_MODEL,
   MAP_MODEL,
   QUESTIONS_SYSTEM,
@@ -39,7 +39,6 @@ function buildUserPrompt(
 export async function POST(req: NextRequest) {
   try {
     const ip = getClientIp(req);
-    // 10 запросов в час на IP — защита от абьюза.
     if (!rateLimit(`diagnose:${ip}`, 10, 60 * 60 * 1000)) {
       return NextResponse.json(
         { error: { code: 'RATE_LIMITED', message: 'Слишком много запросов. Попробуйте позже.' } },
@@ -49,8 +48,8 @@ export async function POST(req: NextRequest) {
 
     const body = bodySchema.parse(await req.json());
 
-    const client = createAnthropic();
-    if (!client) {
+    const apiKey = getNvidiaKey();
+    if (!apiKey) {
       return NextResponse.json(
         { error: { code: 'AGENT_UNAVAILABLE', message: 'Агент временно недоступен' } },
         { status: 503 },
@@ -62,23 +61,59 @@ export async function POST(req: NextRequest) {
     const system = isMap ? MAP_SYSTEM : QUESTIONS_SYSTEM;
     const userPrompt = buildUserPrompt(body.mode, body.sphere, body.pain, body.qa);
 
-    const nvidiaStream = await client.chat.completions.create({
-      model,
-      max_tokens: isMap ? 450 : 250,
-      messages: [
-        { role: 'system', content: system },
-        { role: 'user', content: userPrompt },
-      ],
-      stream: true,
+    const nvidiaRes = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model,
+        max_tokens: isMap ? 450 : 250,
+        messages: [
+          { role: 'system', content: system },
+          { role: 'user', content: userPrompt },
+        ],
+        stream: true,
+      }),
     });
 
+    if (!nvidiaRes.ok || !nvidiaRes.body) {
+      const errText = await nvidiaRes.text().catch(() => '');
+      console.error('[POST /api/diagnose] NVIDIA error', nvidiaRes.status, errText);
+      return NextResponse.json(
+        { error: { code: 'AGENT_UNAVAILABLE', message: 'Агент временно недоступен' } },
+        { status: 503 },
+      );
+    }
+
+    // Парсим SSE поток от NVIDIA и пробрасываем текст клиенту.
+    const reader = nvidiaRes.body.getReader();
+    const decoder = new TextDecoder();
     const encoder = new TextEncoder();
+
     const stream = new ReadableStream<Uint8Array>({
       async start(controller) {
+        let buffer = '';
         try {
-          for await (const chunk of nvidiaStream) {
-            const text = chunk.choices[0]?.delta?.content;
-            if (text) controller.enqueue(encoder.encode(text));
+          for (;;) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n');
+            buffer = lines.pop() ?? '';
+            for (const line of lines) {
+              if (!line.startsWith('data: ')) continue;
+              const payload = line.slice(6).trim();
+              if (payload === '[DONE]') continue;
+              try {
+                const chunk = JSON.parse(payload) as { choices?: { delta?: { content?: string } }[] };
+                const text = chunk.choices?.[0]?.delta?.content;
+                if (text) controller.enqueue(encoder.encode(text));
+              } catch {
+                // пропускаем невалидный chunk
+              }
+            }
           }
         } catch {
           controller.enqueue(encoder.encode('\n\n[Не удалось завершить ответ. Оставьте контакт — пришлём диагностику вручную.]'));
