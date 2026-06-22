@@ -48,9 +48,8 @@ export default function DiagnosticAgent() {
   const [pain, setPain] = useState('');
 
   const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>([]);
-  const [quizAnswers, setQuizAnswers] = useState<Record<number, string[]>>({});
-  const [customMode, setCustomMode] = useState<Record<number, boolean>>({});
-  const [customTexts, setCustomTexts] = useState<Record<number, string>>({});
+  const [currentQ, setCurrentQ] = useState(0);
+  const [qaList, setQaList] = useState<{ question: string; answer: string }[]>([]);
 
   const [mapText, setMapText] = useState('');
   const [mapDone, setMapDone] = useState(false);
@@ -76,7 +75,12 @@ export default function DiagnosticAgent() {
 
   async function handleSend() {
     const text = inputVal.trim();
-    if (!text || chatState !== 'active' || inputDisabled) return;
+    if (!text || inputDisabled) return;
+
+    // Во время квиза ввод текста = ответ на текущий вопрос (свой вариант).
+    if (chatState === 'quiz') { answerCurrent(text); return; }
+    if (chatState !== 'active') return;
+
     addMsg('user', text);
     setInputVal('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
@@ -98,23 +102,41 @@ export default function DiagnosticAgent() {
       const questions = json.data?.questions;
       if (!questions?.length) { goFallback(); return; }
       setQuizQuestions(questions);
-      setQuizAnswers({});
-      setCustomMode({});
-      setCustomTexts({});
+      setQaList([]);
+      setCurrentQ(0);
+      addMsg('ai', questions[0].q);
       setChatState('quiz');
+      setInputDisabled(false);
     } catch {
       goFallback();
     }
   }
 
-  async function handleQuizSubmit() {
-    const qa = quizQuestions.map((item, i) => ({
-      question: item.q,
-      answer: customMode[i]
-        ? (customTexts[i] ?? '').trim()
-        : (quizAnswers[i] ?? []).join(', '),
-    })).filter(a => a.answer);
+  // Ответ на текущий вопрос — по клику на вариант ИЛИ вводом своего текста.
+  function answerCurrent(answer: string) {
+    const a = answer.trim();
+    if (!a || chatState !== 'quiz') return;
+    const q = quizQuestions[currentQ];
+    if (!q) return;
 
+    addMsg('user', a);
+    setInputVal('');
+    if (textareaRef.current) textareaRef.current.style.height = 'auto';
+
+    const nextQa = [...qaList, { question: q.q, answer: a }];
+    setQaList(nextQa);
+
+    const next = currentQ + 1;
+    if (next < quizQuestions.length) {
+      setCurrentQ(next);
+      addMsg('ai', quizQuestions[next].q);
+    } else {
+      setInputDisabled(true);
+      runMap(nextQa);
+    }
+  }
+
+  async function runMap(qa: { question: string; answer: string }[]) {
     setChatState('map_loading');
     setMapText('');
     setMapDone(false);
@@ -122,7 +144,7 @@ export default function DiagnosticAgent() {
 
     let firstChunk = true;
     let acc = '';
-    const ok = await streamPost('/api/diagnose', { mode: 'map', sphere, pain, qa }, t => {
+    const ok = await streamPost('/api/diagnose', { mode: 'map', sphere, pain, qa: qa.filter(a => a.answer) }, t => {
       acc += t;
       if (firstChunk) { firstChunk = false; setChatState('map_shown'); }
       setMapText(acc);
@@ -158,10 +180,6 @@ export default function DiagnosticAgent() {
     });
     setChatState('done');
   }
-
-  const allAnswered = quizQuestions.length > 0 && quizQuestions.every((_, qi) =>
-    customMode[qi] ? (customTexts[qi] ?? '').trim().length > 0 : (quizAnswers[qi] ?? []).length > 0
-  );
 
   return (
     <div
@@ -224,91 +242,31 @@ export default function DiagnosticAgent() {
               </div>
             )}
 
-            {/* Quiz */}
-            {chatState === 'quiz' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 20, animation: 'fadeUp 0.25s ease' }}>
-                <span style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.5 }}>Уточните несколько деталей:</span>
-
-                {quizQuestions.map((item, qi) => (
-                  <div key={qi} style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
-                    <div style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.55, fontWeight: 600 }}>
-                      {qi + 1}. {item.q}
-                    </div>
-
-                    {!customMode[qi] ? (
-                      <>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                          {item.opts.map((opt, oi) => {
-                            const sel = (quizAnswers[qi] ?? []).includes(opt);
-                            return (
-                              <button
-                                key={oi}
-                                onClick={() => setQuizAnswers(prev => {
-                                  const cur = prev[qi] ?? [];
-                                  return { ...prev, [qi]: sel ? cur.filter(o => o !== opt) : [...cur, opt] };
-                                })}
-                                style={{
-                                  padding: '6px 11px',
-                                  border: `1px solid ${sel ? 'var(--accent)' : '#222'}`,
-                                  background: sel ? 'rgba(255,106,0,0.1)' : 'rgba(14,14,14,0.9)',
-                                  color: sel ? 'var(--accent)' : '#999',
-                                  fontSize: 12,
-                                  lineHeight: 1.45,
-                                  cursor: 'pointer',
-                                  textAlign: 'left',
-                                  transition: 'border-color 0.15s, color 0.15s, background 0.15s',
-                                }}
-                              >
-                                {opt}
-                              </button>
-                            );
-                          })}
-                        </div>
-                        <button
-                          onClick={() => setCustomMode(prev => ({ ...prev, [qi]: true }))}
-                          style={{ background: 'none', border: 'none', color: 'rgba(255,106,0,0.75)', fontSize: 13, cursor: 'pointer', textAlign: 'left', padding: 0, width: 'fit-content', marginTop: 2 }}
-                        >
-                          ✏ Напишу сам
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <textarea
-                          placeholder="Ваш ответ..."
-                          value={customTexts[qi] ?? ''}
-                          rows={2}
-                          onChange={e => setCustomTexts(prev => ({ ...prev, [qi]: e.target.value }))}
-                          style={{ background: 'rgba(14,14,14,0.9)', border: '1px solid #222', color: 'var(--ink)', padding: '8px 11px', fontSize: 13, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', resize: 'none', lineHeight: 1.5, width: '100%', boxSizing: 'border-box' }}
-                        />
-                        <button
-                          onClick={() => setCustomMode(prev => ({ ...prev, [qi]: false }))}
-                          style={{ background: 'none', border: 'none', color: 'rgba(255,106,0,0.75)', fontSize: 13, cursor: 'pointer', textAlign: 'left', padding: 0, width: 'fit-content', marginTop: 2 }}
-                        >
-                          ← Выбрать из вариантов
-                        </button>
-                      </>
-                    )}
-                  </div>
+            {/* Варианты ответа на текущий вопрос — диалоговый стиль */}
+            {chatState === 'quiz' && quizQuestions[currentQ] && (
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, animation: 'fadeUp 0.2s ease', paddingLeft: 2 }}>
+                {quizQuestions[currentQ].opts.map((opt, oi) => (
+                  <button
+                    key={oi}
+                    onClick={() => answerCurrent(opt)}
+                    disabled={inputDisabled}
+                    style={{
+                      padding: '7px 12px',
+                      border: '1px solid #242424',
+                      background: 'rgba(14,14,14,0.9)',
+                      color: '#aaa',
+                      fontSize: 12,
+                      lineHeight: 1.45,
+                      cursor: inputDisabled ? 'not-allowed' : 'pointer',
+                      textAlign: 'left',
+                      transition: 'border-color 0.15s, color 0.15s, background 0.15s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.background = 'rgba(255,106,0,0.08)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = '#242424'; e.currentTarget.style.color = '#aaa'; e.currentTarget.style.background = 'rgba(14,14,14,0.9)'; }}
+                  >
+                    {opt}
+                  </button>
                 ))}
-
-                <button
-                  onClick={handleQuizSubmit}
-                  disabled={!allAnswered}
-                  style={{
-                    background: allAnswered ? 'var(--accent)' : '#141414',
-                    color: allAnswered ? '#fff' : '#333',
-                    border: 'none',
-                    padding: '12px 16px',
-                    fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif',
-                    fontSize: 18,
-                    letterSpacing: 1,
-                    cursor: allAnswered ? 'pointer' : 'not-allowed',
-                    transition: 'background 0.15s, color 0.15s',
-                    marginTop: 4,
-                  }}
-                >
-                  ПОЛУЧИТЬ КАРТУ ПОТЕРЬ →
-                </button>
               </div>
             )}
 
@@ -399,12 +357,12 @@ export default function DiagnosticAgent() {
 
           </div>
 
-          {/* Input — только на первом шаге */}
-          {chatState === 'active' && (
+          {/* Input — на первом шаге и во время диалога с вопросами */}
+          {(chatState === 'active' || chatState === 'quiz') && (
             <div style={{ borderTop: '1px solid #161616', padding: '11px 16px', display: 'flex', gap: 6, background: 'var(--card)', flexShrink: 0, alignItems: 'flex-end' }}>
               <textarea
                 ref={textareaRef}
-                placeholder="Введите ответ..." value={inputVal}
+                placeholder={chatState === 'quiz' ? 'Выберите вариант или впишите свой ответ…' : 'Введите ответ…'} value={inputVal}
                 rows={1}
                 onChange={e => {
                   setInputVal(e.target.value);
