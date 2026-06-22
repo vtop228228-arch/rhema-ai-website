@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getNvidiaKey, CHAT_MODEL, CHAT_SYSTEM, MAP_SYSTEM } from '@/lib/anthropic';
+import { getNvidiaKey, CHAT_MODEL, FALLBACK_MODEL, CHAT_SYSTEM, MAP_SYSTEM } from '@/lib/anthropic';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
@@ -16,33 +16,30 @@ const bodySchema = z.object({
 
 type AgentTurn = { reply: string; options: string[]; stage: 'ask' | 'map' };
 
-// Запрос к qwen с одним ретраем — NIM изредка отдаёт пустой content.
-async function callAgent(apiKey: string, messages: { role: string; content: string }[]): Promise<string> {
-  for (let attempt = 0; attempt < 2; attempt++) {
-    const res = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: CHAT_MODEL,
-        max_tokens: 1000,
-        temperature: 0.6,
-        messages,
-        stream: false,
-      }),
-    });
-
-    if (!res.ok) {
-      const txt = await res.text().catch(() => '');
-      console.error('[diagnose] NIM error', res.status, txt.slice(0, 200));
-      continue;
-    }
-
-    type NimJson = { choices?: { message?: { content?: string } }[] };
-    const json = await res.json() as NimJson;
-    const content = json.choices?.[0]?.message?.content?.trim();
-    if (content) return content;
+async function callModel(apiKey: string, model: string, messages: { role: string; content: string }[]): Promise<string> {
+  const res = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ model, max_tokens: 1000, temperature: 0.6, messages, stream: false }),
+  });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    console.error('[diagnose] NIM error', model, res.status, txt.slice(0, 160));
+    return '';
   }
-  return '';
+  type NimJson = { choices?: { message?: { content?: string } }[] };
+  const json = await res.json() as NimJson;
+  return json.choices?.[0]?.message?.content?.trim() ?? '';
+}
+
+// Основная модель + fallback на другую модель: осечки NIM скоррелированы во времени,
+// поэтому быстрые ретраи одной модели не спасают — другой пул мощностей надёжнее.
+async function callAgent(apiKey: string, messages: { role: string; content: string }[]): Promise<string> {
+  const c1 = await callModel(apiKey, CHAT_MODEL, messages);
+  if (c1) return c1;
+  const c2 = await callModel(apiKey, CHAT_MODEL, messages);
+  if (c2) return c2;
+  return callModel(apiKey, FALLBACK_MODEL, messages);
 }
 
 // Достаём JSON-объект из ответа модели (на случай обёрток ```json или текста вокруг).
