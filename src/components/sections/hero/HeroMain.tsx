@@ -1,6 +1,12 @@
+'use client';
+
+import { useState } from 'react';
 import DiagnosticAgent from '@/components/sections/DiagnosticAgent';
+import JarvisModal from '@/components/ui/JarvisModal';
 
 export default function HeroMain() {
+  const [jarvisOpen, setJarvisOpen] = useState(false);
+
   return (
     <section className="hero-wrap" id="diagnose" style={{ display: 'flex', minHeight: 640 }}>
       {/* LEFT: МОНОЛИТ */}
@@ -53,6 +59,57 @@ export default function HeroMain() {
         <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 400, lineHeight: 1.85, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
           Интегрируем AI в вашу CRM и внутренние системы. Заменим рутину на агентов, которые помнят каждого клиента, работают 24/7 и полностью окупаются за 1–2 месяца.
         </p>
+
+        {/* Мы используем это сами */}
+        <button
+          onClick={() => setJarvisOpen(true)}
+          style={{
+            display: 'flex', alignItems: 'flex-start', gap: 14,
+            padding: '14px 16px', maxWidth: 400, width: '100%',
+            background: 'rgba(255,106,0,0.07)',
+            borderTop: '1px solid rgba(255,106,0,0.22)',
+            borderRight: '1px solid rgba(255,106,0,0.22)',
+            borderBottom: '1px solid rgba(255,106,0,0.22)',
+            borderLeft: '2px solid var(--accent)',
+            position: 'relative', zIndex: 1,
+            animation: 'fadeUp 0.6s ease 0.55s both',
+            cursor: 'pointer', textAlign: 'left',
+            transition: 'background 0.18s, border-color 0.18s',
+          }}
+          onMouseEnter={e => {
+            (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,106,0,0.12)';
+            (e.currentTarget as HTMLButtonElement).style.borderTopColor = 'rgba(255,106,0,0.35)';
+            (e.currentTarget as HTMLButtonElement).style.borderRightColor = 'rgba(255,106,0,0.35)';
+            (e.currentTarget as HTMLButtonElement).style.borderBottomColor = 'rgba(255,106,0,0.35)';
+          }}
+          onMouseLeave={e => {
+            (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,106,0,0.07)';
+            (e.currentTarget as HTMLButtonElement).style.borderTopColor = 'rgba(255,106,0,0.22)';
+            (e.currentTarget as HTMLButtonElement).style.borderRightColor = 'rgba(255,106,0,0.22)';
+            (e.currentTarget as HTMLButtonElement).style.borderBottomColor = 'rgba(255,106,0,0.22)';
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5, flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              <div style={{ width: 4, height: 4, background: 'var(--accent)', flexShrink: 0 }} />
+              <span style={{ fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 11, letterSpacing: '2.5px', color: 'var(--accent)' }}>
+                МЫ ИСПОЛЬЗУЕМ ЭТО САМИ
+              </span>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 12 }}>
+              <p style={{ fontSize: 13, color: '#999', lineHeight: 1.6, margin: 0 }}>
+                <span style={{ color: 'var(--ink)', fontWeight: 500 }}>JARVIS</span> — наш внутренний AI-агент для аналитики продаж и клиентской базы. Строим для вас то, на что сами полагаемся каждый день.
+              </p>
+              <span style={{
+                fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif',
+                fontSize: 10, letterSpacing: '1.5px', color: 'var(--accent)',
+                whiteSpace: 'nowrap', flexShrink: 0, paddingBottom: 2,
+              }}>
+                СМОТРЕТЬ →
+              </span>
+            </div>
+          </div>
+        </button>
       </div>
 
       {/* DIVIDER */}
@@ -60,6 +117,8 @@ export default function HeroMain() {
 
       {/* RIGHT: живой AI-агент диагностики */}
       <DiagnosticAgent />
+
+      <JarvisModal open={jarvisOpen} onClose={() => setJarvisOpen(false)} />
 
       <style>{`
         .hero-h1 { font-size: clamp(28px, 7.5vw, 76px); }

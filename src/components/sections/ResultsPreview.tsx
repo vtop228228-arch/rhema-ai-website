@@ -78,7 +78,7 @@ export default function ResultsPreview() {
             УЗНАЙТЕ, ГДЕ ТЕРЯЕТЕ ДЕНЬГИ
           </div>
           <div style={{ fontSize: 13, color: '#666', marginTop: 5 }}>
-            Диагностика бесплатно — ответим в течение рабочего дня
+            Диагностика бесплатно — ответим в течение 2 часов
           </div>
         </div>
         <a

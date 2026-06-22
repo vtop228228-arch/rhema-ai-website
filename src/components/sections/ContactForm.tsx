@@ -67,7 +67,7 @@ export default function ContactForm() {
           Расскажите о бизнесе — посчитаем, где теряются деньги, что автоматизировать первым и какой ROI ожидать. Конкретные цифры под вашу ситуацию.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginTop: 10, paddingTop: 18, borderTop: '1px solid var(--line)' }}>
-          {['Отвечаем в течение рабочего дня', 'Расчёт ROI — бесплатно и без обязательств'].map((t, i) => (
+          {['Отвечаем в течение 2 часов', 'Расчёт ROI — бесплатно и без обязательств'].map((t, i) => (
             <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'center' }}>
               <div style={{ width: 3, height: 3, background: 'var(--accent)', flexShrink: 0 }} />
               <span style={{ fontSize: 13, color: '#888' }}>{t}</span>
@@ -80,7 +80,7 @@ export default function ContactForm() {
         {success ? (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, textAlign: 'center', padding: '20px 0' }}>
             <div style={{ fontFamily: bebas, fontSize: 22, letterSpacing: 1, color: 'var(--accent)' }}>ЗАЯВКА ПРИНЯТА</div>
-            <p style={{ fontSize: 13, color: '#999', lineHeight: 1.65 }}>Свяжемся с вами в течение рабочего дня. Спасибо!</p>
+            <p style={{ fontSize: 13, color: '#999', lineHeight: 1.65 }}>Свяжемся с вами в течение 2 часов. Спасибо!</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

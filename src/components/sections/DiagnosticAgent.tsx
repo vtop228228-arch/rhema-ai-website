@@ -359,7 +359,7 @@ export default function DiagnosticAgent() {
                   ПОЛУЧИТЬ ПОЛНУЮ<br />ДИАГНОСТИКУ БЕСПЛАТНО
                 </div>
                 <p style={{ fontSize: 11, color: '#888', lineHeight: 1.5 }}>
-                  {fallback ? 'Агент перегружен — оставьте контакт, пришлём диагностику вручную в течение дня.' : 'Составим точный план автоматизации под ваш бизнес.'}
+                  {fallback ? 'Агент перегружен — оставьте контакт, пришлём диагностику вручную в течение 2 часов.' : 'Составим точный план автоматизации под ваш бизнес.'}
                 </p>
                 <input
                   className="input-base" placeholder="Ваше имя" value={lead.name}
@@ -393,7 +393,7 @@ export default function DiagnosticAgent() {
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#FF6A00" strokeWidth="2.5" strokeLinecap="square" /></svg>
                 </div>
                 <div style={{ fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 22, letterSpacing: 1, color: 'var(--accent)' }}>ЗАЯВКА ПРИНЯТА</div>
-                <div style={{ fontSize: 13, color: '#999', lineHeight: 1.65, maxWidth: 240 }}>Напишем в Telegram в течение рабочего дня. Спасибо!</div>
+                <div style={{ fontSize: 13, color: '#999', lineHeight: 1.65, maxWidth: 240 }}>Напишем в Telegram в течение 2 часов. Спасибо!</div>
               </div>
             )}
 
