@@ -4,6 +4,7 @@ import { getNvidiaKey, CHAT_MODEL, FALLBACK_MODEL, CHAT_SYSTEM, MAP_SYSTEM } fro
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
+export const maxDuration = 30;
 
 const msgSchema = z.object({
   role: z.enum(['user', 'assistant']),
@@ -16,30 +17,38 @@ const bodySchema = z.object({
 
 type AgentTurn = { reply: string; options: string[]; stage: 'ask' | 'map' };
 
-async function callModel(apiKey: string, model: string, messages: { role: string; content: string }[]): Promise<string> {
-  const res = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model, max_tokens: 1000, temperature: 0.6, messages, stream: false }),
-  });
-  if (!res.ok) {
-    const txt = await res.text().catch(() => '');
-    console.error('[diagnose] NIM error', model, res.status, txt.slice(0, 160));
-    return '';
+// Один вызов модели с ЖЁСТКИМ таймаутом — зависший запрос к NIM не должен держать пользователя.
+async function callModel(apiKey: string, model: string, messages: { role: string; content: string }[], timeoutMs: number): Promise<string> {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, max_tokens: 1000, temperature: 0.6, messages, stream: false }),
+      signal: ctrl.signal,
+    });
+    if (!res.ok) {
+      const txt = await res.text().catch(() => '');
+      console.error('[diagnose] NIM error', model, res.status, txt.slice(0, 160));
+      return '';
+    }
+    type NimJson = { choices?: { message?: { content?: string } }[] };
+    const json = await res.json() as NimJson;
+    return json.choices?.[0]?.message?.content?.trim() ?? '';
+  } catch {
+    return ''; // таймаут или сеть — считаем осечкой, идём на fallback
+  } finally {
+    clearTimeout(timer);
   }
-  type NimJson = { choices?: { message?: { content?: string } }[] };
-  const json = await res.json() as NimJson;
-  return json.choices?.[0]?.message?.content?.trim() ?? '';
 }
 
-// Основная модель + fallback на другую модель: осечки NIM скоррелированы во времени,
-// поэтому быстрые ретраи одной модели не спасают — другой пул мощностей надёжнее.
+// Основная модель (быстрый таймаут) → сразу резервная модель. Без долгого зависания.
+// Суммарно максимум ~21с, обычно 2-3с. Дальше клиент/фолбэк подхватят.
 async function callAgent(apiKey: string, messages: { role: string; content: string }[]): Promise<string> {
-  const c1 = await callModel(apiKey, CHAT_MODEL, messages);
-  if (c1) return c1;
-  const c2 = await callModel(apiKey, CHAT_MODEL, messages);
-  if (c2) return c2;
-  return callModel(apiKey, FALLBACK_MODEL, messages);
+  const primary = await callModel(apiKey, CHAT_MODEL, messages, 16000);
+  if (primary) return primary;
+  return callModel(apiKey, FALLBACK_MODEL, messages, 7000);
 }
 
 // Достаём JSON-объект из ответа модели (на случай обёрток ```json или текста вокруг).

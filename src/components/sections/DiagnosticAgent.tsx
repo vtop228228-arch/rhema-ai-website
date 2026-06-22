@@ -52,7 +52,7 @@ export default function DiagnosticAgent() {
   // Один запрос к агенту с таймаутом. Возвращает ход или null (осечка).
   async function fetchTurn(history: ApiMsg[]): Promise<AgentTurn | null> {
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 30000);
+    const timer = setTimeout(() => ctrl.abort(), 25000);
     try {
       const res = await fetch('/api/diagnose', {
         method: 'POST',
@@ -76,8 +76,8 @@ export default function DiagnosticAgent() {
     setChatState('thinking');
 
     let turn: AgentTurn | null = null;
-    for (let attempt = 0; attempt < 3 && !turn; attempt++) {
-      if (attempt > 0) await new Promise(r => setTimeout(r, 700));
+    for (let attempt = 0; attempt < 2 && !turn; attempt++) {
+      if (attempt > 0) await new Promise(r => setTimeout(r, 500));
       turn = await fetchTurn(history);
     }
     if (!turn) { goFallback(); return; }
