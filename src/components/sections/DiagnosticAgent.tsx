@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { z } from 'zod';
+import { ymGoal } from '@/lib/analytics';
 
 type ChatState = 'idle' | 'active' | 'thinking' | 'map_shown' | 'done';
 type Msg = { role: 'user' | 'ai'; text: string };
@@ -84,6 +85,7 @@ export default function DiagnosticAgent() {
     historyRef.current = [...history, { role: 'assistant', content: turn.reply }];
 
     if (turn.stage === 'map') {
+      ymGoal('agent_map');
       setMapText(turn.reply);
       setChatState('map_shown');
     } else {
@@ -95,6 +97,7 @@ export default function DiagnosticAgent() {
 
   function startChat() {
     if (chatState !== 'idle') return;
+    ymGoal('agent_start');
     historyRef.current = [OPENER];
     callAgent(historyRef.current);
   }
@@ -104,7 +107,7 @@ export default function DiagnosticAgent() {
     const a = text.trim();
     if (!a || chatState === 'thinking') return;
 
-    if (!sphere) setSphere(a.slice(0, 60));
+    if (!sphere) { setSphere(a.slice(0, 60)); ymGoal('agent_engaged'); }
     addMsg('user', a);
     setInputVal('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
@@ -135,6 +138,7 @@ export default function DiagnosticAgent() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sessionId: sessionId.current, ...parsed.data, sphere, pain: transcript, mapText }),
     });
+    ymGoal('agent_lead');
     setChatState('done');
   }
 

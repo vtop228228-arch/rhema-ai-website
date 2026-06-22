@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { z } from 'zod';
+import { ymGoal } from '@/lib/analytics';
 
 const bebas = 'var(--font-bebas), Bebas Neue, sans-serif';
 const inter = 'var(--font-inter), Inter, sans-serif';
@@ -68,6 +69,7 @@ export default function DiagnosticModal({ open, onClose }: Props) {
         }),
       });
       if (!res.ok) throw new Error();
+      ymGoal('modal_lead');
       setSuccess(true);
     } catch {
       setErr('Ошибка отправки. Напишите нам напрямую в Telegram.');

@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { z } from 'zod';
+import { ymGoal } from '@/lib/analytics';
 
 const bebas = 'var(--font-bebas), Bebas Neue, sans-serif';
 
@@ -40,6 +41,7 @@ export default function ContactForm() {
         body: JSON.stringify({ ...parsed.data, consent: true }),
       });
       if (!res.ok) throw new Error('fail');
+      ymGoal('contact_lead');
       setSuccess(true);
     } catch {
       setErr('Не удалось отправить. Попробуйте позже или напишите в Telegram.');
