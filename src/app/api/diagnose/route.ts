@@ -139,7 +139,7 @@ export async function POST(req: NextRequest) {
     const e = err instanceof Error ? err : new Error(String(err));
     console.error('[POST /api/diagnose]', e.name, e.message, e.stack?.slice(0, 400));
     return NextResponse.json(
-      { error: { code: 'INTERNAL_ERROR', message: 'Внутренняя ошибка' } },
+      { error: { code: 'INTERNAL_ERROR', message: `${e.name}: ${e.message}` } },
       { status: 500 },
     );
   }
