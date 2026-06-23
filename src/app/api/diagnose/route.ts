@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getNvidiaKey, MODELS, CHAT_SYSTEM, MAP_SYSTEM } from '@/lib/anthropic';
+import {
+  getNvidiaKey, getAnthropicKey, MODELS,
+  CLAUDE_DIALOG_MODEL, CLAUDE_MAP_MODEL,
+  CHAT_SYSTEM, MAP_SYSTEM,
+} from '@/lib/anthropic';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
@@ -16,9 +20,41 @@ const bodySchema = z.object({
 });
 
 type AgentTurn = { reply: string; options: string[]; stage: 'ask' | 'map' };
+type Msg = { role: 'user' | 'assistant'; content: string };
 
-// Один вызов модели с ЖЁСТКИМ таймаутом — зависший запрос к NIM не должен держать пользователя.
-async function callModel(apiKey: string, model: string, messages: { role: string; content: string }[], timeoutMs: number): Promise<string> {
+// ── Anthropic Claude: основной провайдер. Стабильный, живой диалог. ──
+async function callClaude(key: string, model: string, system: string, history: Msg[], timeoutMs: number): Promise<string> {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({ model, max_tokens: 1024, temperature: 0.6, system, messages: history }),
+      signal: ctrl.signal,
+    });
+    if (!res.ok) {
+      const txt = await res.text().catch(() => '');
+      console.error('[diagnose] Claude error', res.status, txt.slice(0, 160));
+      return '';
+    }
+    type ClaudeJson = { content?: { type: string; text?: string }[] };
+    const json = await res.json() as ClaudeJson;
+    const text = json.content?.find(b => b.type === 'text')?.text;
+    return typeof text === 'string' ? text.trim() : '';
+  } catch {
+    return '';
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+// ── NVIDIA NIM: бесплатный аварийный резерв. Один вызов модели с жёстким таймаутом. ──
+async function callNim(apiKey: string, model: string, messages: { role: string; content: string }[], timeoutMs: number): Promise<string> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
@@ -37,17 +73,27 @@ async function callModel(apiKey: string, model: string, messages: { role: string
     const json = await res.json() as NimJson;
     return json.choices?.[0]?.message?.content?.trim() ?? '';
   } catch {
-    return ''; // таймаут или сеть — считаем осечкой, идём на fallback
+    return '';
   } finally {
     clearTimeout(timer);
   }
 }
 
-// Каскад: перебираем модели по очереди с жёстким таймаутом на каждую. Первый рабочий ответ выигрывает.
-// Зависшая/перегруженная модель аборитися по таймауту и сразу пробуем следующую — без долгого ожидания.
-async function callAgent(apiKey: string, messages: { role: string; content: string }[]): Promise<string> {
+// Единая генерация: Claude (если задан ключ) → при осечке NIM-каскад как резерв.
+// kind управляет выбором модели Claude: 'map' = Sonnet (богаче), иначе Haiku (быстро/дёшево).
+async function generate(system: string, history: Msg[], kind: 'dialog' | 'map'): Promise<string> {
+  const aKey = getAnthropicKey();
+  if (aKey) {
+    const model = kind === 'map' ? CLAUDE_MAP_MODEL : CLAUDE_DIALOG_MODEL;
+    const out = await callClaude(aKey, model, system, history, 20000);
+    if (out) return out;
+  }
+  // Резерв — бесплатный NIM-каскад.
+  const nKey = getNvidiaKey();
+  if (!nKey) return '';
+  const messages = [{ role: 'system', content: system }, ...history];
   for (const model of MODELS) {
-    const content = await callModel(apiKey, model, messages, 9000);
+    const content = await callNim(nKey, model, messages, 9000);
     if (content) return content;
   }
   return '';
@@ -85,8 +131,7 @@ export async function POST(req: NextRequest) {
 
     const { history } = bodySchema.parse(await req.json());
 
-    const apiKey = getNvidiaKey();
-    if (!apiKey) {
+    if (!getAnthropicKey() && !getNvidiaKey()) {
       return NextResponse.json(
         { error: { code: 'AGENT_UNAVAILABLE', message: 'Агент временно недоступен' } },
         { status: 503 },
@@ -103,14 +148,13 @@ export async function POST(req: NextRequest) {
         .slice(1) // убираем скрытый opener
         .map(m => `${m.role === 'user' ? 'Клиент' : 'Рема'}: ${m.content}`)
         .join('\n');
-      const mapMessages = [
-        { role: 'system', content: MAP_SYSTEM },
+      const mapHistory: Msg[] = [
         { role: 'user', content: `Диалог диагностики:\n${transcript}\n\nСоставь карту потерь по этому диалогу.` },
       ];
 
       let turn: AgentTurn | null = null;
       for (let i = 0; i < 2 && (!turn || !looksLikeMap(turn)); i++) {
-        const r = await callAgent(apiKey, mapMessages);
+        const r = await generate(MAP_SYSTEM, mapHistory, 'map');
         const t = r ? parseTurn(r) : null;
         if (t) turn = t;
       }
@@ -127,8 +171,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ── РАЗГОВОР: обычный ход диалога ──
-    const messages = [{ role: 'system', content: CHAT_SYSTEM }, ...history];
-    const raw = await callAgent(apiKey, messages);
+    const raw = await generate(CHAT_SYSTEM, history, 'dialog');
     const turn = raw ? parseTurn(raw) : null;
 
     if (!turn) {

@@ -7,6 +7,19 @@ export function getNvidiaKey(): string | null {
   return key.split(BOM).join('').trim();
 }
 
+// ── Anthropic Claude (основной провайдер, когда задан ANTHROPIC_API_KEY) ──
+// Стабильный продакшн-API, лучший русский и живой диалог. Гибрид: Haiku — диалог, Sonnet — карта.
+export function getAnthropicKey(): string | null {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) return null;
+  const BOM = String.fromCharCode(0xFEFF);
+  return key.split(BOM).join('').trim();
+}
+
+export const CLAUDE_DIALOG_MODEL = 'claude-haiku-4-5-20251001';
+export const CLAUDE_MAP_MODEL = 'claude-sonnet-4-6';
+
+// ── NVIDIA NIM (бесплатный аварийный резерв, если Claude недоступен или ключа нет) ──
 // Каскад моделей по приоритету: сервер перебирает их по очереди, первый рабочий ответ выигрывает.
 // Разные модели = разные пулы мощностей NIM, поэтому когда одна штормит, подхватывает другая.
 // Порядок по живучести/скорости (замер 2026-06-23): 3.1-70b быстрая и стабильная,
