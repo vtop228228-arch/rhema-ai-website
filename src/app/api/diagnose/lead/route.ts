@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
+import { sendLeadToCRM } from '@/lib/crm';
 
 export const runtime = 'nodejs';
 
@@ -99,12 +100,23 @@ export async function POST(req: NextRequest) {
 
     const lead = leadSchema.parse(await req.json());
 
-    // Telegram — основной сток лида. Supabase — опциональный дубль.
+    // Telegram — основной сток лида. Supabase + JARVIS CRM — опциональные дубли.
     await sendTelegram(lead);
     try {
       await saveToSupabase(lead);
     } catch (e) {
       console.error('[lead] supabase save failed', e);
+    }
+    // Дубль в JARVIS CRM (jarvis.leads) через lead-intake. Сбой не валит заявку.
+    const crm = await sendLeadToCRM({
+      name: lead.name,
+      contact: lead.contact,
+      niche: lead.sphere || undefined,
+      notes: [lead.pain, lead.mapText].filter(Boolean).join('\n\n') || undefined,
+      source: 'diagnostic-agent',
+    });
+    if (!crm.ok && !crm.skipped) {
+      console.error('[lead] CRM save failed:', crm.error);
     }
 
     return NextResponse.json({ data: { ok: true } });

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { NextRequest, NextResponse } from 'next/server';
+import { sendLeadToCRM } from '@/lib/crm';
 
 const contactSchema = z.object({
   name: z.string().min(2).max(100),
@@ -47,6 +48,17 @@ ${validated.business}
 
     if (!response.ok) {
       throw new Error(`Telegram API error: ${response.statusText}`);
+    }
+
+    // Дубль в JARVIS CRM (jarvis.leads). Telegram — основной сток; сбой CRM не валит заявку.
+    const crm = await sendLeadToCRM({
+      name: validated.name,
+      contact: validated.contact,
+      notes: validated.business,
+      source: 'rhema-ai-website',
+    });
+    if (!crm.ok && !crm.skipped) {
+      console.error('[contact] CRM save failed:', crm.error);
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
