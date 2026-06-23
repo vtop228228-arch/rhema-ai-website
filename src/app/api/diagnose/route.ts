@@ -34,7 +34,7 @@ async function callClaude(key: string, model: string, system: string, history: M
         'anthropic-version': '2023-06-01',
         'content-type': 'application/json',
       },
-      body: JSON.stringify({ model, max_tokens: 1024, temperature: 0.6, system, messages: history }),
+      body: JSON.stringify({ model, max_tokens: 1500, temperature: 0.6, system, messages: history }),
       signal: ctrl.signal,
     });
     if (!res.ok) {
@@ -85,8 +85,11 @@ async function generate(system: string, history: Msg[], kind: 'dialog' | 'map'):
   const aKey = getAnthropicKey();
   if (aKey) {
     const model = kind === 'map' ? CLAUDE_MAP_MODEL : CLAUDE_DIALOG_MODEL;
-    const out = await callClaude(aKey, model, system, history, 20000);
-    if (out) return out;
+    // Claude надёжный — пробуем дважды перед уходом на флакающий NIM.
+    for (let i = 0; i < 2; i++) {
+      const out = await callClaude(aKey, model, system, history, 20000);
+      if (out) return out;
+    }
   }
   // Резерв — бесплатный NIM-каскад.
   const nKey = getNvidiaKey();
@@ -170,9 +173,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ data: turn });
     }
 
-    // ── РАЗГОВОР: обычный ход диалога ──
-    const raw = await generate(CHAT_SYSTEM, history, 'dialog');
-    const turn = raw ? parseTurn(raw) : null;
+    // ── РАЗГОВОР: обычный ход диалога (ретрай, если ответ не распарсился) ──
+    let turn: AgentTurn | null = null;
+    for (let i = 0; i < 2 && !turn; i++) {
+      const raw = await generate(CHAT_SYSTEM, history, 'dialog');
+      turn = raw ? parseTurn(raw) : null;
+    }
 
     if (!turn) {
       return NextResponse.json(
