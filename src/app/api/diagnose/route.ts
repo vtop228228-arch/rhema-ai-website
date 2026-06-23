@@ -81,22 +81,22 @@ async function callNim(apiKey: string, model: string, messages: { role: string; 
 
 // Единая генерация: Claude (если задан ключ) → при осечке NIM-каскад как резерв.
 // kind управляет выбором модели Claude: 'map' = Sonnet (богаче), иначе Haiku (быстро/дёшево).
+// Одна попытка генерации с ЖЁСТКИМ бюджетом времени (≤~20с), чтобы не упереться в лимит функции Vercel.
+// Claude (≤13с) → если пусто, один быстрый NIM-резерв (≤7с). Без вложенных ретраев — их делает клиент.
 async function generate(system: string, history: Msg[], kind: 'dialog' | 'map'): Promise<string> {
   const aKey = getAnthropicKey();
   if (aKey) {
     const model = kind === 'map' ? CLAUDE_MAP_MODEL : CLAUDE_DIALOG_MODEL;
-    // Claude надёжный — пробуем дважды перед уходом на флакающий NIM.
-    for (let i = 0; i < 2; i++) {
-      const out = await callClaude(aKey, model, system, history, 20000);
-      if (out) return out;
-    }
+    const out = await callClaude(aKey, model, system, history, 13000);
+    if (out) return out;
   }
-  // Резерв — бесплатный NIM-каскад.
   const nKey = getNvidiaKey();
   if (!nKey) return '';
   const messages = [{ role: 'system', content: system }, ...history];
-  for (const model of MODELS) {
-    const content = await callNim(nKey, model, messages, 9000);
+  // С Claude держим резерв минимальным (1 модель), без Claude — полный каскад.
+  const models = aKey ? MODELS.slice(0, 1) : MODELS;
+  for (const model of models) {
+    const content = await callNim(nKey, model, messages, 7000);
     if (content) return content;
   }
   return '';
@@ -155,12 +155,8 @@ export async function POST(req: NextRequest) {
         { role: 'user', content: `Диалог диагностики:\n${transcript}\n\nСоставь карту потерь по этому диалогу.` },
       ];
 
-      let turn: AgentTurn | null = null;
-      for (let i = 0; i < 2 && (!turn || !looksLikeMap(turn)); i++) {
-        const r = await generate(MAP_SYSTEM, mapHistory, 'map');
-        const t = r ? parseTurn(r) : null;
-        if (t) turn = t;
-      }
+      const r = await generate(MAP_SYSTEM, mapHistory, 'map');
+      const turn = r ? parseTurn(r) : null;
 
       if (!turn) {
         return NextResponse.json(
@@ -173,12 +169,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ data: turn });
     }
 
-    // ── РАЗГОВОР: обычный ход диалога (ретрай, если ответ не распарсился) ──
-    let turn: AgentTurn | null = null;
-    for (let i = 0; i < 2 && !turn; i++) {
-      const raw = await generate(CHAT_SYSTEM, history, 'dialog');
-      turn = raw ? parseTurn(raw) : null;
-    }
+    // ── РАЗГОВОР: один ход диалога (повторы — на стороне клиента, чтобы не превысить лимит времени) ──
+    const raw = await generate(CHAT_SYSTEM, history, 'dialog');
+    const turn = raw ? parseTurn(raw) : null;
 
     if (!turn) {
       return NextResponse.json(
