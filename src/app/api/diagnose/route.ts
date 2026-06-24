@@ -3,7 +3,7 @@ import { z } from 'zod';
 import {
   getNvidiaKey, getAnthropicKey, MODELS,
   CLAUDE_DIALOG_MODEL, CLAUDE_MAP_MODEL,
-  CHAT_SYSTEM, MAP_SYSTEM,
+  CHAT_SYSTEM, MAP_SYSTEM, FALLBACK_MAP,
 } from '@/lib/anthropic';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
@@ -80,14 +80,20 @@ async function callNim(apiKey: string, model: string, messages: { role: string; 
 }
 
 // Единая генерация: Claude (если задан ключ) → при осечке NIM-каскад как резерв.
-// kind управляет выбором модели Claude: 'map' = Sonnet (богаче), иначе Haiku (быстро/дёшево).
-// Одна попытка генерации с ЖЁСТКИМ бюджетом времени (≤~20с), чтобы не упереться в лимит функции Vercel.
-// Claude (≤13с) → если пусто, один быстрый NIM-резерв (≤7с). Без вложенных ретраев — их делает клиент.
+// kind управляет выбором модели Claude и бюджетом времени:
+//   'map'    = Sonnet (богаче), бюджет щедрее — карта медленнее и важнее (Vercel Pro: maxDuration=30).
+//   'dialog' = Haiku (быстро/дёшево), короткий бюджет.
+// Один проход с ЖЁСТКИМ бюджетом, чтобы вписаться в лимит функции: Claude → если пусто, один NIM-резерв.
+// Вложенных ретраев нет — их делает клиент.
 async function generate(system: string, history: Msg[], kind: 'dialog' | 'map'): Promise<string> {
+  // Карте даём реальный бюджет (Sonnet нередко >13с), диалог держим быстрым. Сумма < maxDuration=30.
+  const claudeMs = kind === 'map' ? 18000 : 12000;
+  const nimMs = 6000;
+
   const aKey = getAnthropicKey();
   if (aKey) {
     const model = kind === 'map' ? CLAUDE_MAP_MODEL : CLAUDE_DIALOG_MODEL;
-    const out = await callClaude(aKey, model, system, history, 13000);
+    const out = await callClaude(aKey, model, system, history, claudeMs);
     if (out) return out;
   }
   const nKey = getNvidiaKey();
@@ -96,10 +102,28 @@ async function generate(system: string, history: Msg[], kind: 'dialog' | 'map'):
   // С Claude держим резерв минимальным (1 модель), без Claude — полный каскад.
   const models = aKey ? MODELS.slice(0, 1) : MODELS;
   for (const model of models) {
-    const content = await callNim(nKey, model, messages, 7000);
+    const content = await callNim(nKey, model, messages, nimMs);
     if (content) return content;
   }
   return '';
+}
+
+// Карта приходит ПЛЕЙН-ТЕКСТОМ. Этот хелпер устойчив и к тексту, и к случайной JSON-обёртке
+// (если модель всё же завернула ответ) — без падения JSON.parse, как было раньше.
+function extractMapText(raw: string): string {
+  const cleaned = raw.replace(/```json/gi, '').replace(/```/g, '').trim();
+  // Если модель вернула валидный JSON с reply — достаём reply; иначе берём текст как есть.
+  const start = cleaned.indexOf('{');
+  const end = cleaned.lastIndexOf('}');
+  if (start !== -1 && end > start) {
+    try {
+      const obj = JSON.parse(cleaned.slice(start, end + 1)) as { reply?: unknown };
+      if (typeof obj.reply === 'string' && obj.reply.trim()) return obj.reply.trim();
+    } catch {
+      // невалидный JSON (живые переносы) — игнорируем, ниже вернём очищенный текст
+    }
+  }
+  return cleaned;
 }
 
 // Достаём JSON-объект из ответа модели (на случай обёрток ```json или текста вокруг).
@@ -156,17 +180,11 @@ export async function POST(req: NextRequest) {
       ];
 
       const r = await generate(MAP_SYSTEM, mapHistory, 'map');
-      const turn = r ? parseTurn(r) : null;
-
-      if (!turn) {
-        return NextResponse.json(
-          { error: { code: 'AGENT_UNAVAILABLE', message: 'Агент временно недоступен' } },
-          { status: 503 },
-        );
-      }
-      turn.stage = 'map';
-      turn.options = [];
-      return NextResponse.json({ data: turn });
+      const text = r ? extractMapText(r) : '';
+      // Если генерация пустая или без маркеров карты (мусор) — отдаём шаблон, а НЕ 503.
+      // Клиент после пройденного диалога обязан увидеть карту, иначе это «бот сломался».
+      const reply = /[•→]/.test(text) ? text : FALLBACK_MAP;
+      return NextResponse.json({ data: { reply, options: [] as string[], stage: 'map' as const } });
     }
 
     // ── РАЗГОВОР: один ход диалога (повторы — на стороне клиента, чтобы не превысить лимит времени) ──
@@ -174,6 +192,13 @@ export async function POST(req: NextRequest) {
     const turn = raw ? parseTurn(raw) : null;
 
     if (!turn) {
+      // Диалог не сгенерился. Если человек уже что-то рассказал (≥1 ответа) — НЕ упираемся в
+      // «перегружен», а завершаем диагностику картой по тому, что есть (быстро, без второго вызова
+      // модели — на этом пути провайдер уже штормит). Тупик в середине диалога = «бот сломался».
+      // Только если не поднялся даже opener (0 ответов) — отдаём 503, тут показывать нечего.
+      if (realAnswers >= 1) {
+        return NextResponse.json({ data: { reply: FALLBACK_MAP, options: [] as string[], stage: 'map' as const } });
+      }
       return NextResponse.json(
         { error: { code: 'AGENT_UNAVAILABLE', message: 'Агент временно недоступен' } },
         { status: 503 },

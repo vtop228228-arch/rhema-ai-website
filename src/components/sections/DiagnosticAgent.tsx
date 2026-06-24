@@ -22,6 +22,20 @@ const OPENER: ApiMsg = {
   content: 'Поздоровайся коротко и задай первый вопрос про мой бизнес, чтобы начать диагностику.',
 };
 
+// Аварийная карта-шаблон на случай, если сеть полностью отвалилась на этапе карты.
+// Сервер почти всегда отдаёт карту сам; это последний рубеж, чтобы клиент не упёрся в «перегружен».
+const FALLBACK_MAP = `ГДЕ ВЫ ТЕРЯЕТЕ
+• Обращения теряются, пока менеджер занят или вне смены
+• Рутина — ответы, заявки, отчёты — съедает часы команды каждый день
+• Нет единой картины по цифрам: решения принимаются на глаз
+
+ЧТО МОЖНО ВНЕДРИТЬ
+→ Помощник, который мгновенно отвечает клиентам круглосуточно
+→ Автоматизация рутины: заявки и напоминания без ручного труда
+→ Сводка по ключевым показателям бизнеса в одном месте
+
+Оставьте контакт — на бесплатном созвоне покажем точную карту внедрения под ваш бизнес и посчитаем эффект в деньгах.`;
+
 export default function DiagnosticAgent() {
   const sessionId = useRef<string>(typeof crypto !== 'undefined' ? crypto.randomUUID() : String(Date.now()));
   const chatRef = useRef<HTMLDivElement>(null);
@@ -52,7 +66,8 @@ export default function DiagnosticAgent() {
   // Один запрос к агенту с таймаутом. Возвращает ход или null (осечка).
   async function fetchTurn(history: ApiMsg[]): Promise<AgentTurn | null> {
     const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 25000);
+    // Должен быть БОЛЬШЕ серверного бюджета (карта: ~18с Claude + 6с NIM), иначе оборвём успешный ответ.
+    const timer = setTimeout(() => ctrl.abort(), 28000);
     try {
       const res = await fetch('/api/diagnose', {
         method: 'POST',
@@ -76,11 +91,24 @@ export default function DiagnosticAgent() {
     setChatState('thinking');
 
     let turn: AgentTurn | null = null;
-    for (let attempt = 0; attempt < 2 && !turn; attempt++) {
+    for (let attempt = 0; attempt < 3 && !turn; attempt++) {
       if (attempt > 0) await new Promise(r => setTimeout(r, 500));
       turn = await fetchTurn(history);
     }
-    if (!turn) { goFallback(); return; }
+    if (!turn) {
+      // Сеть/сервер отвалились. Если человек уже что-то рассказал — показываем карту-шаблон,
+      // а не «перегружен»: тупик в середине диалога читается как «бот сломался».
+      // Только если ничего не ответил (даже opener не поднялся) — apologetic-фолбэк.
+      const answered = history.filter(m => m.role === 'user').length - 1;
+      if (answered >= 1) {
+        ymGoal('agent_map');
+        setMapText(FALLBACK_MAP);
+        setChatState('map_shown');
+      } else {
+        goFallback();
+      }
+      return;
+    }
 
     historyRef.current = [...history, { role: 'assistant', content: turn.reply }];
 
@@ -261,7 +289,7 @@ export default function DiagnosticAgent() {
                   ПОЛУЧИТЬ ПОЛНУЮ<br />ДИАГНОСТИКУ БЕСПЛАТНО
                 </div>
                 <p style={{ fontSize: 11, color: '#888', lineHeight: 1.5 }}>
-                  {fallback ? 'Агент перегружен — оставьте контакт, пришлём диагностику вручную в течение 2 часов.' : 'Составим точный план автоматизации под ваш бизнес.'}
+                  {fallback ? 'Оставьте контакт — проведём диагностику лично и пришлём результат в течение 2 часов.' : 'Составим точный план автоматизации под ваш бизнес.'}
                 </p>
                 <input
                   className="input-base" placeholder="Ваше имя" value={lead.name}
