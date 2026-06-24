@@ -64,15 +64,16 @@ export default function DiagnosticAgent() {
   }
 
   // Один запрос к агенту с таймаутом. Возвращает ход или null (осечка).
-  async function fetchTurn(history: ApiMsg[]): Promise<AgentTurn | null> {
+  // forceMap — попросить карту принудительно (когда диалог не смог продолжиться).
+  async function fetchTurn(history: ApiMsg[], forceMap = false): Promise<AgentTurn | null> {
     const ctrl = new AbortController();
-    // Должен быть БОЛЬШЕ серверного бюджета (карта: ~18с Claude + 6с NIM), иначе оборвём успешный ответ.
+    // Должен быть БОЛЬШЕ серверного бюджета (карта: 2×12с Claude), иначе оборвём успешный ответ.
     const timer = setTimeout(() => ctrl.abort(), 28000);
     try {
       const res = await fetch('/api/diagnose', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ history: history.slice(-24) }),
+        body: JSON.stringify({ history: history.slice(-24), forceMap }),
         signal: ctrl.signal,
       });
       if (!res.ok) return null;
@@ -85,7 +86,7 @@ export default function DiagnosticAgent() {
     }
   }
 
-  // Один ход к агенту: до 3 попыток (NIM изредка отдаёт осечку), и только потом фолбэк.
+  // Один ход к агенту: до 3 попыток (провайдер изредка отдаёт transient-осечку), и только потом фолбэк.
   async function callAgent(history: ApiMsg[]) {
     setOptions([]);
     setChatState('thinking');
@@ -96,11 +97,16 @@ export default function DiagnosticAgent() {
       turn = await fetchTurn(history);
     }
     if (!turn) {
-      // Сеть/сервер отвалились. Если человек уже что-то рассказал — показываем карту-шаблон,
-      // а не «перегружен»: тупик в середине диалога читается как «бот сломался».
-      // Только если ничего не ответил (даже opener не поднялся) — apologetic-фолбэк.
+      // Диалог не смог продолжиться (исчерпали ретраи). Не упираемся в «перегружен» и не суём
+      // общий шаблон-«чушь»: если человек уже что-то рассказал (≥2 ответов) — просим ЛИЧНУЮ карту
+      // по тому, что есть (forceMap). Только если и это не вышло / совсем нет ответов — фолбэк.
       const answered = history.filter(m => m.role === 'user').length - 1;
-      if (answered >= 1) {
+      if (answered >= 2) {
+        const mapTurn = await fetchTurn(history, true);
+        ymGoal('agent_map');
+        setMapText(mapTurn?.reply ?? FALLBACK_MAP);
+        setChatState('map_shown');
+      } else if (answered >= 1) {
         ymGoal('agent_map');
         setMapText(FALLBACK_MAP);
         setChatState('map_shown');

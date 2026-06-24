@@ -17,6 +17,9 @@ const msgSchema = z.object({
 
 const bodySchema = z.object({
   history: z.array(msgSchema).min(1).max(24),
+  // Клиент выставляет, когда диалог не смог продолжиться (исчерпал ретраи): просим карту
+  // принудительно по тому, что уже рассказали, — личную, а не общий шаблон-«чушь».
+  forceMap: z.boolean().optional(),
 });
 
 type AgentTurn = { reply: string; options: string[]; stage: 'ask' | 'map' };
@@ -79,22 +82,25 @@ async function callNim(apiKey: string, model: string, messages: { role: string; 
   }
 }
 
-// Единая генерация: Claude (если задан ключ) → при осечке NIM-каскад как резерв.
-// kind управляет выбором модели Claude и бюджетом времени:
-//   'map'    = Sonnet (богаче), бюджет щедрее — карта медленнее и важнее (Vercel Pro: maxDuration=30).
-//   'dialog' = Haiku (быстро/дёшево), короткий бюджет.
-// Один проход с ЖЁСТКИМ бюджетом, чтобы вписаться в лимит функции: Claude → если пусто, один NIM-резерв.
-// Вложенных ретраев нет — их делает клиент.
+// Единая генерация: Claude (если задан ключ) → при осечке NIM как резерв.
+// kind управляет выбором модели Claude и бюджетом времени (Vercel Pro: maxDuration=30):
+//   'map'    = Sonnet (богаче). 2 попытки, без NIM-резерва: NIM для карты даёт мусор без маркеров,
+//              а на failure-пути лучше быстро отдать шаблон, чем тратить ещё 6с на заведомо плохой ответ.
+//   'dialog' = Haiku (быстро/дёшево). 2 попытки → если пусто, один NIM-резерв (кросс-провайдер).
+// КЛЮЧЕВОЕ: внутренний ретрай Claude. Главная причина «чуши» в проде — РАЗОВЫЙ transient-блип
+// провайдера (Anthropic 529/перегрузка); один повтор ловит почти все такие осечки. Бюджет подобран
+// так, чтобы худший случай был < клиентского таймаута 28с.
 async function generate(system: string, history: Msg[], kind: 'dialog' | 'map'): Promise<string> {
-  // Карте даём реальный бюджет (Sonnet нередко >13с), диалог держим быстрым. Сумма < maxDuration=30.
-  const claudeMs = kind === 'map' ? 18000 : 12000;
-  const nimMs = 6000;
+  const claudeMs = kind === 'map' ? 12000 : 10000; // worst: map 2×12=24с, dialog 2×10+NIM6=26с (<28с)
 
   const aKey = getAnthropicKey();
   if (aKey) {
     const model = kind === 'map' ? CLAUDE_MAP_MODEL : CLAUDE_DIALOG_MODEL;
-    const out = await callClaude(aKey, model, system, history, claudeMs);
-    if (out) return out;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const out = await callClaude(aKey, model, system, history, claudeMs);
+      if (out) return out;
+    }
+    if (kind === 'map') return ''; // карта: NIM-резерв пропускаем (см. выше) → выше отдадим шаблон
   }
   const nKey = getNvidiaKey();
   if (!nKey) return '';
@@ -102,7 +108,7 @@ async function generate(system: string, history: Msg[], kind: 'dialog' | 'map'):
   // С Claude держим резерв минимальным (1 модель), без Claude — полный каскад.
   const models = aKey ? MODELS.slice(0, 1) : MODELS;
   for (const model of models) {
-    const content = await callNim(nKey, model, messages, nimMs);
+    const content = await callNim(nKey, model, messages, 6000);
     if (content) return content;
   }
   return '';
@@ -156,7 +162,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { history } = bodySchema.parse(await req.json());
+    const { history, forceMap } = bodySchema.parse(await req.json());
 
     if (!getAnthropicKey() && !getNvidiaKey()) {
       return NextResponse.json(
@@ -169,8 +175,9 @@ export async function POST(req: NextRequest) {
     const realAnswers = history.filter(m => m.role === 'user').length - 1;
     const looksLikeMap = (t: AgentTurn) => /[•→]/.test(t.reply);
 
-    // ── ФИНАЛ: после 4 ответов — отдельный фокусный вызов карты (без разговорной болтливости) ──
-    if (realAnswers >= 4) {
+    // ── ФИНАЛ: после 4 ответов (или forceMap, когда диалог не смог продолжиться) — ──
+    // ── отдельный фокусный вызов карты (без разговорной болтливости).                ──
+    if (realAnswers >= 4 || forceMap) {
       const transcript = history
         .slice(1) // убираем скрытый opener
         .map(m => `${m.role === 'user' ? 'Клиент' : 'Рема'}: ${m.content}`)
@@ -192,13 +199,10 @@ export async function POST(req: NextRequest) {
     const turn = raw ? parseTurn(raw) : null;
 
     if (!turn) {
-      // Диалог не сгенерился. Если человек уже что-то рассказал (≥1 ответа) — НЕ упираемся в
-      // «перегружен», а завершаем диагностику картой по тому, что есть (быстро, без второго вызова
-      // модели — на этом пути провайдер уже штормит). Тупик в середине диалога = «бот сломался».
-      // Только если не поднялся даже opener (0 ответов) — отдаём 503, тут показывать нечего.
-      if (realAnswers >= 1) {
-        return NextResponse.json({ data: { reply: FALLBACK_MAP, options: [] as string[], stage: 'map' as const } });
-      }
+      // Диалог не сгенерился — отдаём 503, чтобы КЛИЕНТ повторил тот же ход и беседа продолжилась.
+      // Раньше тут сразу возвращался общий шаблон-карта: клиент принимал его как успех, переставал
+      // ретраить, и человек получал generic-«чушь» из-за секундного блипа. Теперь при исчерпании
+      // ретраев клиент сам попросит ЛИЧНУЮ карту (forceMap) по тому, что уже рассказали.
       return NextResponse.json(
         { error: { code: 'AGENT_UNAVAILABLE', message: 'Агент временно недоступен' } },
         { status: 503 },
