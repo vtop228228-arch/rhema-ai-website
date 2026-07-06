@@ -1,8 +1,9 @@
 // Канонический адрес сайта — единый источник правды для SEO/OG/robots/sitemap.
-// По умолчанию — прод-домен на Vercel. Подключишь свой домен (например rhema.ai) —
-// задай NEXT_PUBLIC_SITE_URL в Vercel → Settings → Environment Variables (без слэша на конце).
+// По умолчанию — актуальный прод-домен проекта на Vercel (rhema-ai-agency-amber).
+// Подключишь свой домен (например rhema.ai) — задай NEXT_PUBLIC_SITE_URL
+// в Vercel → Settings → Environment Variables (без слэша на конце).
 export const SITE_URL = (
-  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://rhema-ai-agency.vercel.app'
+  process.env.NEXT_PUBLIC_SITE_URL ?? 'https://rhema-ai-agency-amber.vercel.app'
 ).replace(/\/+$/, '');
 
 export const SITE_NAME = 'Rhema AI';
