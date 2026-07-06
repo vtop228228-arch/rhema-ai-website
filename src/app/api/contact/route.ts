@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import { NextRequest, NextResponse } from 'next/server';
 import { sendLeadToCRM } from '@/lib/crm';
+import { rateLimit, getClientIp } from '@/lib/rate-limit';
+import { escapeHtml } from '@/lib/escape-html';
 
 const contactSchema = z.object({
   name: z.string().min(2).max(100),
@@ -11,6 +13,16 @@ const contactSchema = z.object({
 
 export async function POST(req: NextRequest) {
   try {
+    // Лимит консервативнее соседних роутов (diagnose: 30/ч, lead: 20/ч):
+    // форма контакта отправляется человеком 1–2 раза, 5/час/IP хватает с запасом.
+    const ip = getClientIp(req);
+    if (!rateLimit(`contact:${ip}`, 5, 60 * 60 * 1000)) {
+      return NextResponse.json(
+        { error: { code: 'RATE_LIMITED', message: 'Слишком много запросов. Попробуйте позже.' } },
+        { status: 429 }
+      );
+    }
+
     const body = await req.json();
     const validated = contactSchema.parse(body);
 
@@ -18,8 +30,9 @@ export async function POST(req: NextRequest) {
     const chatId = process.env.TELEGRAM_CHAT_ID;
 
     if (!botToken || !chatId) {
+      console.error('[POST /api/contact] Telegram config missing');
       return NextResponse.json(
-        { error: 'Telegram config missing' },
+        { error: { code: 'INTERNAL_ERROR', message: 'Не удалось отправить заявку' } },
         { status: 500 }
       );
     }
@@ -27,11 +40,11 @@ export async function POST(req: NextRequest) {
     const message = `
 📧 <b>Новая заявка на диагностику</b>
 
-<b>Имя:</b> ${validated.name}
-<b>Контакт:</b> ${validated.contact}
+<b>Имя:</b> ${escapeHtml(validated.name)}
+<b>Контакт:</b> ${escapeHtml(validated.contact)}
 
 <b>О бизнесе:</b>
-${validated.business}
+${escapeHtml(validated.business)}
 `;
 
     const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
@@ -65,13 +78,14 @@ ${validated.business}
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: 'Invalid data', details: error.issues },
+        { error: { code: 'INVALID_INPUT', message: 'Проверьте данные формы' } },
         { status: 400 }
       );
     }
 
+    console.error('[POST /api/contact]', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: { code: 'INTERNAL_ERROR', message: 'Не удалось отправить заявку' } },
       { status: 500 }
     );
   }

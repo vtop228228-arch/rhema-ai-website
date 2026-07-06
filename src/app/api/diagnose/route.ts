@@ -26,7 +26,7 @@ type AgentTurn = { reply: string; options: string[]; stage: 'ask' | 'map' };
 type Msg = { role: 'user' | 'assistant'; content: string };
 
 // ── Anthropic Claude: основной провайдер. Стабильный, живой диалог. ──
-async function callClaude(key: string, model: string, system: string, history: Msg[], timeoutMs: number): Promise<string> {
+async function callClaude(key: string, model: string, system: string, history: Msg[], timeoutMs: number, maxTokens: number): Promise<string> {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
@@ -37,7 +37,7 @@ async function callClaude(key: string, model: string, system: string, history: M
         'anthropic-version': '2023-06-01',
         'content-type': 'application/json',
       },
-      body: JSON.stringify({ model, max_tokens: 1500, temperature: 0.6, system, messages: history }),
+      body: JSON.stringify({ model, max_tokens: maxTokens, temperature: 0.6, system, messages: history }),
       signal: ctrl.signal,
     });
     if (!res.ok) {
@@ -92,12 +92,15 @@ async function callNim(apiKey: string, model: string, messages: { role: string; 
 // так, чтобы худший случай был < клиентского таймаута 28с.
 async function generate(system: string, history: Msg[], kind: 'dialog' | 'map'): Promise<string> {
   const claudeMs = kind === 'map' ? 12000 : 10000; // worst: map 2×12=24с, dialog 2×10+NIM6=26с (<28с)
+  // Диалоговый ход — короткий JSON (≤2 предложения + варианты): 500 токенов с запасом.
+  // Карта длиннее — оставляем 1500.
+  const claudeMaxTokens = kind === 'map' ? 1500 : 500;
 
   const aKey = getAnthropicKey();
   if (aKey) {
     const model = kind === 'map' ? CLAUDE_MAP_MODEL : CLAUDE_DIALOG_MODEL;
     for (let attempt = 0; attempt < 2; attempt++) {
-      const out = await callClaude(aKey, model, system, history, claudeMs);
+      const out = await callClaude(aKey, model, system, history, claudeMs, claudeMaxTokens);
       if (out) return out;
     }
     if (kind === 'map') return ''; // карта: NIM-резерв пропускаем (см. выше) → выше отдадим шаблон

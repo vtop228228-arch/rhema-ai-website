@@ -53,6 +53,7 @@ export default function DiagnosticAgent() {
 
   const [lead, setLead] = useState({ name: '', contact: '' });
   const [leadErr, setLeadErr] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     const el = chatRef.current;
@@ -163,17 +164,26 @@ export default function DiagnosticAgent() {
   }
 
   async function submitLead() {
+    if (submitting) return;
     const parsed = leadSchema.safeParse(lead);
     if (!parsed.success) { setLeadErr(parsed.error.issues[0]?.message ?? 'Проверьте данные'); return; }
     setLeadErr('');
+    setSubmitting(true);
     const transcript = msgs.filter(m => m.role === 'user').map(m => m.text).join(' | ');
-    await fetch('/api/diagnose/lead', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sessionId: sessionId.current, ...parsed.data, sphere, pain: transcript, mapText }),
-    });
-    ymGoal('agent_lead');
-    setChatState('done');
+    try {
+      const res = await fetch('/api/diagnose/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId: sessionId.current, ...parsed.data, sphere, pain: transcript, mapText }),
+      });
+      if (!res.ok) throw new Error(`lead submit failed: ${res.status}`);
+      ymGoal('agent_lead');
+      setChatState('done');
+    } catch {
+      setLeadErr('Не удалось отправить заявку. Проверьте соединение и нажмите кнопку ещё раз.');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const showInput = chatState === 'active' || chatState === 'thinking';
@@ -316,8 +326,12 @@ export default function DiagnosticAgent() {
                     <div style={{ width: 3, height: 3, background: 'var(--red)', flexShrink: 0 }} />{leadErr}
                   </div>
                 )}
-                <button onClick={submitLead} style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '11px 16px', fontFamily: bebas, fontSize: 17, letterSpacing: 1, width: '100%', cursor: 'pointer' }}>
-                  ПОЛУЧИТЬ ДИАГНОСТИКУ →
+                <button
+                  onClick={submitLead}
+                  disabled={submitting}
+                  style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '11px 16px', fontFamily: bebas, fontSize: 17, letterSpacing: 1, width: '100%', cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.5 : 1 }}
+                >
+                  {submitting ? 'ОТПРАВЛЯЕМ…' : 'ПОЛУЧИТЬ ДИАГНОСТИКУ →'}
                 </button>
               </div>
             )}

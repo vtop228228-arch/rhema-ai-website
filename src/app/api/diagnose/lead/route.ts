@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
 import { sendLeadToCRM } from '@/lib/crm';
+import { escapeHtml } from '@/lib/escape-html';
 
 export const runtime = 'nodejs';
 
@@ -27,13 +28,13 @@ async function sendTelegram(lead: Lead): Promise<void> {
 
   const text = `🤖 <b>Лид с AI-диагностики</b>
 
-<b>Имя:</b> ${lead.name}
-<b>Контакт:</b> ${lead.contact}
-<b>Сфера:</b> ${lead.sphere}
-<b>Боль:</b> ${lead.pain}
+<b>Имя:</b> ${escapeHtml(lead.name)}
+<b>Контакт:</b> ${escapeHtml(lead.contact)}
+<b>Сфера:</b> ${escapeHtml(lead.sphere)}
+<b>Боль:</b> ${escapeHtml(lead.pain)}
 
 <b>Карта потерь:</b>
-${lead.mapText.slice(0, 1500)}`;
+${escapeHtml(lead.mapText.slice(0, 1500))}`;
 
   // Шлём каждому получателю; сбой одного не должен ронять остальных.
   const results = await Promise.allSettled(
@@ -66,7 +67,7 @@ async function saveToSupabase(lead: Lead): Promise<void> {
     Prefer: 'resolution=merge-duplicates',
   };
 
-  await fetch(`${url}/rest/v1/diagnostic_sessions`, {
+  const sessionRes = await fetch(`${url}/rest/v1/diagnostic_sessions`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -76,8 +77,12 @@ async function saveToSupabase(lead: Lead): Promise<void> {
       result_map: lead.mapText,
     }),
   });
+  if (!sessionRes.ok) {
+    const detail = await sessionRes.text().catch(() => '');
+    throw new Error(`Supabase diagnostic_sessions: ${sessionRes.status} ${detail.slice(0, 200)}`);
+  }
 
-  await fetch(`${url}/rest/v1/diagnostic_leads`, {
+  const leadRes = await fetch(`${url}/rest/v1/diagnostic_leads`, {
     method: 'POST',
     headers,
     body: JSON.stringify({
@@ -86,6 +91,10 @@ async function saveToSupabase(lead: Lead): Promise<void> {
       contact: lead.contact,
     }),
   });
+  if (!leadRes.ok) {
+    const detail = await leadRes.text().catch(() => '');
+    throw new Error(`Supabase diagnostic_leads: ${leadRes.status} ${detail.slice(0, 200)}`);
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -100,23 +109,42 @@ export async function POST(req: NextRequest) {
 
     const lead = leadSchema.parse(await req.json());
 
-    // Telegram — основной сток лида. Supabase + JARVIS CRM — опциональные дубли.
-    await sendTelegram(lead);
-    try {
-      await saveToSupabase(lead);
-    } catch (e) {
-      console.error('[lead] supabase save failed', e);
-    }
-    // Дубль в JARVIS CRM (jarvis.leads) через lead-intake. Сбой не валит заявку.
-    const crm = await sendLeadToCRM({
-      name: lead.name,
-      contact: lead.contact,
-      niche: lead.sphere || undefined,
-      notes: [lead.pain, lead.mapText].filter(Boolean).join('\n\n') || undefined,
-      source: 'diagnostic-agent',
+    // Три независимых стока лида: Telegram, Supabase, JARVIS CRM.
+    // Сбой одного не должен ронять остальные — выполняем все и смотрим итог.
+    const sinks: { name: string; run: () => Promise<void> }[] = [
+      { name: 'telegram', run: () => sendTelegram(lead) },
+      { name: 'supabase', run: () => saveToSupabase(lead) },
+      {
+        name: 'crm',
+        run: async () => {
+          const crm = await sendLeadToCRM({
+            name: lead.name,
+            contact: lead.contact,
+            niche: lead.sphere || undefined,
+            notes: [lead.pain, lead.mapText].filter(Boolean).join('\n\n') || undefined,
+            source: 'diagnostic-agent',
+          });
+          if (!crm.ok && !crm.skipped) throw new Error(crm.error ?? 'CRM save failed');
+        },
+      },
+    ];
+
+    const results = await Promise.allSettled(sinks.map(s => s.run()));
+
+    // Логируем упавшие стоки без персональных данных лида: имя стока + sessionId + сообщение.
+    results.forEach((r, i) => {
+      if (r.status === 'rejected') {
+        const msg = r.reason instanceof Error ? r.reason.message : String(r.reason);
+        console.error(`[lead] sink=${sinks[i].name} session=${lead.sessionId} failed:`, msg);
+      }
     });
-    if (!crm.ok && !crm.skipped) {
-      console.error('[lead] CRM save failed:', crm.error);
+
+    // 200 — если лид доехал хотя бы до одного стока; 500 — только если упали все три.
+    if (results.every(r => r.status === 'rejected')) {
+      return NextResponse.json(
+        { error: { code: 'INTERNAL_ERROR', message: 'Не удалось отправить заявку' } },
+        { status: 500 },
+      );
     }
 
     return NextResponse.json({ data: { ok: true } });
