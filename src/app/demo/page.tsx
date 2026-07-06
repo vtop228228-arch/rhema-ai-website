@@ -1,3 +1,10 @@
+import type { Metadata } from 'next';
+
+// Витрина мок-вариантов — не индексируется поисковиками.
+export const metadata: Metadata = {
+  robots: { index: false, follow: false },
+};
+
 const bebas = 'var(--font-bebas), Bebas Neue, sans-serif';
 
 /* ─────────────────────────────────────────────────────────────────

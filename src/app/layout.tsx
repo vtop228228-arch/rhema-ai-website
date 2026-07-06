@@ -7,6 +7,7 @@ import ShaderBackground from '@/components/ui/ShaderBackground';
 import MobileBackground from '@/components/ui/MobileBackground';
 import CookieConsent from '@/components/ui/CookieConsent';
 import Analytics from '@/components/analytics/Analytics';
+import { SITE_URL, SITE_NAME, SITE_TITLE, SITE_DESCRIPTION } from '@/lib/site';
 
 const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
@@ -23,9 +24,27 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Rhema AI — AI-системы под ключ для бизнеса',
-  description: 'Находим скрытые потери в вашем бизнесе за 3 дня. AI-агенты, платформы, автоматизация. Гарантия результата.',
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   keywords: 'AI автоматизация, AI агент, диагностика бизнеса, Telegram бот',
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    type: 'website',
+    locale: 'ru_RU',
+    // Картинку 1200×630 подставляет файл-конвенция app/opengraph-image.tsx —
+    // Next автоматически добавляет og:image (и twitter:image как фолбэк).
+    // Явный список images здесь дал бы дубли og:image-тегов, поэтому не указываем.
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
