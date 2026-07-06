@@ -12,10 +12,41 @@ const leadSchema = z.object({
   contact: z.string().min(3).max(255),
   sphere: z.string().max(200).default(''),
   pain: z.string().max(1000).default(''),
+  dialog: z.string().max(8000).default(''),   // полный диалог диагностики (вопрос агента → ответ клиента)
   mapText: z.string().max(4000).default(''),
 });
 
 type Lead = z.infer<typeof leadSchema>;
+
+// Одно сообщение в Telegram одному получателю. html=false — plain (для диалога клиента: безопасно
+// при разбиении на части и не ломается на спецсимволах пользователя).
+async function tgSend(botToken: string, chatId: string, text: string, html = true): Promise<void> {
+  const res = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text,
+      ...(html ? { parse_mode: 'HTML' } : {}),
+      disable_web_page_preview: true,
+    }),
+  });
+  if (!res.ok) throw new Error(`Telegram API error (${chatId}): ${res.status}`);
+}
+
+// Разбить длинный текст на части ≤max (лимит Telegram — 4096); режем по границам строк.
+function chunkText(s: string, max = 3800): string[] {
+  const out: string[] = [];
+  let rest = s;
+  while (rest.length > max) {
+    let cut = rest.lastIndexOf('\n', max);
+    if (cut < max * 0.5) cut = max; // нет удобной границы — режем жёстко
+    out.push(rest.slice(0, cut));
+    rest = rest.slice(cut).replace(/^\n+/, '');
+  }
+  if (rest) out.push(rest);
+  return out;
+}
 
 async function sendTelegram(lead: Lead): Promise<void> {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -26,31 +57,30 @@ async function sendTelegram(lead: Lead): Promise<void> {
     .filter(Boolean);
   if (!botToken || chatIds.length === 0) return;
 
-  const text = `🤖 <b>Лид с AI-диагностики</b>
+  const head = `🤖 <b>Лид с AI-диагностики</b>
 
 <b>Имя:</b> ${escapeHtml(lead.name)}
 <b>Контакт:</b> ${escapeHtml(lead.contact)}
 <b>Сфера:</b> ${escapeHtml(lead.sphere)}
-<b>Боль:</b> ${escapeHtml(lead.pain)}
 
 <b>Карта потерь:</b>
 ${escapeHtml(lead.mapText.slice(0, 1500))}`;
 
-  // Шлём каждому получателю; сбой одного не должен ронять остальных.
-  const results = await Promise.allSettled(
-    chatIds.map(chatId =>
-      fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: chatId, text, parse_mode: 'HTML' }),
-      }).then(res => {
-        if (!res.ok) throw new Error(`Telegram API error (${chatId}): ${res.status}`);
-      }),
-    ),
-  );
-  // Если ни одному не доставили — пробрасываем ошибку наверх.
+  // 1) Основное уведомление (определяет успех доставки лида).
+  const results = await Promise.allSettled(chatIds.map(id => tgSend(botToken, id, head)));
   if (results.every(r => r.status === 'rejected')) {
     throw new Error('Telegram: не доставлено ни одному получателю');
+  }
+
+  // 2) Полный диалог диагностики — отдельными сообщениями (plain, с разбивкой по лимиту).
+  //    Best-effort: основное уже доставлено, сбой диалога не должен ронять сток.
+  if (lead.dialog.trim()) {
+    const chunks = chunkText(`━━ ПОЛНЫЙ ДИАЛОГ ДИАГНОСТИКИ ━━\n\n${lead.dialog}`);
+    for (const chatId of chatIds) {
+      for (const c of chunks) {
+        await tgSend(botToken, chatId, c, false).catch(() => {});
+      }
+    }
   }
 }
 
@@ -73,7 +103,8 @@ async function saveToSupabase(lead: Lead): Promise<void> {
     body: JSON.stringify({
       session_id: lead.sessionId,
       sphere: lead.sphere,
-      pain: lead.pain,
+      // Сохраняем полный диалог (если есть) — вся картина ответов клиента; иначе краткую сводку.
+      pain: lead.dialog.trim() || lead.pain,
       result_map: lead.mapText,
     }),
   });
@@ -121,7 +152,8 @@ export async function POST(req: NextRequest) {
             name: lead.name,
             contact: lead.contact,
             niche: lead.sphere || undefined,
-            notes: [lead.pain, lead.mapText].filter(Boolean).join('\n\n') || undefined,
+            // Полный диалог диагностики + карта потерь — вся картина в карточке лида CRM.
+            notes: [lead.dialog.trim() || lead.pain, lead.mapText].filter(Boolean).join('\n\n') || undefined,
             source: 'diagnostic-agent',
           });
           if (!crm.ok && !crm.skipped) throw new Error(crm.error ?? 'CRM save failed');

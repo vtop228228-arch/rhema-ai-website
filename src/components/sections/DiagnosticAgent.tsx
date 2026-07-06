@@ -169,12 +169,15 @@ export default function DiagnosticAgent() {
     if (!parsed.success) { setLeadErr(parsed.error.issues[0]?.message ?? 'Проверьте данные'); return; }
     setLeadErr('');
     setSubmitting(true);
-    const transcript = msgs.filter(m => m.role === 'user').map(m => m.text).join(' | ');
+    // Краткая сводка ответов (для полей «боль»/CRM) и полный читаемый диалог
+    // (вопрос агента → ответ клиента) — чтобы команда видела всю картину, а не голые ответы.
+    const answers = msgs.filter(m => m.role === 'user').map(m => m.text).join(' | ');
+    const dialog = msgs.map(m => `${m.role === 'ai' ? '❓ Агент' : '💬 Клиент'}: ${m.text}`).join('\n\n');
     try {
       const res = await fetch('/api/diagnose/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId: sessionId.current, ...parsed.data, sphere, pain: transcript, mapText }),
+        body: JSON.stringify({ sessionId: sessionId.current, ...parsed.data, sphere, pain: answers, dialog, mapText }),
       });
       if (!res.ok) throw new Error(`lead submit failed: ${res.status}`);
       ymGoal('agent_lead');
