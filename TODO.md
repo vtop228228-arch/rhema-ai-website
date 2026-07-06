@@ -1,31 +1,28 @@
 # Rhema AI — что нужно сделать
 
-## 🔴🔴 СРОЧНО — настроить Vercel (только у Влада есть доступ)
+## 🔴🔴 СРОЧНО — ротировать NVIDIA-ключ
 
-Сайт задеплоен, но **AI-агент диагностики не работает** (ошибка «временно недоступен»),
-потому что на проекте `rhema-ai-agency` в Vercel не заданы переменные окружения.
+В этом файле раньше лежал живой `NVIDIA_API_KEY` — он попал в git-историю
+и считается **скомпрометированным навсегда**.
 
 ### Что сделать (5 минут):
 
-1. Зайти на **vercel.com** → проект **`rhema-ai-agency`**
-2. **Settings → Environment Variables**
-3. Добавить 3 переменные (Environment: **Production**):
+1. Зайти в кабинет NVIDIA (build.nvidia.com) → отозвать старый ключ `nvapi-…`
+2. Сгенерировать новый ключ
+3. Vercel → проект `rhema-ai-agency` → **Settings → Environment Variables** →
+   обновить `NVIDIA_API_KEY` (Production) → **Redeploy**
 
-| Name | Value |
+> Ключи и секреты — ТОЛЬКО в Vercel env / `.env.local`. Никогда не вставлять в файлы репозитория.
+
+### Актуальные переменные окружения (для справки, значения — не сюда)
+
+| Name | Зачем |
 |------|-------|
-| `NVIDIA_API_KEY` | `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` |
-| `TELEGRAM_BOT_TOKEN` | *(токен бота — взять у @BotFather)* |
-| `TELEGRAM_CHAT_ID` | *(ID чата — узнать через @userinfobot, можно несколько через запятую)* |
-
-4. Сохранить → вкладка **Deployments** → у последнего деплоя нажать **⋯ → Redeploy**
-
-**После этого заработает:**
-- ✅ AI-агент диагностики на главной
-- ✅ Заявки из формы → уведомления в Telegram
-- ✅ Лиды из AI-агента → уведомления в Telegram
-
-> ⚠️ Важно: вставлять `NVIDIA_API_KEY` именно копированием значения из таблицы.
-> Не добавлять пробелов и переносов строк в начале/конце.
+| `ANTHROPIC_API_KEY` | основной провайдер AI-агента (Claude) — уже настроен |
+| `NVIDIA_API_KEY` | fallback-провайдер (NIM) — после ротации |
+| `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | уведомления о заявках |
+| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | сохранение лидов диагностики |
+| `LEAD_INTAKE_URL`, `LEAD_INTAKE_SECRET` | дублирование лидов в CRM (JARVIS) |
 
 ---
 
