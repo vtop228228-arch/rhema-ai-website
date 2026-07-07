@@ -32,7 +32,7 @@ export default function HeroMain() {
         {/* Eyebrow */}
         <div className="eyebrow" style={{ position: 'relative', zIndex: 1, animation: 'fadeUp 0.5s ease 0.05s both' }}>
           <div className="bar" />
-          <span className="text">AI-агентство · автоматизация под ключ</span>
+          <span className="text">AI-агенты для малого и среднего бизнеса</span>
         </div>
 
         {/* H1 */}

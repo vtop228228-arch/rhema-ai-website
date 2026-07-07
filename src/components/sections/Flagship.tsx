@@ -28,10 +28,10 @@ export default function Flagship() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             <SectionLabel>Флагман проект</SectionLabel>
             <h2 className="font-bebas text-ink" style={{ fontSize: 'clamp(36px, 5vw, 60px)', letterSpacing: '0.03em', margin: 0 }}>
-              Академия Черепахина
+              SigmaUp
             </h2>
             <p style={{ fontSize: 16, color: 'var(--sub2)', margin: 0, lineHeight: 1.6 }}>
-              Полноценная образовательная SaaS-платформа с AI-куратором, геймификацией и Telegram-экосистемой.<br />
+              Образовательная SaaS-платформа Академии Черепахина: AI-куратор, геймификация, Telegram-экосистема.<br />
               Мы не просто рассказываем — мы показываем.
             </p>
           </div>
@@ -47,6 +47,9 @@ export default function Flagship() {
               </div>
             ))}
           </div>
+          <p style={{ fontSize: 11, color: 'var(--sub)', margin: '-32px 0 0', fontStyle: 'italic' }}>
+            * платформа в активной работе — цифры уточняются по мере роста
+          </p>
 
           {/* Фичи — pill tags */}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>

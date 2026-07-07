@@ -6,7 +6,7 @@ const PROOFS = [
   {
     num: '150+',
     label: 'учеников на платформе',
-    sub: 'Академия Черепахина — образовательная платформа с AI-куратором, которую мы построили под ключ.',
+    sub: 'SigmaUp — платформа Академии Черепахина с AI-куратором, которую мы построили под ключ.',
   },
   {
     num: '2×',
@@ -55,7 +55,7 @@ export default function ResultsPreview() {
         ))}
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 28 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 28, flexWrap: 'wrap' }}>
         <a
           href="/how-we-work#cases"
           style={{ fontFamily: bebas, fontSize: 14, letterSpacing: '1.5px', color: 'var(--accent)', textDecoration: 'none', borderBottom: '1px solid rgba(37,99,235,0.4)', paddingBottom: 2 }}
@@ -63,6 +63,7 @@ export default function ResultsPreview() {
           СМОТРЕТЬ ВСЕ КЕЙСЫ →
         </a>
         <span style={{ fontSize: 12, color: '#505050' }}>4 проекта с описанием</span>
+        <span style={{ fontSize: 11, color: '#3a3a3a', fontStyle: 'italic' }}>* платформа в активной работе — цифры уточняются по мере роста</span>
       </div>
 
       {/* Bridge CTA: увидел результаты → следующий шаг */}
