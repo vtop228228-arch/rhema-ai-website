@@ -77,7 +77,7 @@ export default function Flagship() {
             <div>
               <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 8px' }}>Фронтенд</p>
               <p style={{ fontSize: 13, color: 'var(--sub2)', margin: 0, lineHeight: 1.8 }}>
-                Next.js 16 App Router<br />TypeScript strict<br />Tailwind v4
+                Next.js App Router<br />TypeScript strict<br />Tailwind v4
               </p>
             </div>
             <div>

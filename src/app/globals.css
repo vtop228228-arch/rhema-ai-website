@@ -17,7 +17,7 @@
   --line:    #1E1E22;
   --line2:   #26262B;
 
-  /* Blue — CTA buttons and key numbers (TEST: was orange #FF6A00) */
+  /* Blue — CTA buttons and key numbers (ранее был оранжевый акцент) */
   --accent:     #2563EB;
   --accent2:    #3B82F6;
   --accent-dim: rgba(37,99,235,0.08);

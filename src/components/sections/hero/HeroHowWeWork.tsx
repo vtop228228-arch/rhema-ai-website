@@ -20,12 +20,12 @@ export default function HeroHowWeWork() {
         <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.15s both' }}>ДИАГНОСТИКА.</span>
         <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.22s both' }}>РЕШЕНИЕ.</span>
         <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>РЕЗУЛЬТАТ.</span>
-        <span className="hero-sub-line" style={{ display: 'block', color: '#666', fontSize: '0.42em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.38s both' }}>ПРОЗРАЧНО · В СРОК · С ИЗМЕРИМЫМ ROI</span>
+        <span className="hero-sub-line" style={{ display: 'block', color: '#666', fontSize: '0.42em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.38s both' }}>ПРОЗРАЧНО · В СРОК · С ПОНЯТНЫМИ ЦИФРАМИ</span>
       </h1>
 
       <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 540, lineHeight: 1.82, marginBottom: 36, animation: 'fadeUp 0.6s ease 0.45s both' }}>
         Находим, где теряются деньги → строим AI-систему → запускаем за 3–6 недель.
-        Платите за результат, а не за процесс. Бесплатная диагностика за 2 минуты — прямо сейчас.
+        Стоимость фиксируем до старта — и она не растёт по ходу работ. Бесплатная диагностика за 2 минуты — прямо сейчас.
       </p>
 
       {/* Meta strip */}

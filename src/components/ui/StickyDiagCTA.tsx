@@ -23,7 +23,7 @@ export default function StickyDiagCTA() {
             right: 0;
             z-index: 200;
             background: linear-gradient(180deg, var(--accent2), var(--accent));
-            color: #090909;
+            color: #ffffff;
             font-family: var(--font-dm), 'DM Sans', sans-serif;
             font-size: 14px;
             font-weight: 700;
@@ -31,7 +31,7 @@ export default function StickyDiagCTA() {
             text-transform: uppercase;
             text-decoration: none;
             padding: 15px 22px;
-            box-shadow: 0 -4px 24px rgba(255,106,0,0.35);
+            box-shadow: 0 -4px 24px rgba(37,99,235,0.35);
           }
         }
       `}</style>

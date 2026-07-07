@@ -11,7 +11,7 @@ export const contentType = 'image/png';
 
 // Палитра берётся из src/app/globals.css (актуальный «Industrial»-вариант).
 // Сейчас на сайте активен синий акцент (#2563EB); в globals.css это помечено как
-// TEST-замена оранжевого #FF6A00. Если бренд вернётся к оранжевому — поменяй ACCENT здесь.
+// Синий акцент бренда. Если акцент поменяется — поменяй ACCENT здесь.
 const BG = '#0A0A0B';
 const ACCENT = '#2563EB';
 const INK = '#FFFFFF';

@@ -34,22 +34,6 @@ const PLANS = [
     popular: true,
     cta: 'Заказать диагностику',
   },
-  {
-    name: 'ENTERPRISE',
-    subtitle: 'Для сложных/крупных проектов',
-    price: 'от 60 000 ₽',
-    term: '5 - 7 дней',
-    features: [
-      'Всё из Полной',
-      'Анализ команды и процессов',
-      'Финансовое моделирование',
-      'Несколько сценариев развития',
-      'Презентация для совета директоров',
-      '2 недели поддержки после',
-    ],
-    popular: false,
-    cta: 'Заказать диагностику',
-  },
 ];
 
 const AFTER = [
@@ -67,7 +51,7 @@ export default function DiagnosticPricing() {
           <SectionLabel>Состав диагностик</SectionLabel>
 
           {/* 3 карточки */}
-          <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+          <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
             {PLANS.map((plan, i) => (
               <div key={i} style={{
                 background: plan.popular ? 'var(--card)' : 'var(--bg)',

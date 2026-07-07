@@ -273,7 +273,7 @@ export default function DiagnosticAgent() {
                       textAlign: 'left',
                       transition: 'border-color 0.15s, color 0.15s, background 0.15s',
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.background = 'rgba(255,106,0,0.08)'; }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.background = 'rgba(37,99,235,0.08)'; }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = '#242424'; e.currentTarget.style.color = '#aaa'; e.currentTarget.style.background = 'rgba(14,14,14,0.9)'; }}
                   >
                     {opt}
@@ -313,14 +313,14 @@ export default function DiagnosticAgent() {
                 <input
                   className="input-base" placeholder="Ваше имя" value={lead.name}
                   onChange={e => setLead(p => ({ ...p, name: e.target.value }))}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,106,0,0.55)'; }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.55)'; }}
                   onBlur={e => { e.currentTarget.style.borderColor = '#1E1E1E'; }}
                   style={{ borderColor: '#1E1E1E' }}
                 />
                 <input
                   className="input-base" placeholder="Telegram (@username) или телефон" value={lead.contact}
                   onChange={e => setLead(p => ({ ...p, contact: e.target.value }))}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,106,0,0.55)'; }}
+                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.55)'; }}
                   onBlur={e => { e.currentTarget.style.borderColor = '#1E1E1E'; }}
                   style={{ borderColor: '#1E1E1E' }}
                 />
@@ -341,9 +341,9 @@ export default function DiagnosticAgent() {
 
             {/* Done */}
             {chatState === 'done' && (
-              <div style={{ background: 'rgba(255,106,0,0.05)', border: '1px solid rgba(255,106,0,0.13)', padding: '26px 18px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, textAlign: 'center', animation: 'fadeUp 0.35s ease' }}>
-                <div style={{ width: 36, height: 36, background: 'rgba(255,106,0,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#FF6A00" strokeWidth="2.5" strokeLinecap="square" /></svg>
+              <div style={{ background: 'rgba(37,99,235,0.05)', border: '1px solid rgba(37,99,235,0.13)', padding: '26px 18px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, textAlign: 'center', animation: 'fadeUp 0.35s ease' }}>
+                <div style={{ width: 36, height: 36, background: 'rgba(37,99,235,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="square" /></svg>
                 </div>
                 <div style={{ fontFamily: bebas, fontSize: 22, letterSpacing: 1, color: 'var(--accent)' }}>ЗАЯВКА ПРИНЯТА</div>
                 <div style={{ fontSize: 13, color: '#999', lineHeight: 1.65, maxWidth: 240 }}>Напишем в Telegram в течение 2 часов. Спасибо!</div>
@@ -366,7 +366,7 @@ export default function DiagnosticAgent() {
                 }}
                 onKeyDown={handleKey}
                 disabled={chatState === 'thinking'}
-                onFocus={e => { e.currentTarget.style.borderColor = 'rgba(255,106,0,0.55)'; }}
+                onFocus={e => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.55)'; }}
                 onBlur={e => { e.currentTarget.style.borderColor = '#1C1C1C'; }}
                 style={{ flex: 1, background: 'rgba(19,19,19,0.88)', border: '1px solid #1C1C1C', color: 'var(--ink)', padding: '8px 12px', fontSize: 16, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', transition: 'border-color 0.18s', resize: 'none', overflow: 'hidden', lineHeight: '1.55', minHeight: 36, maxHeight: 120, opacity: chatState === 'thinking' ? 0.5 : 1 }}
               />

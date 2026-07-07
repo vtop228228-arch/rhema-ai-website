@@ -50,7 +50,7 @@ export default function ContactForm() {
     }
   }
 
-  const focusOrange = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { e.currentTarget.style.borderColor = 'rgba(255,106,0,0.55)'; };
+  const focusAccent = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.55)'; };
   const blurInput = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => { e.currentTarget.style.borderColor = '#1C1C1C'; };
   const inputStyle: React.CSSProperties = { background: 'rgba(19,19,19,0.88)', border: '1px solid #1C1C1C', color: 'var(--ink)', padding: '11px 14px', fontSize: 14, fontFamily: 'var(--font-inter), Inter, sans-serif', width: '100%', outline: 'none', transition: 'border-color 0.18s' };
 
@@ -62,14 +62,14 @@ export default function ContactForm() {
           <span className="text">Первый шаг</span>
         </div>
         <h2 style={{ fontFamily: bebas, fontSize: 'clamp(28px, 7.5vw, 62px)', lineHeight: 0.9, letterSpacing: '-0.5px' }}>
-          <span style={{ display: 'block', color: 'var(--ink)' }}>Получите расчёт</span>
-          <span style={{ display: 'block', color: 'var(--accent)' }}>окупаемости</span>
+          <span style={{ display: 'block', color: 'var(--ink)' }}>Не хотите диалог?</span>
+          <span style={{ display: 'block', color: 'var(--accent)' }}>Оставьте контакт</span>
         </h2>
         <p style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.8, maxWidth: 340 }}>
-          Расскажите о бизнесе — посчитаем, где теряются деньги, что автоматизировать первым и какой ROI ожидать. Конкретные цифры под вашу ситуацию.
+          Проведём диагностику лично и пришлём результат в течение 2 часов.
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 9, marginTop: 10, paddingTop: 18, borderTop: '1px solid var(--line)' }}>
-          {['Отвечаем в течение 2 часов', 'Расчёт ROI — бесплатно и без обязательств'].map((t, i) => (
+          {['Отвечаем в течение 2 часов', 'Диагностика — бесплатно и без обязательств'].map((t, i) => (
             <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'center' }}>
               <div style={{ width: 3, height: 3, background: 'var(--accent)', flexShrink: 0 }} />
               <span style={{ fontSize: 13, color: '#888' }}>{t}</span>
@@ -86,9 +86,9 @@ export default function ContactForm() {
           </div>
         ) : (
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <input type="text" placeholder="Ваше имя" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} onFocus={focusOrange} onBlur={blurInput} style={inputStyle} />
-            <input type="text" placeholder="Telegram (@username) или телефон" value={form.contact} onChange={e => setForm(p => ({ ...p, contact: e.target.value }))} onFocus={focusOrange} onBlur={blurInput} style={inputStyle} />
-            <textarea placeholder="Расскажите о вашем бизнесе..." rows={4} value={form.business} onChange={e => setForm(p => ({ ...p, business: e.target.value }))} onFocus={focusOrange} onBlur={blurInput} style={{ ...inputStyle, resize: 'none' }} />
+            <input type="text" placeholder="Ваше имя" value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} onFocus={focusAccent} onBlur={blurInput} style={inputStyle} />
+            <input type="text" placeholder="Telegram (@username) или телефон" value={form.contact} onChange={e => setForm(p => ({ ...p, contact: e.target.value }))} onFocus={focusAccent} onBlur={blurInput} style={inputStyle} />
+            <textarea placeholder="Расскажите о вашем бизнесе..." rows={4} value={form.business} onChange={e => setForm(p => ({ ...p, business: e.target.value }))} onFocus={focusAccent} onBlur={blurInput} style={{ ...inputStyle, resize: 'none' }} />
             <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer' }}>
               <input
                 type="checkbox"

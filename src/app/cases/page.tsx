@@ -1,12 +1,11 @@
 import HeroCases from '@/components/sections/hero/HeroCases';
 import Cases from '@/components/sections/Cases';
-import Works from '@/components/sections/Works';
 import ContactForm from '@/components/sections/ContactForm';
 import GradientDivider from '@/components/ui/GradientDivider';
 
 export const metadata = {
   title: 'Кейсы | Rhema AI',
-  description: 'Реальные проекты Rhema AI: JARVIS, ISnail Academy, SigmaUp, LifesystemA.',
+  description: 'Проекты Rhema AI: JARVIS, ISnail Academy, SigmaUp, Besty — с честными цифрами.',
 };
 
 export default function CasesPage() {
@@ -15,8 +14,6 @@ export default function CasesPage() {
       <HeroCases />
       <GradientDivider />
       <Cases />
-      <GradientDivider />
-      <Works />
       <GradientDivider />
       <ContactForm />
     </div>

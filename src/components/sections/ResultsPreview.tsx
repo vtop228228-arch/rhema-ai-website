@@ -1,20 +1,22 @@
+import Link from 'next/link';
+
 const bebas = 'var(--font-bebas), Bebas Neue, sans-serif';
 
 const PROOFS = [
   {
-    num: '3 нед',
-    label: 'до первой выручки',
-    sub: 'Платформа SigmaUp под ключ — там, где у студий уходит 2–4 месяца.',
+    num: '150+',
+    label: 'учеников на платформе',
+    sub: 'Академия Черепахина — образовательная платформа с AI-куратором, которую мы построили под ключ.',
+  },
+  {
+    num: '2×',
+    label: 'рост доходимости курса',
+    sub: 'AI-куратор проверяет задания и ведёт учеников — доходимость курса выросла вдвое.',
   },
   {
     num: '0',
-    label: 'потерянных заявок',
-    sub: 'AI-агент в LifesystemA обрабатывает каждого клиента 24/7 — ни одной упущенной продажи.',
-  },
-  {
-    num: '70%',
-    label: 'экономии на ФОТ',
-    sub: 'Исключаем раздутый штат: AI-агент заменяет рутинную работу менеджеров и экономит сотни тысяч ₽ в месяц.',
+    label: 'потерянных заявок и платежей',
+    sub: 'Онлайн-оплата с автовыдачей доступа и все заявки в одной системе — ничего не теряется.',
   },
 ];
 
@@ -60,7 +62,7 @@ export default function ResultsPreview() {
         >
           СМОТРЕТЬ ВСЕ КЕЙСЫ →
         </a>
-        <span style={{ fontSize: 12, color: '#505050' }}>4 реальных проекта с описанием</span>
+        <span style={{ fontSize: 12, color: '#505050' }}>4 проекта с описанием</span>
       </div>
 
       {/* Bridge CTA: увидел результаты → следующий шаг */}
@@ -81,8 +83,8 @@ export default function ResultsPreview() {
             Диагностика бесплатно — ответим в течение 2 часов
           </div>
         </div>
-        <a
-          href="#diagnose"
+        <Link
+          href="/#diagnose"
           className="results-bridge-btn"
           style={{
             display: 'inline-block',
@@ -99,7 +101,7 @@ export default function ResultsPreview() {
           }}
         >
           ПОЛУЧИТЬ КАРТУ ПОТЕРЬ →
-        </a>
+        </Link>
       </div>
 
       <style>{`

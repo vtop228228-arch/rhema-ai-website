@@ -1,5 +1,4 @@
 import HeroAbout from '@/components/sections/hero/HeroAbout';
-import ComparisonTable from '@/components/sections/ComparisonTable';
 import Flagship from '@/components/sections/Flagship';
 import ContactForm from '@/components/sections/ContactForm';
 import GradientDivider from '@/components/ui/GradientDivider';
@@ -13,8 +12,6 @@ export default function About() {
   return (
     <div>
       <HeroAbout />
-      <GradientDivider />
-      <ComparisonTable />
       <GradientDivider />
       <Flagship />
       <GradientDivider />

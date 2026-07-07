@@ -7,8 +7,8 @@ import SectionLabel from '@/components/ui/SectionLabel';
 // ЗАМЕНИТЬ реальными метриками после завершения внедрений.
 const CASES = [
   {
-    title: 'JARVIS — SaaS аналитики продаж',
-    thought: '«Менеджеры работают — почему продажи не растут? Наверное, нужно ещё людей»',
+    title: 'JARVIS — аналитика продаж (наш внутренний продукт)',
+    thought: '«Менеджеры работают — почему продажи не растут?» — этот вопрос мы задали сами себе: JARVIS — наш внутренний продукт, работаем в нём каждый день',
     diagnosis: [
       'Ни один менеджер не знал свою реальную конверсию',
       'Лиды терялись между WhatsApp, почтой и таблицами',
@@ -22,7 +22,7 @@ const CASES = [
       'Руководитель видит узкие места воронки в реальном времени',
       '−20 часов/мес на ручные отчёты',
     ],
-    roi: 'Ориентир: +3–5x к выручке в первый квартал',
+    roi: 'Наш внутренний продукт — работаем в нём каждый день',
     provisional: true,
   },
   {
@@ -53,7 +53,7 @@ const CASES = [
       'Без своего ЛК — нет данных о студентах и нет воронки аналитики',
       'Каждое изменение в чужом инструменте = снова платить подрядчику',
     ],
-    solution: 'Построили платформу под ключ за 3 недели: курсы, личный кабинет студента, тарифная сетка, аналитика, отзывы, деплой. Стек: Next.js 15 + Supabase + Vercel. Полный контроль кода — без зависимости от вендоров.',
+    solution: 'Построили платформу под ключ за 3 недели: курсы, личный кабинет студента, тарифная сетка, аналитика, отзывы, деплой. Стек: Next.js + Supabase + Vercel. Полный контроль кода — без зависимости от вендоров.',
     results: [
       'Запуск через 3 недели — вместо 3–4 месяцев в агентстве',
       'Стоимость разработки в 3× ниже агентской',
@@ -82,25 +82,6 @@ const CASES = [
     roi: 'Школа из набора чатов превратилась в брендированный продукт',
     provisional: false,
   },
-  {
-    title: 'LifesystemA — AI-коуч в Telegram',
-    thought: '«Знаю что надо делать — питание, тренировки. Но через неделю всё разваливается»',
-    diagnosis: [
-      'Питание, тренировки, расписание существовали отдельно — системы не было',
-      'Мотивация держалась на силе воли: кончилась — всё рухнуло',
-      'Платный личный тренер и диетолог — дорого, не у всех есть возможность',
-      'Обычные приложения с напоминаниями игнорировались через 3 дня',
-    ],
-    solution: '3 AI-агента в Telegram: диетолог, тренер, планировщик — единая система. Знают твой прогресс, адаптируют план под результат, напоминают вовремя и не дают соскочить.',
-    results: [
-      '+3 кг мышечной массы за первый месяц',
-      '0 пропущенных тренировок и запланированных встреч',
-      'Привычки встроены в режим — работают на автопилоте',
-      'Экономия 15–20к ₽/мес по сравнению с живым тренером',
-    ],
-    roi: 'Результат реального клиента за первый месяц',
-    provisional: false,
-  },
 ];
 
 export default function Cases() {
@@ -126,8 +107,8 @@ export default function Cases() {
                     onClick={() => setActive(i)}
                     className={`case-btn${isActive ? ' case-btn-active' : ''}`}
                     style={{
-                      background: isActive ? 'rgba(255,106,0,0.07)' : 'var(--card)',
-                      border: `1px solid ${isActive ? 'rgba(255,106,0,0.45)' : 'var(--line)'}`,
+                      background: isActive ? 'rgba(37,99,235,0.07)' : 'var(--card)',
+                      border: `1px solid ${isActive ? 'rgba(37,99,235,0.45)' : 'var(--line)'}`,
                       borderLeft: `3px solid ${isActive ? 'var(--accent)' : 'transparent'}`,
                       padding: '14px 14px 14px 12px',
                       cursor: 'pointer',
@@ -136,7 +117,7 @@ export default function Cases() {
                       alignItems: 'center',
                       gap: 10,
                       width: '100%',
-                      boxShadow: isActive ? '0 0 18px rgba(255,106,0,0.18), inset 0 0 24px rgba(255,106,0,0.04)' : 'none',
+                      boxShadow: isActive ? '0 0 18px rgba(37,99,235,0.18), inset 0 0 24px rgba(37,99,235,0.04)' : 'none',
                       transition: 'all 0.22s',
                       minHeight: 52,
                     }}
@@ -195,20 +176,20 @@ export default function Cases() {
 
                 {/* Блок 2: Диагностика — оранжевый акцент (это ОТКРОВЕНИЕ, поворотный момент) */}
                 <div style={{
-                  background: 'rgba(255,106,0,0.03)',
-                  border: '1px solid rgba(255,106,0,0.14)',
-                  borderLeft: '3px solid rgba(255,106,0,0.45)',
+                  background: 'rgba(37,99,235,0.03)',
+                  border: '1px solid rgba(37,99,235,0.14)',
+                  borderLeft: '3px solid rgba(37,99,235,0.45)',
                   padding: '20px 20px 20px 18px',
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                    <div style={{ width: 5, height: 5, background: 'rgba(255,106,0,0.55)', flexShrink: 0 }} />
-                    <span style={{ fontSize: 10, color: 'rgba(255,106,0,0.65)', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700 }}>
+                    <div style={{ width: 5, height: 5, background: 'rgba(37,99,235,0.55)', flexShrink: 0 }} />
+                    <span style={{ fontSize: 10, color: 'rgba(37,99,235,0.65)', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700 }}>
                       Что показала диагностика
                     </span>
                   </div>
                   {c.diagnosis.map((d, i) => (
                     <div key={i} style={{ display: 'flex', gap: 8, marginBottom: 7 }}>
-                      <span style={{ color: 'rgba(255,106,0,0.4)', fontSize: 12, flexShrink: 0, marginTop: 2 }}>→</span>
+                      <span style={{ color: 'rgba(37,99,235,0.4)', fontSize: 12, flexShrink: 0, marginTop: 2 }}>→</span>
                       <span style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.55 }}>{d}</span>
                     </div>
                   ))}
@@ -236,15 +217,15 @@ export default function Cases() {
 
                 {/* Блок 4: Результат — ГЛАВНЫЙ БЛОК, максимальный акцент */}
                 <div style={{
-                  background: 'rgba(255,106,0,0.07)',
-                  border: '1px solid rgba(255,106,0,0.3)',
+                  background: 'rgba(37,99,235,0.07)',
+                  border: '1px solid rgba(37,99,235,0.3)',
                   borderTop: '3px solid var(--accent)',
                   padding: 20,
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
                     <div style={{ width: 7, height: 7, background: 'var(--accent)', flexShrink: 0 }} />
                     <span style={{ fontSize: 10, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.12em', fontWeight: 700 }}>
-                      Результат через месяц
+                      {c.provisional ? 'Ожидаемый эффект*' : 'Результат'}
                     </span>
                   </div>
                   {c.results.map((r, i) => (
@@ -253,7 +234,7 @@ export default function Cases() {
                       <span style={{ fontSize: 13, color: 'var(--ink)', lineHeight: 1.55 }}>{r}</span>
                     </div>
                   ))}
-                  <div style={{ borderTop: '1px solid rgba(255,106,0,0.2)', marginTop: 14, paddingTop: 14 }}>
+                  <div style={{ borderTop: '1px solid rgba(37,99,235,0.2)', marginTop: 14, paddingTop: 14 }}>
                     <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', margin: 0, lineHeight: 1.3 }}>{c.roi}</p>
                     {c.provisional && (
                       <p style={{ fontSize: 11, color: '#353535', margin: '5px 0 0' }}>* ориентир — уточняется после завершения внедрения</p>
@@ -267,8 +248,8 @@ export default function Cases() {
 
           <style>{`
             .case-btn:hover:not(.case-btn-active) {
-              background: rgba(255,106,0,0.03) !important;
-              border-color: rgba(255,106,0,0.2) !important;
+              background: rgba(37,99,235,0.03) !important;
+              border-color: rgba(37,99,235,0.2) !important;
             }
             .case-btn:hover:not(.case-btn-active) span:last-child {
               color: #555 !important;
@@ -278,7 +259,7 @@ export default function Cases() {
               .cases-sidebar { flex-direction: row !important; overflow-x: auto; gap: 6px !important; padding-bottom: 4px; }
               .cases-sidebar::-webkit-scrollbar { height: 2px; }
               .cases-sidebar::-webkit-scrollbar-track { background: var(--bg); }
-              .cases-sidebar::-webkit-scrollbar-thumb { background: rgba(255,106,0,0.3); }
+              .cases-sidebar::-webkit-scrollbar-thumb { background: rgba(37,99,235,0.3); }
               .case-btn { min-width: 130px !important; white-space: normal !important; flex-shrink: 0 !important; flex-direction: column !important; align-items: flex-start !important; padding: 10px 12px !important; min-height: 60px !important; }
               .case-btn span:last-child { display: none !important; }
               .cases-inner-grid { grid-template-columns: 1fr !important; }

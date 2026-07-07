@@ -41,10 +41,6 @@ export default function ServicesSimple() {
         <div className="rule" />
       </div>
 
-      <p style={{ fontSize: 14, color: 'var(--ink2)', lineHeight: 1.7, maxWidth: 560, marginBottom: 24, borderLeft: '2px solid var(--accent)', paddingLeft: 14 }}>
-        AI-модель — это процессор. Ценность — в среде вокруг неё: задокументированные процессы, данные клиентов, память агентов. Именно это мы строим — не шаблонный бот, а систему, которую не скопировать.
-      </p>
-
       <div className="svc-simple-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2 }}>
         {SERVICES.map((s) => (
           <div
