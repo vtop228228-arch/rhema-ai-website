@@ -3,21 +3,6 @@ import Button from '@/components/ui/Button';
 
 const PLANS = [
   {
-    name: 'Экспресс',
-    subtitle: 'Для быстрой оценки ситуации',
-    price: 'БЕСПЛАТНО',
-    term: '1 - 2 дня',
-    features: [
-      'Анализ по вашим материалам',
-      '1 созвон (1 час)',
-      'Краткий отчёт (10 страниц)',
-      'Топ-3 проблемы',
-      'Рекомендации',
-    ],
-    popular: false,
-    cta: 'Получить бесплатно',
-  },
-  {
     name: 'Полная',
     subtitle: 'Глубокий анализ всего бизнеса',
     price: 'БЕСПЛАТНО',
@@ -65,8 +50,8 @@ export default function DiagnosticPricing() {
 
           <SectionLabel>Состав диагностик</SectionLabel>
 
-          {/* 3 карточки */}
-          <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+          {/* 2 карточки */}
+          <div className="pricing-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
             {PLANS.map((plan, i) => (
               <div key={i} style={{
                 background: plan.popular ? 'var(--card)' : 'var(--bg)',
