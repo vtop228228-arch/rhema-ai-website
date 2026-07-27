@@ -44,8 +44,8 @@ export default function HeroMain() {
           overflowWrap: 'break-word',
           wordBreak: 'normal',
         }}>
-          <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>Проектирование и внедрение</span>
-          <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>AI-агентов под ваш бизнес</span>
+          <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>AI ДЛЯ</span>
+          <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>БИЗНЕСА</span>
           <span className="hero-sub hero-sub-xs" style={{ display: 'block', color: '#999', fontSize: '0.43em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>Помнит каждого клиента · Отвечает ночью · Не теряет заявки</span>
         </h1>
 
