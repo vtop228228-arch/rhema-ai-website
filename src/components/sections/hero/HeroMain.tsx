@@ -49,10 +49,19 @@ export default function HeroMain() {
           <span className="hero-sub hero-sub-xs" style={{ display: 'block', color: '#999', fontSize: '0.43em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>Помнит каждого клиента · Отвечает ночью · Не теряет заявки</span>
         </h1>
 
-        {/* Body */}
-        <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 400, lineHeight: 1.85, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
-          Интегрируем AI в вашу CRM и внутренние системы. Заменим рутину на агентов, которые помнят каждого клиента и работают 24/7. Окупаемость вашего кейса считаем на бесплатной диагностике — до старта работ.
-        </p>
+        {/* Body — для кого */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
+          {[
+            'Бизнес работает, деньги идут — но вы чувствуете, что можно эффективнее',
+            'Слышали про AI, но не понимаете, где конкретно его применить',
+            'Подозреваете, что где-то теряете деньги — но не видите где',
+          ].map((t) => (
+            <div key={t} style={{ display: 'flex', gap: 9, alignItems: 'flex-start', maxWidth: 400 }}>
+              <div style={{ width: 4, height: 4, background: 'var(--accent)', flexShrink: 0, marginTop: 7 }} />
+              <span style={{ fontSize: 15, color: '#AAAAAA', lineHeight: 1.6 }}>{t}</span>
+            </div>
+          ))}
+        </div>
 
       </div>
 
