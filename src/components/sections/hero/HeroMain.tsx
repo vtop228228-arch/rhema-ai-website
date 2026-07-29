@@ -45,12 +45,16 @@ export default function HeroMain() {
           wordBreak: 'normal',
         }}>
           <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>AI ДЛЯ</span>
-          <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>БИЗНЕСА</span>
+          <span style={{ display: 'block', color: 'var(--accent)', marginTop: 8, animation: 'fadeUp 0.6s ease 0.3s both' }}>БИЗНЕСА</span>
         </h1>
 
         {/* Body — для кого */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
-          <span style={{ fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 20, letterSpacing: '1px', color: 'var(--accent)' }}>ДЛЯ КОГО?</span>
+        <div style={{ position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
+          <div className="section-head" style={{ marginBottom: 20 }}>
+            <div className="dot" />
+            <span className="title">ДЛЯ КОГО?</span>
+            <div className="rule" />
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
               'Бизнес работает, деньги идут — но вы чувствуете, что можно эффективнее',
