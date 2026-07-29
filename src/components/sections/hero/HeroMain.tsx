@@ -46,21 +46,23 @@ export default function HeroMain() {
         }}>
           <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>AI ДЛЯ</span>
           <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>БИЗНЕСА</span>
-          <span className="hero-sub hero-sub-xs" style={{ display: 'block', color: '#999', fontSize: '0.43em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>Помнит каждого клиента · Отвечает ночью · Не теряет заявки</span>
         </h1>
 
         {/* Body — для кого */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
-          {[
-            'Бизнес работает, деньги идут — но вы чувствуете, что можно эффективнее',
-            'Слышали про AI, но не понимаете, где конкретно его применить',
-            'Подозреваете, что где-то теряете деньги — но не видите где',
-          ].map((t) => (
-            <div key={t} style={{ display: 'flex', gap: 9, alignItems: 'flex-start', maxWidth: 400 }}>
-              <div style={{ width: 4, height: 4, background: 'var(--accent)', flexShrink: 0, marginTop: 7 }} />
-              <span style={{ fontSize: 15, color: '#AAAAAA', lineHeight: 1.6 }}>{t}</span>
-            </div>
-          ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
+          <span style={{ fontFamily: 'var(--font-bebas), Bebas Neue, sans-serif', fontSize: 20, letterSpacing: '1px', color: 'var(--accent)' }}>ДЛЯ КОГО?</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {[
+              'Бизнес работает, деньги идут — но вы чувствуете, что можно эффективнее',
+              'Слышали про AI, но не понимаете, где конкретно его применить',
+              'Подозреваете, что где-то теряете деньги — но не видите где',
+            ].map((t) => (
+              <div key={t} style={{ display: 'flex', gap: 9, alignItems: 'flex-start', maxWidth: 420 }}>
+                <div style={{ width: 4, height: 4, background: 'var(--accent)', flexShrink: 0, marginTop: 9 }} />
+                <span style={{ fontSize: 18, color: 'var(--ink)', lineHeight: 1.6 }}>{t}</span>
+              </div>
+            ))}
+          </div>
         </div>
 
       </div>
@@ -73,7 +75,6 @@ export default function HeroMain() {
 
       <style>{`
         .hero-h1 { font-size: clamp(28px, 7.5vw, 76px); }
-        .hero-sub-xs { letter-spacing: 5px; }
         .hero-left {
           padding: 60px 40px 60px 72px;
           overflow: hidden;
@@ -89,8 +90,6 @@ export default function HeroMain() {
         @media (max-width: 480px) {
           .hero-h1 { font-size: 5.2vw; }
           .hero-left { padding: 40px 20px 28px; }
-          .hero-sub { letter-spacing: 2px; }
-          .hero-sub-xs { letter-spacing: 1.5px; }
         }
       `}</style>
     </section>
