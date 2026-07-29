@@ -49,7 +49,7 @@ export default function HeroMain() {
         </h1>
 
         {/* Body — для кого */}
-        <div style={{ position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
+        <div style={{ marginTop: 48, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
           <div className="section-head" style={{ marginBottom: 20 }}>
             <div className="dot" />
             <span className="title">ДЛЯ КОГО?</span>
