@@ -63,7 +63,7 @@ export default function HeroMain() {
             ].map((t) => (
               <div key={t} style={{ display: 'flex', gap: 9, alignItems: 'flex-start', maxWidth: 420 }}>
                 <div style={{ width: 4, height: 4, background: 'var(--accent)', flexShrink: 0, marginTop: 9 }} />
-                <span style={{ fontSize: 18, color: 'var(--ink)', lineHeight: 1.6 }}>{t}</span>
+                <span style={{ fontSize: 18, color: 'var(--ink)', lineHeight: 1.6, fontStyle: 'italic' }}>{t}</span>
               </div>
             ))}
           </div>
