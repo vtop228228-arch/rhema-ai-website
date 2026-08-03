@@ -209,14 +209,6 @@ export default function DiagnosticAgent() {
           <h2 style={{ fontFamily: bebas, fontSize: 30, letterSpacing: 1, color: 'var(--ink)', lineHeight: 1.05 }}>
             Покажем, какие AI<br />подойдут под ваш бизнес
           </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {['Живой диалог, а не анкета', 'Персональная карта потерь', 'AI-решения для вашей ниши', 'Ориентир эффекта для вашей сферы'].map((t, i) => (
-              <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'center' }}>
-                <div style={{ width: 4, height: 4, background: 'var(--accent)', flexShrink: 0 }} />
-                <span style={{ fontSize: 15, color: 'var(--ink2)' }}>{t}</span>
-              </div>
-            ))}
-          </div>
           <div>
             <button
               onClick={startChat}
