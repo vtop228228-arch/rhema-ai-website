@@ -206,8 +206,8 @@ export default function DiagnosticAgent() {
       {/* IDLE */}
       {chatState === 'idle' && (
         <div style={{ flex: 1, padding: '30px 24px', display: 'flex', flexDirection: 'column', gap: 18, justifyContent: 'center' }}>
-          <h2 style={{ fontFamily: bebas, fontSize: 30, letterSpacing: 1, color: 'var(--ink)', lineHeight: 1.05 }}>
-            Покажем, какие AI<br />подойдут под ваш бизнес
+          <h2 style={{ fontFamily: bebas, fontSize: 27, letterSpacing: 1, color: 'var(--ink)', lineHeight: 1.05, maxWidth: 340 }}>
+            Покажем, какие AI подойдут под ваш бизнес
           </h2>
           <div>
             <button
