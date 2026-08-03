@@ -207,7 +207,7 @@ export default function DiagnosticAgent() {
       {chatState === 'idle' && (
         <div style={{ flex: 1, padding: '30px 24px', display: 'flex', flexDirection: 'column', gap: 18, justifyContent: 'center' }}>
           <h2 style={{ fontFamily: bebas, fontSize: 30, letterSpacing: 1, color: 'var(--ink)', lineHeight: 1.05 }}>
-            Узнайте за 2 минуты,<br />где теряете деньги
+            Покажем, какие AI<br />подойдут под ваш бизнес
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {['Живой диалог, а не анкета', 'Персональная карта потерь', 'AI-решения для вашей ниши', 'Ориентир эффекта для вашей сферы'].map((t, i) => (
