@@ -34,7 +34,7 @@ const FALLBACK_MAP = `ГДЕ ВЫ ТЕРЯЕТЕ
 → Автоматизация рутины: заявки и напоминания без ручного труда
 → Сводка по ключевым показателям бизнеса в одном месте
 
-Оставьте контакт — на бесплатном созвоне покажем точную карту внедрения под ваш бизнес и посчитаем эффект в деньгах.`;
+Оставьте контакт — и мы на созвоне дадим 2-3 AI-инструмента под конкретно ваш бизнес, которые повысят эффективность.`;
 
 export default function DiagnosticAgent() {
   const sessionId = useRef('');
@@ -217,17 +217,9 @@ export default function DiagnosticAgent() {
       {/* IDLE */}
       {chatState === 'idle' && (
         <div style={{ flex: 1, padding: '30px 24px', display: 'flex', flexDirection: 'column', gap: 18, justifyContent: 'center' }}>
-          <h2 style={{ fontFamily: bebas, fontSize: 30, letterSpacing: 1, color: 'var(--ink)', lineHeight: 1.05 }}>
-            Что в вашем бизнесе<br />можно упростить?
+          <h2 style={{ fontFamily: bebas, fontSize: 27, letterSpacing: 1, color: 'var(--ink)', lineHeight: 1.05, maxWidth: 340 }}>
+            Покажем, какие AI подойдут под ваш бизнес
           </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {['Диалог с AI по вашей задаче', 'Направления автоматизации', 'AI-решения для вашей ниши', 'Первый сценарий для обсуждения'].map((t, i) => (
-              <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'center' }}>
-                <div style={{ width: 4, height: 4, background: 'var(--accent)', flexShrink: 0 }} />
-                <span style={{ fontSize: 15, color: 'var(--ink2)' }}>{t}</span>
-              </div>
-            ))}
-          </div>
           <div>
             <button
               onClick={startChat}

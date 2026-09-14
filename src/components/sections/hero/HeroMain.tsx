@@ -44,15 +44,30 @@ export default function HeroMain() {
           overflowWrap: 'break-word',
           wordBreak: 'normal',
         }}>
-          <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>Проектирование и внедрение</span>
-          <span style={{ display: 'block', color: 'var(--accent)', animation: 'fadeUp 0.6s ease 0.3s both' }}>AI-агентов под ваш бизнес</span>
-          <span className="hero-sub hero-sub-xs" style={{ display: 'block', color: '#999', fontSize: '0.43em', marginTop: 10, animation: 'fadeUp 0.6s ease 0.4s both' }}>Помнит каждого клиента · Отвечает ночью · Не теряет заявки</span>
+          <span style={{ display: 'block', color: 'var(--ink)', animation: 'fadeUp 0.6s ease 0.18s both' }}>AI ДЛЯ</span>
+          <span style={{ display: 'block', color: 'var(--accent)', marginTop: 8, animation: 'fadeUp 0.6s ease 0.3s both' }}>БИЗНЕСА</span>
         </h1>
 
-        {/* Body */}
-        <p style={{ fontSize: 15, color: '#AAAAAA', maxWidth: 400, lineHeight: 1.85, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
-          Интегрируем AI в вашу CRM и внутренние системы. Заменим рутину на агентов, которые помнят каждого клиента и работают 24/7. Окупаемость вашего кейса считаем на бесплатной диагностике — до старта работ.
-        </p>
+        {/* Body — для кого */}
+        <div style={{ marginTop: 200, position: 'relative', zIndex: 1, animation: 'fadeUp 0.6s ease 0.45s both' }}>
+          <div className="section-head" style={{ marginBottom: 20 }}>
+            <div className="dot" />
+            <span className="title">ДЛЯ КОГО?</span>
+            <div className="rule" />
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {[
+              'Бизнес работает, деньги идут — но вы чувствуете, что можно эффективнее',
+              'Слышали про AI, но не понимаете, где конкретно его применить',
+              'Подозреваете, что где-то теряете деньги — но не видите где',
+            ].map((t) => (
+              <div key={t} style={{ display: 'flex', gap: 9, alignItems: 'flex-start', maxWidth: 420 }}>
+                <div style={{ width: 4, height: 4, background: 'var(--accent)', flexShrink: 0, marginTop: 9 }} />
+                <span style={{ fontSize: 18, color: 'var(--ink)', lineHeight: 1.6, fontStyle: 'italic' }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
       </div>
 
@@ -64,7 +79,6 @@ export default function HeroMain() {
 
       <style>{`
         .hero-h1 { font-size: clamp(28px, 7.5vw, 76px); }
-        .hero-sub-xs { letter-spacing: 5px; }
         .hero-left {
           padding: 60px 40px 60px 72px;
           overflow: hidden;
@@ -80,8 +94,6 @@ export default function HeroMain() {
         @media (max-width: 480px) {
           .hero-h1 { font-size: 5.2vw; }
           .hero-left { padding: 40px 20px 28px; }
-          .hero-sub { letter-spacing: 2px; }
-          .hero-sub-xs { letter-spacing: 1.5px; }
         }
       `}</style>
     </section>
