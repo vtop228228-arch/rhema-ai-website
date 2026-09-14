@@ -1,4 +1,5 @@
 .env*
+.next-cache-backup-*/
 .agents/
 .claude/
 design-export/
