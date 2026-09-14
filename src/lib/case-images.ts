@@ -1,6 +1,6 @@
 import type { ProductCaseSlug } from './product-cases';
 
-export type CaseImage = { src: string; width: number; height: number; ru: string; en: string };
+export type CaseImage = { src: string; width: number; height: number; ru: string; en: string; demo?: boolean };
 export const caseImages: Record<ProductCaseSlug, CaseImage[]> = {
   radar: [
     { src: '/cases/radar/workspace.png', width: 587, height: 1281, ru: 'Радар: создание контента, поиск идей и планирование', en: 'Radar workspace for content creation, ideas and planning' },
@@ -14,7 +14,7 @@ export const caseImages: Record<ProductCaseSlug, CaseImage[]> = {
     { src: '/cases/church-analytics/menu.png', width: 590, height: 1272, ru: 'Единый вход в дашборд, отчёт по церкви и отчёт по служению', en: 'Reporting hub with access to the dashboard, church reports and ministry reports' },
   ],
   financefamily: [
-    { src: '/cases/financefamily/dashboard.png', width: 593, height: 1291, ru: 'Financefamily: остатки в IDR, USD и RUB и переход к обмену валют', en: 'Financefamily dashboard with IDR, USD and RUB balances and the currency exchange entry point' },
+    { src: '/cases/financefamily/dashboard-demo.png', width: 850, height: 1850, demo: true, ru: 'Financefamily: баланс и обмен валют. Имена и суммы демонстрационные', en: 'Financefamily balances and currency exchange. Names and amounts are demonstration data' },
     { src: '/cases/financefamily/categories.png', width: 593, height: 1282, ru: 'Расходы по категориям и последние операции', en: 'Spending by category and recent transactions' },
     { src: '/cases/financefamily/history.png', width: 598, height: 1282, ru: 'История операций по дням с поиском и фильтрами', en: 'Daily transaction history with search and filters' },
     { src: '/cases/financefamily/summary.png', width: 590, height: 1277, ru: 'Месячная сводка: семейный бюджет, личные и рабочие траты', en: 'Monthly overview with household, personal and work-related spending views' },

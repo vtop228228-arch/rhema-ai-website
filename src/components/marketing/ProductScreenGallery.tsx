@@ -51,7 +51,7 @@ export default function ProductScreenGallery({ screens, locale }: { screens: Pro
     </div>
     <div className={c.screenStage} id="product-screen-preview">
       <div className={c.stageTopline}><span>{screen.label}</span><span>{String(active + 1).padStart(2, '0')} / {String(screens.length).padStart(2, '0')}</span></div>
-      <figure className={c.focusedScreen} key={screen.shot.src}><ProductScreenImage screen={screen} locale={locale} /><figcaption>{en ? 'Actual product interface' : 'Реальный интерфейс продукта'}</figcaption></figure>
+      <figure className={c.focusedScreen} key={screen.shot.src}><ProductScreenImage screen={screen} locale={locale} /><figcaption>{screen.shot.demo ? (en ? 'Demo names and amounts' : 'Имена и суммы — для примера') : (en ? 'Actual product interface' : 'Реальный интерфейс продукта')}</figcaption></figure>
     </div>
   </div>;
 }
