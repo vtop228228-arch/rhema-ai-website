@@ -1,0 +1,42 @@
+[
+  {
+    "route": "/",
+    "width": 1440,
+    "violations": []
+  },
+  {
+    "route": "/",
+    "width": 390,
+    "violations": []
+  },
+  {
+    "route": "/cases",
+    "width": 1440,
+    "violations": []
+  },
+  {
+    "route": "/cases",
+    "width": 390,
+    "violations": []
+  },
+  {
+    "route": "/how-we-work",
+    "width": 1440,
+    "violations": []
+  },
+  {
+    "route": "/how-we-work",
+    "width": 390,
+    "violations": []
+  },
+  {
+    "route": "/about",
+    "width": 1440,
+    "violations": []
+  },
+  {
+    "route": "/about",
+    "width": 390,
+    "violations": []
+  }
+]

@@ -1,0 +1,79 @@
+{
+  "checkedAt": "2026-09-09T14:28:15.014Z",
+  "build": "production",
+  "checks": [
+    {
+      "locale": "ru",
+      "width": 320,
+      "photosLoaded": true,
+      "overflow": false,
+      "linksCorrect": true
+    },
+    {
+      "locale": "ru",
+      "width": 390,
+      "photosLoaded": true,
+      "overflow": false,
+      "linksCorrect": true
+    },
+    {
+      "locale": "ru",
+      "width": 768,
+      "photosLoaded": true,
+      "overflow": false,
+      "linksCorrect": true
+    },
+    {
+      "locale": "ru",
+      "width": 1024,
+      "photosLoaded": true,
+      "overflow": false,
+      "linksCorrect": true
+    },
+    {
+      "locale": "ru",
+      "width": 1440,
+      "photosLoaded": true,
+      "overflow": false,
+      "linksCorrect": true
+    },
+    {
+      "locale": "/en",
+      "width": 320,
+      "photosLoaded": true,
+      "overflow": false,
+      "linksCorrect": true
+    },
+    {
+      "locale": "/en",
+      "width": 390,
+      "photosLoaded": true,
+      "overflow": false,
+      "linksCorrect": true
+    },
+    {
+      "locale": "/en",
+      "width": 768,
+      "photosLoaded": true,
+      "overflow": false,
+      "linksCorrect": true
+    },
+    {
+      "locale": "/en",
+      "width": 1024,
+      "photosLoaded": true,
+      "overflow": false,
+      "linksCorrect": true
+    },
+    {
+      "locale": "/en",
+      "width": 1440,
+      "photosLoaded": true,
+      "overflow": false,
+      "linksCorrect": true
+    }
+  ],
+  "axeAudits": 4,
+  "keyboardFocus": true,
+  "caseScreensPreserved": 3
+}

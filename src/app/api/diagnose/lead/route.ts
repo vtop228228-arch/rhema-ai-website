@@ -8,6 +8,7 @@ export const runtime = 'nodejs';
 
 const leadSchema = z.object({
   sessionId: z.string().min(8).max(64),
+  consent: z.literal(true),
   name: z.string().min(2).max(100),
   contact: z.string().min(3).max(255),
   sphere: z.string().max(200).default(''),
@@ -55,7 +56,7 @@ async function sendTelegram(lead: Lead): Promise<void> {
     .split(',')
     .map(id => id.trim())
     .filter(Boolean);
-  if (!botToken || chatIds.length === 0) return;
+  if (!botToken || chatIds.length === 0) throw new Error('Telegram is not configured');
 
   const head = `🤖 <b>Лид с AI-диагностики</b>
 
@@ -88,7 +89,7 @@ ${escapeHtml(lead.mapText.slice(0, 1500))}`;
 async function saveToSupabase(lead: Lead): Promise<void> {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) return;
+  if (!url || !key) throw new Error('Supabase is not configured');
 
   const headers = {
     'Content-Type': 'application/json',
@@ -156,7 +157,7 @@ export async function POST(req: NextRequest) {
             notes: [lead.dialog.trim() || lead.pain, lead.mapText].filter(Boolean).join('\n\n') || undefined,
             source: 'diagnostic-agent',
           });
-          if (!crm.ok && !crm.skipped) throw new Error(crm.error ?? 'CRM save failed');
+          if (!crm.ok) throw new Error(crm.skipped ? 'CRM is not configured' : (crm.error ?? 'CRM save failed'));
         },
       },
     ];

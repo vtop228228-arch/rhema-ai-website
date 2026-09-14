@@ -1,27 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
-
-export default function Footer() {
-  return (
-    <footer className="footer-pad" style={{ borderTop: '1px solid var(--line)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16, padding: '24px 72px' }}>
-      <Link href="/" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-        <Image src="/logo.png" alt="RHEMA AI" height={22} width={61} style={{ height: 22, width: 'auto', display: 'block' }} />
-      </Link>
-
-      <span style={{ fontSize: 12, color: '#666' }}>© 2026 Rhema AI. Все права защищены.</span>
-
-      <div style={{ display: 'flex', gap: 22, flexWrap: 'wrap', justifyContent: 'center' }}>
-        <a href="https://t.me/RhemaAI_support" target="_blank" rel="noopener noreferrer" style={{ fontSize: 12, color: '#888', letterSpacing: '1.5px', textTransform: 'uppercase', fontWeight: 500 }}>Telegram</a>
-        <a href="mailto:rhemaaiagency@gmail.com" style={{ fontSize: 12, color: '#888', letterSpacing: '0.5px', fontWeight: 400 }}>rhemaaiagency@gmail.com</a>
-        <Link href="/privacy" style={{ fontSize: 12, color: '#666', letterSpacing: '1px', textTransform: 'uppercase' }}>Политика</Link>
-        <Link href="/offer" style={{ fontSize: 12, color: '#666', letterSpacing: '1px', textTransform: 'uppercase' }}>Оферта</Link>
-      </div>
-
-      <style>{`
-        @media (max-width: 720px) {
-          .footer-pad { padding: 24px 22px !important; justify-content: center; text-align: center; }
-        }
-      `}</style>
-    </footer>
-  );
+import s from './Chrome.module.css';
+export default function Footer({ locale = 'ru' }: { locale?: 'ru' | 'en' }) {
+  const en = locale === 'en';
+  const prefix = en ? '/en' : '';
+  const services = [['ai-agents', en ? 'AI assistants' : 'AI-помощники'], ['business-automation', en ? 'Less manual work' : 'Меньше ручной работы'], ['business-platforms', en ? 'Websites and business tools' : 'Сайты и сервисы для бизнеса']];
+  return <footer className={s.footer}>
+    <div className={s.footerTop}><div><Link className={s.brand} href={prefix || '/'} aria-label={en ? 'Rhema AI — home' : 'Rhema AI — главная'}><Image src="/logo.png" alt={en ? 'Rhema AI fish logo' : 'Rhema AI — логотип с рыбкой'} width={1725} height={624} sizes="(max-width: 480px) 204px, 228px" className={s.logoImage} /></Link><p>{en ? 'Practical tools for your everyday work.' : 'Помогаем упростить ежедневную работу.'}</p></div><div className={s.footerContacts}><a href="https://t.me/RhemaAI_support" target="_blank" rel="noopener noreferrer">Telegram ↗</a><a href="mailto:rhemaaiagency@gmail.com">rhemaaiagency@gmail.com</a></div></div>
+    <nav className={s.footerServices} aria-label={en ? 'Our services' : 'Наши услуги'}><Link href={`${prefix}/services`}>{en ? 'All services' : 'Все услуги'} ↗</Link>{services.map(([slug, label]) => <Link key={slug} href={`${prefix}/services/${slug}`}>{label}</Link>)}</nav>
+    <div className={s.footerBottom}><span>© 2026 Rhema AI</span><nav aria-label={en ? 'Legal' : 'Документы'}><Link href={`${prefix}/privacy`}>{en ? 'Privacy policy' : 'Конфиденциальность'}</Link><Link href={`${prefix}/offer`}>{en ? 'Service terms' : 'Оферта'}</Link></nav><a href="#main-content">{en ? 'Back to top ↑' : 'Наверх ↑'}</a></div>
+  </footer>;
 }

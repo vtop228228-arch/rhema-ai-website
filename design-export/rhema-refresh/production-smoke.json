@@ -1,0 +1,95 @@
+{
+  "base": "https://rhema-ai-agency-amber.vercel.app",
+  "checkedAt": "2026-09-13T02:16:10.845Z",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200
+    },
+    {
+      "path": "/en",
+      "status": 200
+    },
+    {
+      "path": "/cases",
+      "status": 200
+    },
+    {
+      "path": "/en/cases",
+      "status": 200
+    },
+    {
+      "path": "/sitemap.xml",
+      "status": 200
+    },
+    {
+      "path": "/robots.txt",
+      "status": 200
+    },
+    {
+      "path": "/opengraph-image",
+      "status": 200
+    },
+    {
+      "path": "/en/opengraph-image",
+      "status": 200
+    },
+    {
+      "path": "/cases/besty",
+      "status": 200
+    },
+    {
+      "path": "/cases/mayak",
+      "status": 200
+    },
+    {
+      "path": "/cases/financefamily",
+      "status": 200
+    },
+    {
+      "path": "/cases/church-analytics",
+      "status": 200
+    },
+    {
+      "path": "/cases/garajw",
+      "status": 200
+    },
+    {
+      "path": "/cases/sigmaup",
+      "status": 200
+    },
+    {
+      "path": "/cases/jarvis",
+      "status": 200
+    },
+    {
+      "path": "/en/cases/besty",
+      "status": 200
+    },
+    {
+      "path": "/en/cases/mayak",
+      "status": 200
+    },
+    {
+      "path": "/en/cases/financefamily",
+      "status": 200
+    },
+    {
+      "path": "/en/cases/church-analytics",
+      "status": 200
+    },
+    {
+      "path": "/en/cases/garajw",
+      "status": 200
+    },
+    {
+      "path": "/en/cases/sigmaup",
+      "status": 200
+    },
+    {
+      "path": "/en/cases/jarvis",
+      "status": 200
+    }
+  ],
+  "mobileGallery": "passed"
+}

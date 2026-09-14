@@ -1,0 +1,22 @@
+{
+  "checks": [
+    "/ returns 200 and has one H1",
+    "/cases returns 200 and has one H1",
+    "/how-we-work returns 200 and has one H1",
+    "/about returns 200 and has one H1",
+    "/privacy returns 200 and has one H1",
+    "/offer returns 200 and has one H1",
+    "No horizontal overflow at 1440px",
+    "No horizontal overflow at 1024px",
+    "No horizontal overflow at 768px",
+    "No horizontal overflow at 390px",
+    "No horizontal overflow at 320px",
+    "Mobile menu opens and closes with Escape",
+    "FAQ expands",
+    "Contact error preserves input; retry succeeds; consent included (mock API)",
+    "Diagnosis requires explicit consent and reaches success (mock API)",
+    "No browser runtime errors"
+  ],
+  "errors": [],
+  "note": "API submissions mocked; no real leads sent."
+}

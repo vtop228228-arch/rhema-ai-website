@@ -1,0 +1,229 @@
+{
+  "results": [
+    {
+      "lang": "",
+      "path": "",
+      "width": 320
+    },
+    {
+      "lang": "",
+      "path": "",
+      "width": 390
+    },
+    {
+      "lang": "",
+      "path": "",
+      "width": 1440
+    },
+    {
+      "lang": "",
+      "path": "/services",
+      "width": 320
+    },
+    {
+      "lang": "",
+      "path": "/services",
+      "width": 390
+    },
+    {
+      "lang": "",
+      "path": "/services",
+      "width": 1440
+    },
+    {
+      "lang": "",
+      "path": "/services/ai-agents",
+      "width": 320
+    },
+    {
+      "lang": "",
+      "path": "/services/ai-agents",
+      "width": 390
+    },
+    {
+      "lang": "",
+      "path": "/services/ai-agents",
+      "width": 1440
+    },
+    {
+      "lang": "",
+      "path": "/services/business-automation",
+      "width": 320
+    },
+    {
+      "lang": "",
+      "path": "/services/business-automation",
+      "width": 390
+    },
+    {
+      "lang": "",
+      "path": "/services/business-automation",
+      "width": 1440
+    },
+    {
+      "lang": "",
+      "path": "/services/business-platforms",
+      "width": 320
+    },
+    {
+      "lang": "",
+      "path": "/services/business-platforms",
+      "width": 390
+    },
+    {
+      "lang": "",
+      "path": "/services/business-platforms",
+      "width": 1440
+    },
+    {
+      "lang": "",
+      "path": "/cases/radar",
+      "width": 320
+    },
+    {
+      "lang": "",
+      "path": "/cases/radar",
+      "width": 390
+    },
+    {
+      "lang": "",
+      "path": "/cases/radar",
+      "width": 1440
+    },
+    {
+      "lang": "/en",
+      "path": "",
+      "width": 320
+    },
+    {
+      "lang": "/en",
+      "path": "",
+      "width": 390
+    },
+    {
+      "lang": "/en",
+      "path": "",
+      "width": 1440
+    },
+    {
+      "lang": "/en",
+      "path": "/services",
+      "width": 320
+    },
+    {
+      "lang": "/en",
+      "path": "/services",
+      "width": 390
+    },
+    {
+      "lang": "/en",
+      "path": "/services",
+      "width": 1440
+    },
+    {
+      "lang": "/en",
+      "path": "/services/ai-agents",
+      "width": 320
+    },
+    {
+      "lang": "/en",
+      "path": "/services/ai-agents",
+      "width": 390
+    },
+    {
+      "lang": "/en",
+      "path": "/services/ai-agents",
+      "width": 1440
+    },
+    {
+      "lang": "/en",
+      "path": "/services/business-automation",
+      "width": 320
+    },
+    {
+      "lang": "/en",
+      "path": "/services/business-automation",
+      "width": 390
+    },
+    {
+      "lang": "/en",
+      "path": "/services/business-automation",
+      "width": 1440
+    },
+    {
+      "lang": "/en",
+      "path": "/services/business-platforms",
+      "width": 320
+    },
+    {
+      "lang": "/en",
+      "path": "/services/business-platforms",
+      "width": 390
+    },
+    {
+      "lang": "/en",
+      "path": "/services/business-platforms",
+      "width": 1440
+    },
+    {
+      "lang": "/en",
+      "path": "/cases/radar",
+      "width": 320
+    },
+    {
+      "lang": "/en",
+      "path": "/cases/radar",
+      "width": 390
+    },
+    {
+      "lang": "/en",
+      "path": "/cases/radar",
+      "width": 1440
+    }
+  ],
+  "events": [
+    [
+      1,
+      "init",
+      {
+        "defer": true,
+        "clickmap": true,
+        "trackLinks": true,
+        "accurateTrackBounce": true,
+        "webvisor": false
+      }
+    ],
+    [
+      1,
+      "hit",
+      "/en",
+      {}
+    ],
+    [
+      1,
+      "reachGoal",
+      "task_selected",
+      {
+        "task": "content"
+      }
+    ],
+    [
+      1,
+      "hit",
+      "/en/cases/radar",
+      {
+        "referer": "/en"
+      }
+    ],
+    [
+      1,
+      "reachGoal",
+      "case_view",
+      {
+        "project": "radar"
+      }
+    ]
+  ],
+  "forms": "mocked retry and success passed",
+  "consent": "decline persists; accept starts tracking"
+}

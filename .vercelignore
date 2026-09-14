@@ -1,0 +1,10 @@
+.env*
+.agents/
+.claude/
+design-export/
+supabase/
+*.md
+skills-lock.json
+spec-template.md
+rhema-logo-reference.svg
+*.tsbuildinfo

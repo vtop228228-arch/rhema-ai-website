@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "Missing consent rejected before delivery",
+    "All destinations unconfigured returns failure",
+    "Failed Telegram plus skipped destinations returns failure",
+    "Successful Telegram delivery returns success",
+    "Successful CRM delivery returns success"
+  ],
+  "note": "Isolated handlers, mocked delivery, no external requests."
+}

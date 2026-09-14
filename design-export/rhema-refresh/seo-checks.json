@@ -1,0 +1,477 @@
+{
+  "checks": [
+    {
+      "path": "/",
+      "title": "AI-агенты и автоматизация бизнеса под ключ — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/services",
+      "title": "AI-агенты, автоматизация и разработка платформ — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/services/ai-agents",
+      "title": "Разработка AI-агентов для бизнеса — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/services/business-automation",
+      "title": "Автоматизация бизнес-процессов и CRM — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/services/business-platforms",
+      "title": "Разработка бизнес-платформ, CRM и кабинетов — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/about",
+      "title": "Основатели Rhema AI — Владислав Грижак и Тимофей Матюжов",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/cases",
+      "title": "Проекты Rhema AI — платформы, боты и AI-агенты",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/cases/jarvis",
+      "title": "Rhema OS (JARVIS) — операционная система с AI-агентами",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/cases/besty",
+      "title": "Besty — разработка фитнес-приложения в Telegram | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/cases/mayak",
+      "title": "Маяк — Telegram-бот, маршрутизация и CRM сообщества | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/cases/financefamily",
+      "title": "Мультивалютный кошелёк Financefamily — кейс разработки | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/cases/church-analytics",
+      "title": "ГорницаАналитик — Telegram-бот для отчётности церкви | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/cases/garajw",
+      "title": "Сайт ювелирной мастерской D. Garabazhii — кейс Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/cases/sigmaup",
+      "title": "SigmaUp — разработка сайта онлайн-курса | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/how-we-work",
+      "title": "Как работает Rhema AI — от задачи до запуска",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/privacy",
+      "title": "Политика конфиденциальности — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/offer",
+      "title": "Публичная оферта — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en",
+      "title": "Rhema AI — AI Agents & Business Automation",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/services",
+      "title": "AI Agents, Workflow Automation & Custom Platforms — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/services/ai-agents",
+      "title": "Custom AI Agent Development for Business — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/services/business-automation",
+      "title": "Business Process Automation and CRM Integration — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/services/business-platforms",
+      "title": "Custom Business Platforms, CRM and Customer Portals — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/about",
+      "title": "About Rhema AI — Our Founders & Approach",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/cases",
+      "title": "AI Agents, Bots & Platform Projects — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/cases/jarvis",
+      "title": "Rhema OS (JARVIS) — an AI operating system for our agency",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/cases/besty",
+      "title": "Besty — Fitness Telegram Mini App Case Study | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/cases/mayak",
+      "title": "Mayak — Telegram Onboarding Bot & Community CRM | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/cases/financefamily",
+      "title": "Financefamily — Multi-Currency Wallet Case Study | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/cases/church-analytics",
+      "title": "Gornitsa Analytics — Church Reporting Telegram Bot | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/cases/garajw",
+      "title": "D. Garabazhii — Bespoke Jewellery Website Case Study | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/cases/sigmaup",
+      "title": "SigmaUp — Online Course Website Case Study | Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/how-we-work",
+      "title": "AI Implementation Process & Pricing — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/privacy",
+      "title": "Privacy Policy — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    },
+    {
+      "path": "/en/offer",
+      "title": "Public Offer — Rhema AI",
+      "ssr": true,
+      "metadata": true
+    }
+  ],
+  "links": [
+    "/",
+    "/services",
+    "/cases",
+    "/how-we-work",
+    "/about",
+    "/en",
+    "/services/ai-agents",
+    "/services/business-automation",
+    "/services/business-platforms",
+    "/cases/jarvis",
+    "/cases/sigmaup",
+    "/cases/besty",
+    "/privacy",
+    "/offer",
+    "/en/services",
+    "/en/services/ai-agents",
+    "/en/services/business-automation",
+    "/cases/mayak",
+    "/cases/church-analytics",
+    "/en/services/business-platforms",
+    "/cases/garajw",
+    "/cases/financefamily",
+    "/en/about",
+    "/en/cases",
+    "/en/cases/jarvis",
+    "/cases/jarvis/agents.png",
+    "/en/cases/besty",
+    "/cases/besty/home.png",
+    "/cases/besty/workouts.png",
+    "/cases/besty/nutrition.png",
+    "/cases/besty/expert.png",
+    "/en/cases/mayak",
+    "/cases/mayak/overview.png",
+    "/cases/mayak/messages.png",
+    "/cases/mayak/cities.png",
+    "/en/cases/financefamily",
+    "/cases/financefamily/dashboard.png",
+    "/cases/financefamily/categories.png",
+    "/cases/financefamily/history.png",
+    "/cases/financefamily/summary.png",
+    "/en/cases/church-analytics",
+    "/cases/church-analytics/dashboard.png",
+    "/cases/church-analytics/menu.png",
+    "/en/cases/garajw",
+    "/cases/garajw/workshop.png",
+    "/cases/garajw/homepage.png",
+    "/cases/garajw/custom-order.png",
+    "/en/cases/sigmaup",
+    "/cases/sigmaup/homepage.png",
+    "/cases/sigmaup/curriculum.png",
+    "/cases/sigmaup/plans.png",
+    "/en/how-we-work",
+    "/en/privacy",
+    "/en/offer"
+  ],
+  "sitemap": 34,
+  "responsive": [
+    "/",
+    "/en",
+    "/services",
+    "/en/services",
+    "/services/ai-agents",
+    "/en/services/ai-agents",
+    "/services/business-automation",
+    "/en/services/business-platforms",
+    "/en/about",
+    "/en/cases",
+    "/en/how-we-work",
+    "/cases/jarvis",
+    "/en/cases/jarvis",
+    "/cases/besty",
+    "/en/cases/besty",
+    "/cases/mayak",
+    "/en/cases/mayak",
+    "/cases/financefamily",
+    "/en/cases/financefamily",
+    "/cases/church-analytics",
+    "/en/cases/church-analytics",
+    "/cases/garajw",
+    "/en/cases/garajw",
+    "/cases/sigmaup",
+    "/en/cases/sigmaup"
+  ],
+  "accessibility": [
+    {
+      "path": "/en",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/en",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/services/ai-agents",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/services/ai-agents",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/en/services/ai-agents",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/en/services/ai-agents",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/en/about",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/en/about",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/cases/jarvis",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/cases/jarvis",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/jarvis",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/jarvis",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/cases/besty",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/cases/besty",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/besty",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/besty",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/cases/mayak",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/cases/mayak",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/mayak",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/mayak",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/cases/financefamily",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/cases/financefamily",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/financefamily",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/financefamily",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/cases/church-analytics",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/cases/church-analytics",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/church-analytics",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/church-analytics",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/cases/garajw",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/cases/garajw",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/garajw",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/garajw",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/cases/sigmaup",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/cases/sigmaup",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/sigmaup",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "path": "/en/cases/sigmaup",
+      "width": 1440,
+      "violations": []
+    }
+  ],
+  "languageSwitch": true,
+  "englishForm": "failure and retry checked with mocked API",
+  "errors": []
+}

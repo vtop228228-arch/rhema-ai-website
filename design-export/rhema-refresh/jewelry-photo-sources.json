@@ -1,0 +1,27 @@
+{
+  "retrievedAt": "2026-09-09T14:21:07.618Z",
+  "assets": [
+    {
+      "file": "/cases/garajw/gem-palette-photo.webp",
+      "sourcePage": "https://garajw.ru/",
+      "sourceUrl": "https://garajw.ru/_next/image?url=https%3A%2F%2Fweabnuqkjqqixqqcyxqv.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fproduct-media%2Fprocess%2Fpodbor-kamney-poster.jpg&w=640&q=75",
+      "originalUrl": "https://weabnuqkjqqixqqcyxqv.supabase.co/storage/v1/object/public/product-media/process/podbor-kamney-poster.jpg",
+      "contentType": "image/webp",
+      "width": 640,
+      "height": 1138,
+      "bytes": 76568,
+      "modifications": "None. Saved exact cached image response bytes."
+    },
+    {
+      "file": "/cases/garajw/emerald-ring-photo.webp",
+      "sourcePage": "https://garajw.ru/",
+      "sourceUrl": "https://garajw.ru/_next/image?url=https%3A%2F%2Fweabnuqkjqqixqqcyxqv.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Fproduct-media%2Fprocess%2Fkoltso-s-izumrudom-poster.jpg&w=640&q=75",
+      "originalUrl": "https://weabnuqkjqqixqqcyxqv.supabase.co/storage/v1/object/public/product-media/process/koltso-s-izumrudom-poster.jpg",
+      "contentType": "image/webp",
+      "width": 640,
+      "height": 1138,
+      "bytes": 23042,
+      "modifications": "None. Saved exact cached image response bytes."
+    }
+  ]
+}

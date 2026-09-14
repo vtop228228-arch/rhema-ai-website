@@ -324,3 +324,18 @@ h1, h2, h3, h4 {
   background: var(--accent);
   flex-shrink: 0;
 }
+
+/* Editorial refresh: shared document shell; legacy demo/legal components retain their tokens. */
+:root { --font-body: var(--font-heading); }
+html, body { background: #f4f2ec; }
+body { font-family: var(--font-heading), sans-serif; }
+#scroll-root { background: #f4f2ec; }
+#main-content { background: #101411; outline: none; scroll-margin-top: 100px; }
+@media (prefers-reduced-motion: reduce) {
+  #scroll-root { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+#main-content:has(.legal-page) { background: #f4f2ec; }
+.legal-page { --ink:#18201e; --ink2:#52604b; --sub:#606b59; --accent:#1649e8; color:var(--ink); }
+.legal-page a:focus-visible { outline:3px solid #1649e8; outline-offset:4px; }

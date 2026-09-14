@@ -1,66 +1,14 @@
 'use client';
-
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 import Link from 'next/link';
-
-export default function CookieConsent() {
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    if (!localStorage.getItem('cookie_consent')) {
-      setVisible(true);
-    }
-  }, []);
-
-  function accept() {
-    localStorage.setItem('cookie_consent', '1');
-    setVisible(false);
-  }
-
-  if (!visible) return null;
-
-  return (
-    <div style={{
-      position: 'fixed',
-      bottom: 24,
-      left: '50%',
-      transform: 'translateX(-50%)',
-      zIndex: 9999,
-      background: 'rgba(12,12,12,0.97)',
-      border: '1px solid #1C1C1C',
-      backdropFilter: 'blur(12px)',
-      padding: '16px 24px',
-      display: 'flex',
-      alignItems: 'center',
-      gap: 20,
-      maxWidth: 640,
-      width: 'calc(100vw - 32px)',
-      boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
-    }}>
-      <p style={{ fontSize: 13, color: '#999', margin: 0, lineHeight: 1.6, flex: 1 }}>
-        Мы используем cookie для корректной работы сайта.{' '}
-        <Link href="/privacy" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>
-          Политика конфиденциальности
-        </Link>
-      </p>
-      <button
-        onClick={accept}
-        style={{
-          background: 'var(--accent)',
-          color: '#ffffff',
-          border: 'none',
-          padding: '8px 18px',
-          fontSize: 12,
-          fontWeight: 700,
-          letterSpacing: '1px',
-          textTransform: 'uppercase',
-          cursor: 'pointer',
-          flexShrink: 0,
-          whiteSpace: 'nowrap',
-        }}
-      >
-        Принять
-      </button>
-    </div>
-  );
+import { consentSnapshot, saveConsent, subscribeConsent } from '@/lib/analytics-consent';
+import s from './CookieConsent.module.css';
+export default function CookieConsent({ locale = 'ru' }: { locale?: 'ru' | 'en' }) {
+  const en = locale === 'en';
+  const consent = useSyncExternalStore(subscribeConsent, consentSnapshot, () => 'pending');
+  if (consent !== null) return null;
+  return <div role="region" aria-label={en ? 'Cookie notice' : 'Использование cookie'} className={s.notice}>
+    <p>{en ? 'Allow analytics to help us improve the site? ' : 'Разрешить аналитику, чтобы помочь нам улучшить сайт? '}<Link href={en ? '/en/privacy' : '/privacy'}>{en ? 'Details' : 'Подробнее'}</Link></p>
+    <div><button type="button" onClick={() => saveConsent('0')}>{en ? 'No thanks' : 'Без аналитики'}</button><button type="button" className={s.accept} onClick={() => saveConsent('1')}>{en ? 'Accept' : 'Принять'}</button></div>
+  </div>;
 }

@@ -1,0 +1,38 @@
+[
+  {
+    "locale": "ru",
+    "slug": "radar",
+    "width": 1440,
+    "stages": 5
+  },
+  {
+    "locale": "ru",
+    "slug": "radar",
+    "width": 390,
+    "stages": 5
+  },
+  {
+    "locale": "ru",
+    "slug": "radar",
+    "width": 320,
+    "stages": 5
+  },
+  {
+    "locale": "/en",
+    "slug": "radar",
+    "width": 1440,
+    "stages": 5
+  },
+  {
+    "locale": "/en",
+    "slug": "radar",
+    "width": 390,
+    "stages": 5
+  },
+  {
+    "locale": "/en",
+    "slug": "radar",
+    "width": 320,
+    "stages": 5
+  }
+]

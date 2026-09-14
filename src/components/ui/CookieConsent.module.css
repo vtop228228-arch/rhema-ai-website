@@ -1,0 +1,8 @@
+.notice { position:fixed; bottom:max(16px,env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%); z-index:30; background:#fffef9; color:#44513d; border-radius:22px; padding:16px 20px; display:flex; align-items:center; gap:20px; max-width:720px; width:calc(100% - 32px); box-shadow:0 12px 65px -28px #32412359; font-family:var(--font-heading),sans-serif; }
+.notice p { font-size:12px; line-height:1.65; flex:1; }
+.notice a { color:#1649e8; text-decoration:underline; text-underline-offset:3px; }
+.notice > div { display:flex; gap:8px; flex-shrink:0; }
+.notice button { border:0; border-radius:30px; padding:12px 16px; min-height:44px; font-size:12px; font-weight:600; cursor:pointer; background:#e9ede1; color:#35482f; }
+.notice .accept { background:#1649e8; color:#fff; }
+.notice :is(a,button):focus-visible { outline:3px solid #1649e8; outline-offset:3px; }
+@media(max-width:600px) { .notice { flex-direction:column; align-items:stretch; gap:10px; padding:14px 18px; } .notice > div { justify-content:flex-end; } }

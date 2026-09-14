@@ -1,10 +1,12 @@
 # Rhema AI — Маркетинговый сайт
 
+Актуальная передача проекта, запуск и карта документов: [HANDOFF.md](HANDOFF.md).
+
 Сайт AI-агентства Rhema AI с встроенным AI-агентом бесплатной диагностики бизнеса.
 
 ## Стек
 
-- **Next.js 15** App Router + TypeScript
+- **Next.js 16.2.6** App Router + TypeScript
 - **Tailwind CSS v4**
 - **Anthropic Claude** — AI-агент диагностики
 - **Telegram Bot API** — уведомления о заявках

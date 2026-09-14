@@ -1,0 +1,75 @@
+.label,.step { font-size:10px; font-weight:600; line-height:1.7; letter-spacing:.09em; text-transform:uppercase; }
+.jewelryOpening { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin:0 0 90px; padding:7px; border-radius:30px; background:#203d34; overflow:hidden; }
+.ringPortrait { position:relative; min-height:610px; overflow:hidden; border-radius:24px 4px 4px 24px; }
+.ringPortrait img { display:block; width:100%; height:100%; position:absolute; object-fit:cover; object-position:28% 48%; transform:scale(1.18); transform-origin:28% 48%; }
+.ringPortrait > span { position:absolute; bottom:24px; left:24px; right:24px; width:fit-content; padding:10px 16px; border-radius:30px; background:#f1f1e7; color:#294c3e; font-size:11px; }
+.jewelryEditorial { display:flex; flex-direction:column; padding:46px 42px 35px; color:#f5f2e7; }
+.jewelryEditorial > .label { color:#c4d1ba; }
+.jewelryEditorial h2 { margin:38px 0 23px; font-size:clamp(46px,5.8vw,78px); font-weight:500; line-height:1.02; letter-spacing:-.065em; color:#f5f2e7; }
+.jewelryEditorial > p { max-width:350px; font-size:15px; line-height:1.7; color:#dce2d7; }
+.paletteDetail { display:grid; grid-template-columns:1.35fr 1fr; align-items:end; gap:24px; margin-top:36px; }
+.paletteDetail img { display:block; width:100%; height:190px; border-radius:3px 3px 16px 3px; object-fit:cover; object-position:50% 32%; }
+.paletteDetail span { font-size:12px; line-height:1.7; color:#c4d1ba; padding-bottom:3px; }
+.sigmaOpening { padding:30px 30px 20px; margin:0 0 90px; border-radius:30px; background:#1d2220; color:#e7f1d2; box-shadow:inset 0 0 0 7px #30392f; }
+.sigmaMasthead { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:2px 8px 26px; }
+.sigmaMasthead > span:first-child { font-size:32px; font-weight:600; letter-spacing:-.06em; }
+.academy { font-size:12px; font-weight:400; letter-spacing:0; margin-left:12px; color:#c5d2b2; }
+.sigmaMasthead > .label { color:#c5d2b2; }
+.screenFrame { margin:0; width:100%; min-width:0; }
+.screenLink { display:block; overflow:hidden; border-radius:14px; background:#f8f6f0; box-shadow:0 12px 36px -18px #283b2c26; }
+.screenLink:focus-visible { outline:3px solid #1649e8; outline-offset:5px; }
+.screenClip { display:block; overflow:hidden; background:#f8f6f0; }
+.screenClip img { display:block; height:auto; max-width:none; }
+.screenCaption { display:flex; align-items:center; justify-content:space-between; gap:16px; min-height:54px; padding:10px 17px; font-size:11px; font-weight:500; color:#405349; background:#f4f1e9; }
+.expandIcon { display:grid; place-items:center; flex:0 0 30px; height:30px; border-radius:50%; background:#e4e8dc; font-size:17px; transition:transform .3s cubic-bezier(.22,1,.36,1); }
+.screenLink:hover .expandIcon { transform:translate(2px,-2px); }
+.sigmaOpening .screenLink { background:#080b06; }
+.sigmaOpening .screenCaption { color:#d6e8b7; background:#2c3429; }
+.sigmaOpening .expandIcon { background:#414e37; }
+.sigmaHomeScreen { aspect-ratio:1440/780; background:#030500; }
+.sigmaHomeScreen img { width:100%; margin-top:-4.45%; }
+.sigmaRoute { display:flex; justify-content:space-between; align-items:center; gap:15px; padding:25px 8px 4px; color:#c5d2b2; font-size:11px; }
+.sigmaRoute > span { display:flex; align-items:center; gap:12px; }
+.sigmaRoute b { font-size:10px; font-weight:400; color:#f3f8e6; }
+.screenStories { display:grid; gap:28px; }
+.screenStory { display:grid; grid-template-columns:.72fr 1.28fr; gap:30px; align-items:center; padding:36px; border-radius:28px; background:#e9e7df; box-shadow:inset 0 0 0 6px #ffffff30; }
+.storyCopy { padding:14px 8px; min-width:0; }
+.step { display:block; color:#496153; margin-bottom:28px; }
+.storyCopy h3 { max-width:370px; font-size:clamp(27px,2.8vw,39px); line-height:1.13; font-weight:500; letter-spacing:-.055em; }
+.storyCopy p { max-width:380px; margin-top:24px; font-size:14px; line-height:1.8; color:#596257; }
+.pageAddress { display:block; margin-top:30px; color:#414b42; font-size:10px; letter-spacing:.04em; }
+.screenSurface { min-width:0; padding:14px; border-radius:22px; background:#d9ded1; }
+.jewelryHomeScreen { aspect-ratio:960/450; }
+.jewelryHomeScreen img { width:150%; margin-left:-7.3%; margin-top:-9.4%; }
+.workshopStory { grid-template-columns:1fr; gap:20px; padding:38px; background:#dce2d6; }
+.workshopStory .storyCopy { display:grid; grid-template-columns:1fr 1fr; column-gap:70px; align-items:end; }
+.workshopStory .step { grid-column:1/-1; margin-bottom:20px; }
+.workshopStory .storyCopy p { max-width:450px; margin:0; }
+.workshopStory .screenSurface { background:#c8d0c0; }
+.workshopScreen { aspect-ratio:1263/648; }
+.workshopScreen img { width:114%; margin-left:-7%; margin-top:-6.75%; }
+.orderStory { background:#e8e3d9; grid-template-columns:1fr 1fr; gap:80px; padding:48px; }
+.orderStory .screenSurface { background:#d5cfc1; padding:24px; max-width:550px; width:100%; justify-self:end; }
+.orderScreen { aspect-ratio:640/706; }
+.orderScreen img { width:225%; margin-left:-62.5%; margin-top:-14.06%; }
+.sigmaStories .screenStory { background:#e8e7ef; }
+.sigmaStories .step { color:#575274; }
+.sigmaStories .storyCopy p { color:#615c70; }
+.sigmaStories .pageAddress { color:#625d73; }
+.sigmaStories .screenSurface { background:#cccadb; }
+.sigmaStories .screenClip { background:#080b06; }
+.sigmaStories .screenCaption { background:#252c22; color:#dae9c3; }
+.sigmaStories .expandIcon { background:#414e37; }
+.curriculumScreen { aspect-ratio:760/520; }
+.curriculumScreen img { width:189.47%; margin-left:-44.74%; margin-top:-40.4%; }
+.plansStory { grid-template-columns:1fr; gap:25px; padding:38px; }
+.plansStory .storyCopy { display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:end; }
+.plansStory .storyCopy h3 { max-width:500px; }
+.plansStory .storyCopy p { max-width:450px; margin:0; }
+.plansScreen { aspect-ratio:1024/670; }
+.plansScreen img { width:140.625%; margin-left:-20.3125%; margin-top:-32.2265%; }
+.srOnly { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+@media(max-width:1100px) { .jewelryEditorial { padding:38px 28px; } .ringPortrait { min-height:570px; } .paletteDetail { gap:18px; } .paletteDetail img { height:155px; } .screenStory { padding:28px; gap:24px; } .orderStory { gap:40px; } .workshopStory .storyCopy,.plansStory .storyCopy { gap:30px; } }
+@media(max-width:800px) { .jewelryOpening { grid-template-columns:1fr; margin-bottom:60px; } .ringPortrait { min-height:420px; border-radius:24px 24px 4px 4px; } .jewelryEditorial { padding:28px; } .jewelryEditorial h2 { margin-top:28px; font-size:58px; } .paletteDetail { grid-template-columns:1fr 1fr; margin-top:28px; } .paletteDetail img { height:200px; } .sigmaOpening { margin-bottom:60px; padding:24px 20px 20px; } .sigmaRoute { gap:12px; flex-wrap:wrap; justify-content:flex-start; font-size:10px; } .sigmaRoute > span { gap:7px; } .screenStory,.orderStory { grid-template-columns:1fr; gap:24px; padding:25px; } .storyCopy { padding:8px 4px; } .storyCopy h3 { max-width:500px; font-size:34px; } .storyCopy p { max-width:520px; margin-top:18px; } .step { margin-bottom:19px; } .pageAddress { margin-top:20px; } .orderStory .screenSurface { max-width:550px; justify-self:center; } .workshopStory .storyCopy,.plansStory .storyCopy { grid-template-columns:1fr; gap:18px; } .workshopStory .step { margin:0; } }
+@media(max-width:480px) { .jewelryOpening,.sigmaOpening { border-radius:24px; } .ringPortrait { min-height:350px; border-radius:18px 18px 4px 4px; } .ringPortrait > span { bottom:17px; left:17px; right:17px; padding:9px 12px; font-size:9px; } .jewelryEditorial { padding:26px 20px; } .jewelryEditorial h2 { font-size:52px; } .jewelryEditorial > p { font-size:14px; } .paletteDetail img { height:170px; } .paletteDetail span { font-size:11px; } .jewelryEditorial .label { font-size:9px; } .sigmaOpening { padding:22px 13px 20px; } .sigmaMasthead { padding:0 5px 22px; align-items:flex-start; } .sigmaMasthead > span:first-child { font-size:26px; } .academy { display:block; font-size:10px; margin:3px 0 0; } .sigmaMasthead > .label { font-size:8px; max-width:110px; text-align:right; padding-top:5px; } .sigmaHomeScreen { aspect-ratio:800/760; } .sigmaHomeScreen img { width:180%; margin-left:-40%; margin-top:-8%; } .sigmaRoute { display:grid; grid-template-columns:1fr; gap:12px; padding:20px 8px 2px; font-size:11px; } .sigmaRoute > span[aria-hidden] { display:none; } .sigmaRoute > span { gap:14px; } .screenStories { gap:20px; } .screenStory { padding:21px 15px 15px; border-radius:24px; gap:22px; } .storyCopy { padding:6px; } .storyCopy h3 { font-size:31px; } .storyCopy p { font-size:13px; } .screenSurface { padding:7px; border-radius:18px; } .screenLink { border-radius:12px; } .screenCaption { padding:9px 12px; font-size:10px; min-height:49px; } .jewelryHomeScreen { aspect-ratio:820/450; } .jewelryHomeScreen img { width:175.6%; margin-left:-8.53%; margin-top:-11%; } .orderStory .screenSurface { padding:12px; } .plansScreen { aspect-ratio:680/670; } .plansScreen img { width:211.76%; margin-left:-78.5%; margin-top:-48.53%; } }
+@media(prefers-reduced-motion:reduce) { .expandIcon { transition:none; } }

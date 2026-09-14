@@ -37,7 +37,7 @@ const FALLBACK_MAP = `ГДЕ ВЫ ТЕРЯЕТЕ
 Оставьте контакт — на бесплатном созвоне покажем точную карту внедрения под ваш бизнес и посчитаем эффект в деньгах.`;
 
 export default function DiagnosticAgent() {
-  const sessionId = useRef<string>(typeof crypto !== 'undefined' ? crypto.randomUUID() : String(Date.now()));
+  const sessionId = useRef('');
   const chatRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const historyRef = useRef<ApiMsg[]>([]);
@@ -54,6 +54,7 @@ export default function DiagnosticAgent() {
   const [lead, setLead] = useState({ name: '', contact: '' });
   const [leadErr, setLeadErr] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [consent, setConsent] = useState(false);
 
   useEffect(() => {
     const el = chatRef.current;
@@ -131,6 +132,7 @@ export default function DiagnosticAgent() {
   }
 
   function startChat() {
+    if (!sessionId.current) sessionId.current = typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
     if (chatState !== 'idle') return;
     ymGoal('agent_start');
     historyRef.current = [OPENER];
@@ -165,6 +167,7 @@ export default function DiagnosticAgent() {
 
   async function submitLead() {
     if (submitting) return;
+    if (!consent) { setLeadErr('Подтвердите согласие на обработку данных.'); return; }
     const parsed = leadSchema.safeParse(lead);
     if (!parsed.success) { setLeadErr(parsed.error.issues[0]?.message ?? 'Проверьте данные'); return; }
     setLeadErr('');
@@ -177,7 +180,7 @@ export default function DiagnosticAgent() {
       const res = await fetch('/api/diagnose/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId: sessionId.current, ...parsed.data, sphere, pain: answers, dialog, mapText }),
+        body: JSON.stringify({ sessionId: sessionId.current, ...parsed.data, consent, sphere, pain: answers, dialog, mapText }),
       });
       if (!res.ok) throw new Error(`lead submit failed: ${res.status}`);
       ymGoal('agent_lead');
@@ -190,6 +193,13 @@ export default function DiagnosticAgent() {
   }
 
   const showInput = chatState === 'active' || chatState === 'thinking';
+  const announcement = chatState === 'thinking'
+    ? 'AI-агент готовит ответ…'
+    : chatState === 'active'
+      ? msgs.filter(message => message.role === 'ai').at(-1)?.text ?? ''
+      : chatState === 'map_shown'
+        ? 'Предварительный разбор готов. Можно оставить контакт для обсуждения.'
+        : chatState === 'done' ? 'Заявка принята. Свяжемся по указанному контакту.' : '';
 
   return (
     <div
@@ -197,6 +207,7 @@ export default function DiagnosticAgent() {
       className="chat-panel"
       style={{ flex: '0 0 460px', background: 'var(--card)', display: 'flex', flexDirection: 'column', minHeight: 640 }}
     >
+      <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</span>
       {/* Header */}
       <div style={{ padding: '18px 24px', borderBottom: '1px solid #161616', display: 'flex', alignItems: 'center', gap: 9, flexShrink: 0 }}>
         <div style={{ width: 6, height: 6, background: 'var(--accent)' }} />
@@ -207,10 +218,10 @@ export default function DiagnosticAgent() {
       {chatState === 'idle' && (
         <div style={{ flex: 1, padding: '30px 24px', display: 'flex', flexDirection: 'column', gap: 18, justifyContent: 'center' }}>
           <h2 style={{ fontFamily: bebas, fontSize: 30, letterSpacing: 1, color: 'var(--ink)', lineHeight: 1.05 }}>
-            Узнайте за 2 минуты,<br />где теряете деньги
+            Что в вашем бизнесе<br />можно упростить?
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {['Живой диалог, а не анкета', 'Персональная карта потерь', 'AI-решения для вашей ниши', 'Ориентир эффекта для вашей сферы'].map((t, i) => (
+            {['Диалог с AI по вашей задаче', 'Направления автоматизации', 'AI-решения для вашей ниши', 'Первый сценарий для обсуждения'].map((t, i) => (
               <div key={i} style={{ display: 'flex', gap: 9, alignItems: 'center' }}>
                 <div style={{ width: 4, height: 4, background: 'var(--accent)', flexShrink: 0 }} />
                 <span style={{ fontSize: 15, color: 'var(--ink2)' }}>{t}</span>
@@ -239,7 +250,7 @@ export default function DiagnosticAgent() {
             {msgs.map((m, i) => (
               <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', animation: 'fadeUp 0.2s ease' }}>
                 <div style={{ maxWidth: '87%', padding: '9px 13px', background: m.role === 'user' ? 'var(--accent)' : 'rgba(24,24,24,0.88)' }}>
-                  <span style={{ fontSize: 14, lineHeight: 1.65, color: m.role === 'user' ? '#090909' : 'var(--ink2)', whiteSpace: 'pre-wrap', display: 'block' }}>{m.text}</span>
+                  <span style={{ fontSize: 14, lineHeight: 1.65, color: m.role === 'user' ? '#ffffff' : 'var(--ink2)', whiteSpace: 'pre-wrap', display: 'block' }}>{m.text}</span>
                 </div>
               </div>
             ))}
@@ -288,14 +299,14 @@ export default function DiagnosticAgent() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                   <div style={{ width: 2, height: 22, background: 'var(--accent)', flexShrink: 0 }} />
                   <div>
-                    <div style={{ fontFamily: bebas, fontSize: 18, color: 'var(--accent)', letterSpacing: 1, lineHeight: 1 }}>КАРТА ПОТЕРЬ</div>
+                    <div style={{ fontFamily: bebas, fontSize: 18, color: 'var(--accent)', letterSpacing: 1, lineHeight: 1 }}>ПРЕДВАРИТЕЛЬНЫЙ РАЗБОР</div>
                     <div style={{ fontSize: 9, color: '#999', textTransform: 'uppercase', letterSpacing: 2, marginTop: 2 }}>{sphere || 'Ваш бизнес'}</div>
                   </div>
                 </div>
                 <div style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>
                   {mapText || 'Анализирую…'}
                 </div>
-                <div style={{ fontSize: 10, color: '#3a3a3a', fontStyle: 'italic', lineHeight: 1.4, borderTop: '1px solid #1A1A1A', paddingTop: 9 }}>
+                <div style={{ fontSize: 10, color: '#aeb9a9', fontStyle: 'italic', lineHeight: 1.4, borderTop: '1px solid #1A1A1A', paddingTop: 9 }}>
                   Предварительная оценка на основе ваших ответов. Точные цифры — на бесплатной диагностике.
                 </div>
               </div>
@@ -308,24 +319,28 @@ export default function DiagnosticAgent() {
                   ПОЛУЧИТЬ ПОЛНУЮ<br />ДИАГНОСТИКУ БЕСПЛАТНО
                 </div>
                 <p style={{ fontSize: 11, color: '#888', lineHeight: 1.5 }}>
-                  {fallback ? 'Оставьте контакт — проведём диагностику лично и пришлём результат в течение 2 часов.' : 'Составим точный план автоматизации под ваш бизнес.'}
+                  {fallback ? 'Оставьте контакт — обсудим вашу задачу лично.' : 'Составим точный план автоматизации под ваш бизнес.'}
                 </p>
                 <input
-                  className="input-base" placeholder="Ваше имя" value={lead.name}
+                  className="input-base" aria-label="Ваше имя" autoComplete="name" maxLength={100} placeholder="Ваше имя" value={lead.name}
                   onChange={e => setLead(p => ({ ...p, name: e.target.value }))}
                   onFocus={e => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.55)'; }}
                   onBlur={e => { e.currentTarget.style.borderColor = '#1E1E1E'; }}
                   style={{ borderColor: '#1E1E1E' }}
                 />
                 <input
-                  className="input-base" placeholder="Telegram (@username) или телефон" value={lead.contact}
+                  className="input-base" aria-label="Telegram или телефон" maxLength={255} placeholder="Telegram (@username) или телефон" value={lead.contact}
                   onChange={e => setLead(p => ({ ...p, contact: e.target.value }))}
                   onFocus={e => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.55)'; }}
                   onBlur={e => { e.currentTarget.style.borderColor = '#1E1E1E'; }}
                   style={{ borderColor: '#1E1E1E' }}
                 />
+                <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', color: '#bac6b5', fontSize: 12, lineHeight: 1.6 }}>
+                  <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: 4, accentColor: 'var(--accent)' }} />
+                  <span>Согласен на обработку данных по <a href="/privacy" style={{ color: '#bdceff', textDecoration: 'underline' }}>политике конфиденциальности</a>.</span>
+                </label>
                 {leadErr && (
-                  <div style={{ fontSize: 11, color: 'var(--red)', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <div role="status" style={{ fontSize: 11, color: 'var(--red)', display: 'flex', alignItems: 'center', gap: 5 }}>
                     <div style={{ width: 3, height: 3, background: 'var(--red)', flexShrink: 0 }} />{leadErr}
                   </div>
                 )}
@@ -346,7 +361,7 @@ export default function DiagnosticAgent() {
                   <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="square" /></svg>
                 </div>
                 <div style={{ fontFamily: bebas, fontSize: 22, letterSpacing: 1, color: 'var(--accent)' }}>ЗАЯВКА ПРИНЯТА</div>
-                <div style={{ fontSize: 13, color: '#999', lineHeight: 1.65, maxWidth: 240 }}>Напишем в Telegram в течение 2 часов. Спасибо!</div>
+                <div style={{ fontSize: 13, color: '#999', lineHeight: 1.65, maxWidth: 240 }}>Свяжемся по указанному контакту. Спасибо!</div>
               </div>
             )}
 
@@ -357,7 +372,7 @@ export default function DiagnosticAgent() {
             <div style={{ borderTop: '1px solid #161616', padding: '11px 16px', display: 'flex', gap: 6, background: 'var(--card)', flexShrink: 0, alignItems: 'flex-end' }}>
               <textarea
                 ref={textareaRef}
-                placeholder="Напишите ответ…" value={inputVal}
+                aria-label="Ответ агенту" placeholder="Напишите ответ…" value={inputVal}
                 rows={1}
                 onChange={e => {
                   setInputVal(e.target.value);
@@ -370,7 +385,7 @@ export default function DiagnosticAgent() {
                 onBlur={e => { e.currentTarget.style.borderColor = '#1C1C1C'; }}
                 style={{ flex: 1, background: 'rgba(19,19,19,0.88)', border: '1px solid #1C1C1C', color: 'var(--ink)', padding: '8px 12px', fontSize: 16, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', transition: 'border-color 0.18s', resize: 'none', overflow: 'hidden', lineHeight: '1.55', minHeight: 36, maxHeight: 120, opacity: chatState === 'thinking' ? 0.5 : 1 }}
               />
-              <button onClick={() => sendAnswer(inputVal)} disabled={chatState === 'thinking'} style={{ background: 'var(--accent)', border: 'none', padding: '8px 13px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: chatState === 'thinking' ? 0.5 : 1, flexShrink: 0, height: 36, cursor: chatState === 'thinking' ? 'not-allowed' : 'pointer' }}>
+              <button aria-label="Отправить ответ" onClick={() => sendAnswer(inputVal)} disabled={chatState === 'thinking'} style={{ background: 'var(--accent)', border: 'none', padding: '8px 13px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: chatState === 'thinking' ? 0.5 : 1, flexShrink: 0, height: 36, cursor: chatState === 'thinking' ? 'not-allowed' : 'pointer' }}>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="square" /></svg>
               </button>
             </div>

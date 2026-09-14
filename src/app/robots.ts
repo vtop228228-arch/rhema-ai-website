@@ -1,15 +1,14 @@
 import type { MetadataRoute } from 'next';
-import { SITE_URL } from '@/lib/site';
+import { IS_PREVIEW, SITE_URL } from '@/lib/site';
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
       allow: '/',
-      // /demo — витрина мок-вариантов (не индексируем); /api — серверные роуты.
-      disallow: ['/demo', '/api/'],
+      disallow: ['/api/'],
+      // /demo и preview доступны роботу: иначе он не увидит meta noindex.
     },
-    sitemap: `${SITE_URL}/sitemap.xml`,
-    host: SITE_URL,
+    ...(IS_PREVIEW ? {} : { sitemap: `${SITE_URL}/sitemap.xml` }),
   };
 }

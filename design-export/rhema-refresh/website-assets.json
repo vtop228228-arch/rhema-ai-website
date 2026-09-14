@@ -1,0 +1,58 @@
+{
+  "capturedAt": "2026-09-09T09:20:13.600Z",
+  "screenshots": [
+    {
+      "slug": "garajw",
+      "path": "/cases/garajw/homepage.png",
+      "width": 1440,
+      "height": 1000,
+      "sourceUrl": "https://garajw.ru/",
+      "note": "Original public homepage: bespoke jewellery and commission journey."
+    },
+    {
+      "slug": "garajw",
+      "path": "/cases/garajw/workshop.png",
+      "width": 1440,
+      "height": 1000,
+      "sourceUrl": "https://garajw.ru/",
+      "note": "Original public workshop section: gemstone selection, engraving, stone setting and finished emerald ring."
+    },
+    {
+      "slug": "garajw",
+      "path": "/cases/garajw/custom-order.png",
+      "width": 1440,
+      "height": 1000,
+      "sourceUrl": "https://garajw.ru/custom",
+      "note": "Original public bespoke order page. Form was not submitted."
+    },
+    {
+      "slug": "sigmaup",
+      "path": "/cases/sigmaup/homepage.png",
+      "width": 1440,
+      "height": 1000,
+      "sourceUrl": "https://www.sigmaup.pro/main",
+      "note": "Original public mobile video editing course homepage; cookie notice dismissed normally."
+    },
+    {
+      "slug": "sigmaup",
+      "path": "/cases/sigmaup/plans.png",
+      "width": 1440,
+      "height": 1000,
+      "sourceUrl": "https://www.sigmaup.pro/main",
+      "note": "Original public course plans. Prices are a snapshot; no purchase or registration was made."
+    },
+    {
+      "slug": "sigmaup",
+      "path": "/cases/sigmaup/curriculum.png",
+      "width": 1440,
+      "height": 1000,
+      "sourceUrl": "https://www.sigmaup.pro/main",
+      "note": "Original public curriculum opened via the course-plan button."
+    }
+  ],
+  "caveats": [
+    "garajw.ru/catalog returned a visible catalogue load error in the browser; omitted from portfolio screenshots.",
+    "SigmaUp private student workspace was not accessed. Screenshots show public landing page and public course outline only.",
+    "No contact forms, registration or payment flow were submitted."
+  ]
+}
