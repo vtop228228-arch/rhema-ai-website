@@ -1,4 +1,4 @@
-import Image from 'next/image';
+import CaseCard from './CaseCard';
 import Link from 'next/link';
 import { productCases } from '@/lib/product-cases';
 import { caseImages } from '@/lib/case-images';
@@ -53,15 +53,7 @@ function presentationScreens(slug: CaseKey, locale: SiteLocale): ProductScreen[]
 }
 
 export function ProductCaseTeaser({ slug, locale = 'ru', anchor = false, heading = 'h2' }: { slug: CaseKey; locale?: SiteLocale; anchor?: boolean; heading?: 'h2' | 'h3' }) {
-  const copy = productCases[slug][locale];
-  const shot = caseImages[slug][0];
-  const Heading = heading;
-  return <article className={`${c.teaser} ${c[slug]} ${['financefamily', 'church-analytics'].includes(slug) ? c.wideTeaser : ''}`} id={anchor ? slug : undefined} data-reveal>
-    <span className={c.eyebrow}>{copy.eyebrow}</span>
-    <div className={c.teaserDisplay}><div><Heading><ProductName slug={slug} locale={locale} /></Heading><p>{copy.title}</p></div><div className={c.teaserImage}><Image src={shot.src} alt={shot[locale]} width={shot.width} height={shot.height} sizes={['financefamily', 'church-analytics'].includes(slug) ? '(max-width: 600px) 160px, (max-width: 1100px) 190px, 230px' : '160px'} /></div></div>
-    <p className={c.teaserDescription}>{copy.intro}</p>
-    <Link className={s.secondary} href={localizedPath(`/cases/${slug}`, locale)}>{locale === 'en' ? `Explore ${copy.name}` : `Разобрать ${copy.name}`}<span aria-hidden="true">↗</span></Link>
-  </article>;
+  return <CaseCard slug={slug} locale={locale} anchor={anchor} heading={heading} />;
 }
 
 export function ProductCaseCollection({ locale = 'ru' }: { locale?: SiteLocale }) {
@@ -76,13 +68,13 @@ export default function ProductCaseStudy({ slug, locale = 'ru' }: { slug: CaseKe
   return <Reveal><PageStructuredData title={copy.title} description={copy.description} path={`/cases/${slug}`} locale={locale} parent={{ name: en ? 'Projects' : 'Проекты', path: '/cases' }} />
     <div className={`${s.container} ${c[slug]}`}>
       <nav className={c.breadcrumbs} aria-label={en ? 'Breadcrumb' : 'Хлебные крошки'}><ol><li><Link href={localizedPath('/', locale)}>{en ? 'Home' : 'Главная'}</Link></li><li><Link href={localizedPath('/cases', locale)}>{en ? 'Projects' : 'Проекты'}</Link></li><li aria-current="page">{copy.name}</li></ol></nav>
-      <header className={c.hero}><div><span className={c.eyebrow}>{copy.eyebrow}</span><div className={c.wordmark}><ProductName slug={slug} locale={locale} /><span aria-hidden="true">↗</span></div><h1>{copy.title}</h1><p>{copy.intro}</p><div className={c.actions}><a className={s.button} href="#screens">{en ? 'See the product' : 'Посмотреть продукт'}<span aria-hidden="true">↓</span></a><a className={s.textLink} href="#contact">{en ? 'Discuss a similar project' : 'Обсудить похожий проект'} ↗</a></div></div><div className={c.heroArt}><div className={c.heroArtLabel}><span>{copy.name}</span><span>{en ? 'Product interface' : 'Интерфейс продукта'}</span></div><figure className={c.heroScreenshot}><ProductScreenImage screen={heroScreen} locale={locale} hero /><figcaption>{heroScreen.label}<span aria-hidden="true">↗</span></figcaption></figure></div></header>
+      <header className={c.hero}><div><span className={c.eyebrow}>{copy.eyebrow}</span><div className={c.wordmark}><ProductName slug={slug} locale={locale} /><span aria-hidden="true">↗</span></div><h1>{copy.title}</h1><p>{copy.intro}</p><div className={c.actions}><a className={s.button} href="#screens">{en ? 'See the product' : 'Посмотреть продукт'}<span aria-hidden="true">↓</span></a><a className={s.textLink} href="#contact">{en ? 'I want a similar solution' : 'Хочу похожее решение'} ↗</a></div></div><div className={c.heroArt}><div className={c.heroArtLabel}><span>{copy.name}</span><span>{en ? 'Product interface' : 'Интерфейс продукта'}</span></div><figure className={c.heroScreenshot}><ProductScreenImage screen={heroScreen} locale={locale} hero /><figcaption>{heroScreen.label}<span aria-hidden="true">↗</span></figcaption></figure></div></header>
       <section className={c.story} data-reveal><div><span className={s.kicker}>{en ? 'The task' : 'Задача'}</span><h2>{en ? 'Start with the people using it.' : 'Начать с задач пользователей.'}</h2><p>{copy.challenge}</p></div><div><span className={s.kicker}>{en ? 'The solution' : 'Решение'}</span><h2>{en ? 'Connect the whole process.' : 'Связать весь процесс.'}</h2><p>{copy.solution}</p></div></section>
       <section className={c.screens} id="screens" data-reveal><div className={s.sectionHeading}><div><span className={s.kicker}>{en ? 'Inside the product' : 'Внутри продукта'}</span><h2>{en ? 'See how it works, screen by screen.' : 'Как это работает — на экранах.'}</h2></div><p>{en ? 'Choose a section to explore its purpose and interface. The original product is in Russian.' : 'Выберите раздел: рядом с экраном объясняем, какую задачу он решает.'}</p></div><ProductScreenGallery screens={screens} locale={locale} />{['mayak', 'financefamily', 'church-analytics'].includes(slug) && <p className={s.note}>{en ? 'Dashboard values are a snapshot of the interface when captured.' : 'Значения в панели отражают состояние интерфейса на момент съёмки.'}</p>}</section>
       <section className={c.features} data-reveal><div className={s.sectionHeading}><div><span className={s.kicker}>{en ? 'What we built' : 'Что реализовали'}</span><h2>{copy.featuresHeading ?? (en ? 'Tools for each side of the process.' : 'Инструменты для каждой стороны.')}</h2></div></div><div className={s.scenarioGrid}>{copy.features.map((feature, i) => <article className={s.scenarioShell} key={feature.title}><div className={s.scenarioCard}><span className={s.stepNumber}>0{i + 1}</span><h3>{feature.title}</h3><p>{feature.text}</p></div></article>)}</div></section>
       <section className={c.steps} data-reveal><div><span className={s.kicker}>{en ? 'The user journey' : 'Путь пользователя'}</span><h2>{en ? 'A clear next step.' : 'Понятный следующий шаг.'}</h2></div><ol>{copy.steps.map((step, i) => <li key={step.title}><span>0{i + 1}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></li>)}</ol></section>
       <section className={c.outcomes} data-reveal><span className={c.eyebrow}>{en ? 'The result' : 'Результат работы'}</span><h2>{en ? 'A working product around a real task.' : 'Рабочий продукт под конкретную задачу.'}</h2><ul>{copy.outcomes.map(item => <li key={item}><span aria-hidden="true">↳</span>{item}</li>)}</ul><p>{copy.closing}</p><div className={c.actions}><Link className={s.textLink} href={localizedPath('/services/business-platforms', locale)}>{en ? 'Platform development' : 'Разработка платформ'} ↗</Link><Link className={s.textLink} href={localizedPath(slug === 'mayak' ? '/services/business-automation' : '/cases/mayak', locale)}>{en ? (slug === 'mayak' ? 'Workflow automation' : 'Explore Mayak') : (slug === 'mayak' ? 'Автоматизация процессов' : 'Кейс «Маяк»')} ↗</Link></div></section>
-      <ContactPanel locale={locale} />
+      <ContactPanel key={slug} locale={locale} projectName={copy.name} />
     </div>
   </Reveal>;
 }

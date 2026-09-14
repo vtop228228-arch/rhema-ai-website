@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { ymGoal } from '@/lib/analytics';
 import s from './Editorial.module.css';
 
-export default function ContactPanel({ locale = 'ru' }: { locale?: 'ru' | 'en' }) {
+export default function ContactPanel({ locale = 'ru', projectName }: { locale?: 'ru' | 'en'; projectName?: string }) {
   const en = locale === 'en';
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [error, setError] = useState('');
@@ -52,7 +52,8 @@ export default function ContactPanel({ locale = 'ru' }: { locale?: 'ru' | 'en' }
   return <section className={s.contact} id="contact" aria-labelledby="contact-title">
     <div>
       <span className={s.kicker}>{en ? 'Start with a conversation' : 'Начнём с разговора'}</span>
-      <h2 id="contact-title">{en ? <>What takes up<br />your team’s time?</> : <>Какая задача<br />забирает ваше время?</>}</h2>
+      <h2 id="contact-title">{projectName ? (en ? <>A similar solution<br />for your business?</> : <>Похожее решение<br />для вашего бизнеса?</>) : (en ? <>What takes up<br />your team’s time?</> : <>Какая задача<br />забирает ваше время?</>)}</h2>
+      {projectName && <p><strong>{en ? 'Project you are exploring: ' : 'Вас заинтересовал проект: '}{projectName}</strong><br />{en ? 'Its name is already in the form. Tell us what you would like to adapt.' : 'Название уже в форме. Допишите, что нужно изменить под вашу задачу.'}</p>}
       <p>{en ? 'Describe one example: enquiries get lost, reports take too long or you need a website for your service. We will explain what can be done, what we need from you and the likely cost and timing. No technical brief needed.' : 'Опишите один пример: теряются заявки, долго собираются отчёты или нужен сайт для вашей услуги. Объясним, что можно сделать, что понадобится от вас и каковы ориентиры по стоимости и срокам. Техническое задание не требуется.'}</p>
       <a className={s.contactLink} href="https://t.me/RhemaAI_support" target="_blank" rel="noopener noreferrer">{en ? 'Message us on Telegram' : 'Написать в Telegram'} <span aria-hidden="true">↗</span></a>
       <span className={s.note}>{en ? 'The initial discussion is free.' : 'Первое обсуждение — бесплатно.'}</span>
@@ -62,7 +63,7 @@ export default function ContactPanel({ locale = 'ru' }: { locale?: 'ru' | 'en' }
       <form onSubmit={submit} className={s.form} aria-busy={status === 'sending'} onChange={() => { if (!started.current) { ymGoal('contact_start', { page: window.location.pathname }); started.current = true; } }}>
         <label htmlFor="project-name">{en ? 'Your name' : 'Как к вам обращаться'}<input id="project-name" name="name" autoComplete="name" placeholder={en ? 'Your name' : 'Ваше имя'} required minLength={2} maxLength={100} aria-invalid={invalidField === 'name' || undefined} aria-describedby={invalidField === 'name' ? 'project-error' : undefined} /></label>
         <label htmlFor="project-contact">{en ? 'Email, Telegram or phone' : 'Telegram или телефон'}<input id="project-contact" name="contact" autoComplete="off" autoCapitalize="none" spellCheck={false} placeholder={en ? 'you@company.com or @username' : '@username или +7…'} required minLength={3} maxLength={255} aria-invalid={invalidField === 'contact' || undefined} aria-describedby={invalidField === 'contact' ? 'project-error' : undefined} /></label>
-        <label htmlFor="project-business">{en ? 'What would you like to simplify?' : 'Что хотите упростить?'}<textarea id="project-business" name="business" placeholder={en ? 'For example: we run an online school and answer the same student questions every day…' : 'Например: у нас онлайн-школа, каждый день отвечаем ученикам на одинаковые вопросы…'} rows={4} required minLength={10} maxLength={2000} aria-invalid={invalidField === 'business' || undefined} aria-describedby={invalidField === 'business' ? 'project-error' : undefined} /></label>
+        <label htmlFor="project-business">{en ? 'What would you like to simplify?' : 'Что хотите упростить?'}<textarea id="project-business" name="business" defaultValue={projectName ? (en ? `I am interested in a solution similar to ${projectName}. ` : `Интересует решение, похожее на ${projectName}. `) : undefined} placeholder={en ? 'For example: we run an online school and answer the same student questions every day…' : 'Например: у нас онлайн-школа, каждый день отвечаем ученикам на одинаковые вопросы…'} rows={4} required minLength={10} maxLength={2000} aria-invalid={invalidField === 'business' || undefined} aria-describedby={invalidField === 'business' ? 'project-error' : undefined} /></label>
         <label className={s.consent}><input type="checkbox" name="consent" required aria-invalid={invalidField === 'consent' || undefined} aria-describedby={invalidField === 'consent' ? 'project-error' : undefined} /><span>{en ? 'I consent to the processing of my personal data under the ' : 'Согласен на обработку персональных данных в соответствии с '}<Link href={en ? '/en/privacy' : '/privacy'} target="_blank" rel="noopener noreferrer">{en ? 'privacy policy' : 'политикой конфиденциальности'}</Link>.</span></label>
         {status === 'error' && <p id="project-error" role="alert" className={s.error}>{error}</p>}
         <button className={s.button} type="submit" disabled={status === 'sending'}>{status === 'sending' ? (en ? 'Sending…' : 'Отправляем…') : (en ? 'Discuss my project' : 'Обсудить мой проект')}<span aria-hidden="true">↗</span></button>

@@ -24,7 +24,7 @@ export default function RhemaOSCase({ locale = 'ru' }: { locale?: SiteLocale }) 
         <span className={s.kicker}>{copy.eyebrow}</span>
         <div className={c.wordmark}>Rhema OS<span aria-hidden="true">↗</span></div>
         <div className={c.heroSplit}><h1>{copy.title}</h1><div><p>{copy.intro}</p><a className={s.secondary} href="#inside">{en ? 'Explore the system' : 'Как устроена система'}<span aria-hidden="true">↓</span></a></div></div>
-      </header>
+      <div className={s.actions}><a className={s.button} href="#contact">{en ? 'I want a similar solution' : 'Хочу похожее решение'}<span aria-hidden="true">↗</span></a></div></header>
       <figure className={c.realScreen} data-reveal>
         <div className={c.screenBar}><span><i aria-hidden="true" />Rhema OS</span><span>{en ? 'The team workspace' : 'Рабочая среда команды'}</span></div>
         <a className={c.screenOverview} href="/cases/jarvis/agents.png" target="_blank" rel="noopener noreferrer" aria-label={en ? 'Open the Rhema OS interface screenshot at full size' : 'Открыть скриншот интерфейса Rhema OS полностью'}><Image src="/cases/jarvis/agents.png" width={1290} height={684} sizes="(max-width: 600px) calc(100vw - 48px), (max-width: 1100px) calc(100vw - 80px), 1224px" alt={en ? 'Rhema OS interface: the founder, agent hierarchy and Mission Control panel' : 'Интерфейс Rhema OS: основатель, иерархия агентов и панель Mission Control'} preload /><span className={c.screenExpand}>{en ? 'View full screen' : 'Рассмотреть экран'}<span aria-hidden="true">↗</span></span></a>
@@ -57,7 +57,7 @@ export default function RhemaOSCase({ locale = 'ru' }: { locale?: SiteLocale }) 
       </section>
       <section className={c.workflow} data-reveal><div><span className={s.kicker}>{en ? 'A workflow in practice' : 'Сценарий работы'}</span><h2>{en ? 'From context to a next step.' : 'От контекста до следующего шага.'}</h2></div><ol>{copy.workflow.map((step, i) => <li key={step.title}><span>0{i + 1}</span><div><h3>{step.title}</h3><p>{step.text}</p></div></li>)}</ol></section>
       <section className={c.outcome} data-reveal><span className={s.kicker}>{en ? 'What this gives our team' : 'Что это даёт нашей команде'}</span><h2>{en ? 'Practical experience, built into our work.' : 'Опыт, встроенный в нашу работу.'}</h2><ul>{copy.outcomes.map(item => <li key={item}><span aria-hidden="true">↳</span>{item}</li>)}</ul><p>{copy.closing}</p><div className={c.related}><Link className={s.textLink} href={localizedPath('/services/ai-agents', locale)}>{en ? 'AI agent development' : 'Разработка AI-агентов'} ↗</Link><Link className={s.textLink} href={localizedPath('/services/business-platforms', locale)}>{en ? 'Custom business platforms' : 'Бизнес-платформы под ключ'} ↗</Link></div></section>
-      <ContactPanel locale={locale} />
+      <ContactPanel locale={locale} projectName="Rhema OS / JARVIS" />
     </div>
   </Reveal>;
 }
