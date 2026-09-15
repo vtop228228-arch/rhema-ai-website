@@ -1,6 +1,7 @@
-import TaskPicker from './TaskPicker';
+import DiscoveryIntro, { ClearServices } from './DiscoveryIntro';
+import SeraphimTeaser from './SeraphimTeaser';
 import Link from 'next/link';
-import FishArtwork from '@/components/ui/FishArtwork';
+
 import ContactPanel from './ContactPanel';
 import Reveal from './Reveal';
 import RhemaOSFeature from './RhemaOSFeature';
@@ -57,6 +58,7 @@ const projects = [
 ];
 
 const faqs = [
+  { q: 'Is the diagnosis really free?', a: 'Yes. We review your task and discuss a useful first step at no charge. Leave your details and we will arrange a call. If you decide to commission development, we agree its scope, price and timeline separately. There is no obligation to buy.' },
   { q: 'I do not understand AI. Where do I start?', a: 'Tell us in your own words what you would like to make easier: replying to customers, preparing reports or keeping track of promises. We will ask questions and suggest a first step. You do not need technical knowledge or a detailed brief.' },
   { q: 'What is an AI agent in plain language?', a: 'It is a software assistant that uses your materials to answer questions and carry out agreed tasks. For example, it can ask what a customer needs and pass the request to your team. A conventional bot works well for fixed steps and buttons; AI is useful when questions and texts vary. We choose the right approach for your task.' },
   { q: 'Will we have to replace the tools we already use?', a: 'First, we check whether we can connect your spreadsheets, email and CRM — software for tracking customers and deals. What is possible depends on those services. If changes are needed, we explain and agree them before development.' },
@@ -79,24 +81,7 @@ function Intro({ eyebrow, title, children }: { eyebrow: string; title: string; c
   return <header className={s.subHero}><Label>{eyebrow}</Label><h1>{title}</h1><p>{children}</p></header>;
 }
 
-function SystemVisual() {
-  return <div className={s.systemVisual} role="img" aria-label="Example: a customer writes, an AI assistant clarifies the request and passes the enquiry to your team.">
-    <div className={s.visualTop}><span>RHEMA / HOW IT WORKS</span><span className={s.statusDot}>An enquiry example</span></div>
-    <div className={s.orbit} aria-hidden="true"><i /><i /><div className={s.orbitCore}><FishArtwork className={s.heroFish} /></div></div>
-    <div className={s.flowInput}><span className={s.mono}>01 / INCOMING</span><p>“Which option would<br />work best for me?”</p><span className={s.tiny}>Customer · message</span></div>
-    <div className={s.flowAgent}><span className={s.agentMark} aria-hidden="true"><FishArtwork className={s.agentFish} /></span><div><strong>AI assistant</strong><p>Answers and clarifies the request</p></div></div>
-    <div className={s.flowOutput}><div><span aria-hidden="true">↳</span><strong>Enquiry with your team</strong></div><p>What the customer needs and has said</p></div>
-    <div className={s.visualBottom}><span>Your team approves important actions</span><span aria-hidden="true">↗</span></div>
-  </div>;
-}
 
-function Scenarios() {
-  return <section className={s.section} id="services" data-reveal>
-    <div className={s.sectionHeading}><div><Label>01 / How we can help</Label><h2>A familiar problem.<br /><em>A clear solution.</em></h2></div><p>Automation means letting software handle repeated actions. We start with one part of the job that takes up your team’s time.</p></div>
-    <TaskPicker locale="en" />
-    <p style={{ marginTop: 28 }}><Action href="/en/services" secondary>Explore our services</Action></p>
-  </section>;
-}
 
 function Process() {
   return <section className={s.section} id="process" data-reveal>
@@ -119,7 +104,7 @@ function Pricing() {
 function CasePreview() {
   return <section className={s.caseSection} id="cases" data-reveal>
     <div className={s.sectionHeading}><div><Label>02 / What we have built</Label><h2>Working products.<br /><em>Real business tasks.</em></h2></div><Action href="/en/cases" secondary>All projects</Action></div>
-    <RhemaOSFeature locale="en" />
+    <SeraphimTeaser locale="en" />
     <div className={s.caseGrid}>
       <WebsiteCaseTeaser slug="sigmaup" locale="en" heading="h3" />
       <ProductCaseTeaser slug="besty" locale="en" heading="h3" />
@@ -132,10 +117,8 @@ function Questions() {
 }
 
 export function HomePage() {
-  return <Reveal><div className={s.container}>
-    <section className={s.hero}><div className={s.heroCopy}><Label>RHEMA AI / Websites, apps and AI for business</Label><h1>Less busywork.<br /><em>More time</em><br />for business.</h1><p>We help you manage enquiries, orders and reports. We build websites, apps and AI assistants — software that answers customers and carries out tasks using your rules.</p><div className={s.actions}><Action href="#contact">Discuss my task</Action><Link href="#cases" className={s.textLink}>See examples <span aria-hidden="true">↓</span></Link></div><span className={s.note}>Use your own words · we handle the technology</span></div><SystemVisual /></section>
-    <div className={s.facts}><span>A clear first step</span><div><strong>01</strong><span>task to start with</span></div><div><strong>30,000 RUB</strong><span>AI assistant, starting price</span></div><div><strong>30 days</strong><span>of support after launch</span></div></div>
-    <Scenarios /><CasePreview /><Process /><Pricing /><Questions /><ContactPanel locale="en" />
+  return <Reveal><div className={s.container}><DiscoveryIntro locale="en" />
+    <ClearServices locale="en" /><CasePreview /><Process /><Questions /><ContactPanel locale="en" />
   </div></Reveal>;
 }
 
@@ -159,7 +142,7 @@ export function CasesPage() {
     <Intro eyebrow="RHEMA / Projects" title="See how it works for other businesses.">A workshop website, an online course, money tracking, reporting and customer support. Choose a task similar to yours to see what we built and how people use it.</Intro>
     <CaseDirectory locale="en" />
     <WebsiteCaseCollection locale="en" />
-    <RhemaOSFeature locale="en" anchor />
+    <SeraphimTeaser locale="en" anchor /><RhemaOSFeature locale="en" anchor />
     <ProductCaseCollection locale="en" />
     <div className={s.projectList}>{projects.map((project) => ['jarvis', 'besty', 'sigmaup'].includes(project.id) ? null : <article key={project.name} id={project.id} className={s.project} data-reveal><div><Label>09 / {project.type}</Label><div className={s.projectName}>{project.name}<span aria-hidden="true">↗</span></div><div className={s.tags}>{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div></div><div><h2>{project.title}</h2><dl><dt>The task</dt><dd>{project.before}</dd><dt>What we built</dt><dd>{project.after}</dd></dl><p style={{ marginTop: 22 }}><Link className={s.textLink} href={`/en/services/${project.service}`}>{project.serviceLabel}<span aria-hidden="true">↗</span></Link></p></div></article>)}</div>
     <ContactPanel locale="en" />

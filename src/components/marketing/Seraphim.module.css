@@ -1,0 +1,33 @@
+.teaser { background:#e4e8df; border-radius:30px; padding:8px; margin:25px 0; overflow:hidden; }
+.teaserCopy { padding:35px; display:grid; grid-template-columns:1fr 1fr; gap:20px 50px; align-items:start; }
+.teaserCopy > span { grid-column:1/-1; }
+.teaser .teaserCopy h2 { font-size:clamp(30px,3.7vw,50px); letter-spacing:-.05em; line-height:1.12; }
+.teaserCopy p { font-size:17px; line-height:1.7; }
+.teaserCopy > a { justify-self:start; }
+.cover { display:block; border-radius:23px; background:#181b1b; overflow:hidden; color:#e7ece4; text-decoration:none; }
+.cover img { display:block; width:100%; height:auto; }
+.cover > span { display:block; padding:18px 22px; font-size:12px; color:#e7ece4; }
+.breadcrumbs { display:flex; gap:12px; font-size:12px; padding-top:32px; }
+.breadcrumbs a { text-decoration:underline; text-underline-offset:4px; }
+.hero { padding:45px 0; }
+.hero h1 { font-size:clamp(40px,6vw,78px); line-height:1.07; letter-spacing:-.055em; margin:25px 0; }
+.hero em { color:var(--royal); font-style:normal; }
+.hero > p { max-width:780px; font-size:19px; line-height:1.7; margin-bottom:25px; }
+.overview { margin:0; padding:8px; background:#e3e8dd; border-radius:26px; }
+.overview img { width:100%; height:auto; display:block; border-radius:19px; }
+.overview figcaption { padding:18px; font-size:12px; }
+.story { display:grid; grid-template-columns:1fr 1fr; gap:60px; padding:85px 0; }
+.story h2 { font-size:clamp(28px,3vw,40px); letter-spacing:-.04em; margin-bottom:20px; }
+.story p,.screenCopy p { font-size:16px; line-height:1.75; }
+.departments { padding:0 0 60px; }
+.departmentGrid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.departmentGrid article { padding:30px; border-radius:23px; background:#eeeee6; }
+.departmentGrid h3 { font-size:25px; }.departmentGrid p { font-size:15px; line-height:1.7; margin:15px 0; }
+.departmentGrid small { display:block; color:#56644f; font-size:11px; line-height:1.6; }
+.screens article { padding:30px 0 65px; }
+.screenCopy { max-width:750px; margin-bottom:25px; }
+.screenCopy h2 { font-size:clamp(28px,3.5vw,44px); margin:15px 0; letter-spacing:-.045em; }
+.screenCopy p { margin-bottom:20px; }
+.screenImage { display:block; padding:8px; background:#e4e8df; border-radius:24px; }
+.screenImage img { display:block; width:100%; height:auto; border-radius:17px; }
+@media(max-width:800px) { .teaserCopy,.story,.departmentGrid { grid-template-columns:1fr; } .teaserCopy { padding:25px 20px; gap:20px; } .teaserCopy p { font-size:15px; } .story { gap:35px; padding:60px 0; } .hero > p { font-size:16px; } }

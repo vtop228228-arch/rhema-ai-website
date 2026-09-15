@@ -1,4 +1,4 @@
-import TaskPicker from './TaskPicker';
+import { ClearServices } from './DiscoveryIntro';
 import ServiceBrief from './ServiceBrief';
 import ProjectExamples from './ProjectExamples';
 import Link from 'next/link';
@@ -45,8 +45,7 @@ export function ServicesPage({ locale = 'ru' }: { locale?: SiteLocale }) {
   return <Reveal><PageStructuredData title={title} description={description} path="/services" locale={locale} /><div className={s.container}>
     <Breadcrumbs title={en ? 'Services' : 'Услуги'} locale={locale} />
     <header className={`${s.subHero} ${c.hero}`}><span className={s.kicker}>RHEMA / {en ? 'Services' : 'Услуги'}</span><h1>{title}</h1><p>{description}</p></header>
-    <TaskPicker locale={locale} heading="h2" />
-    <ServiceLinks locale={locale} />
+    <ClearServices locale={locale} />
     <section className={s.aboutSplit} data-reveal><div><span className={s.kicker}>{en ? 'Where to begin' : 'С чего начать'}</span><h2>{en ? 'Tell us what takes time.' : 'Расскажите, что занимает время.'}</h2></div><div>
       <p>{en ? 'If your team answers the same questions every day, an AI assistant may help. If people copy information between tools, we can connect those tools. If customers need somewhere to book, learn or use your service, we can build a website or app.' : 'Если команда каждый день отвечает на одинаковые вопросы, может помочь AI-помощник. Если сотрудники переносят данные между программами — соединим эти программы. Если клиентам нужно место для записи, обучения или работы с вашей услугой — создадим сайт или приложение.'}</p>
       <p>{en ? 'You do not need a technical brief. Show us an example of the work. We will explain what can be done, what we need from you and the likely cost and timing. The first discussion is free.' : 'Техническое задание не требуется. Покажите пример вашей работы. Мы объясним, что можно сделать, что понадобится от вас и каковы ориентиры по стоимости и срокам. Первое обсуждение бесплатно.'}</p>

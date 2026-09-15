@@ -1,0 +1,26 @@
+.hero { display:grid; grid-template-columns:1.2fr 1fr; gap:64px; padding:70px 0 80px; align-items:center; }
+.hero h1 { font-size:clamp(40px,4.8vw,68px); line-height:1.06; letter-spacing:-.06em; margin:22px 0; }
+.hero h1 em { font-style:normal; color:var(--royal); }
+.hero .lead { font-size:18px; line-height:1.7; max-width:630px; margin:25px 0; }
+.offer { padding:32px; border-radius:30px; background:#e5e9dd; box-shadow:inset 0 0 0 7px #edf0e7; }
+.offerTop { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:22px; font-size:12px; }
+.offerTop strong { font-size:30px; letter-spacing:-.05em; }
+.hero .offer h2 { font-size:28px; line-height:1.2; letter-spacing:-.045em; }
+.offer ol { list-style:none; padding:0; margin:26px 0; display:grid; gap:18px; }
+.offer li { display:flex; align-items:flex-start; gap:15px; }
+.offer li > span { flex:0 0 32px; height:32px; display:grid; place-items:center; background:#fffdf7; border-radius:50%; font-size:11px; }
+.hero .offer h3 { font-size:16px; margin:0 0 5px; }
+.hero .offer li p,.hero .offerNote { font-size:13px; line-height:1.6; margin:0; color:#52614e; }
+.hero .offerNote { padding-top:18px; border-top:1px solid #c9d3be; }
+.pains { padding:25px 0 60px; }
+.painGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:18px; }
+.painGrid article { padding:30px; border-radius:22px; background:#eeeee6; }
+.pains .painGrid h3,.services .servicesGrid h3 { font-size:24px; line-height:1.2; letter-spacing:-.035em; }
+.painGrid p,.servicesGrid p { font-size:15px; line-height:1.7; margin:14px 0 0; color:#56614f; }
+.closing { margin:24px 0 0; max-width:800px; font-size:15px; }
+.services { padding:45px 0 75px; }
+.servicesGrid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:22px; margin-bottom:28px; }
+.servicesGrid article { display:flex; flex-direction:column; align-items:flex-start; padding:32px; background:#fffdf7; border-radius:24px; box-shadow:inset 0 0 0 6px #e8ebe1; }
+.servicesGrid a { margin-top:22px; }
+@media(max-width:850px) { .hero { grid-template-columns:1fr; gap:35px; padding-top:35px; } .offer { max-width:620px; } }
+@media(max-width:600px) { .hero h1 { font-size:42px; } .hero .lead { font-size:16px; } .hero { padding-bottom:50px; } .offer { padding:26px; } .hero .offer h2 { font-size:25px; } .painGrid,.servicesGrid { grid-template-columns:1fr; } .painGrid article,.servicesGrid article { padding:26px; } }

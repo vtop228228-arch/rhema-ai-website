@@ -2,6 +2,7 @@ import type { SiteLocale } from '@/lib/seo';
 import s from './Editorial.module.css';
 
 const links = [
+  ['seraphim', 'Офис из 38 AI-агентов', '38-agent digital office'],
   ['garajw', 'Сайт мастерской', 'Workshop website'],
   ['sigmaup', 'Сайт курса', 'Course website'],
   ['jarvis', 'Работа команды', 'Team workspace'],

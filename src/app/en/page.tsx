@@ -3,7 +3,7 @@ import { pageMetadata } from '@/lib/seo';
 
 export const metadata = pageMetadata({
   title: 'Rhema AI — AI Agents & Business Automation',
-  description: 'Websites, apps and AI assistants for business. Capture enquiries, answer customers and simplify reporting with a team that explains, builds and supports your solution.',
+  description: 'Start with a free business diagnosis. We review your task and suggest a first step, then build AI assistants, automation, websites and apps. Discuss scope and pricing on a call.',
   path: '/',
   locale: 'en',
 });

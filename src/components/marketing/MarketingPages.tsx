@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import DiagnosticAgent from '@/components/sections/DiagnosticAgent';
-import FishArtwork from '@/components/ui/FishArtwork';
+
 import ContactPanel from './ContactPanel';
 import Reveal from './Reveal';
 import { faqs, projects, steps } from './content';
-import TaskPicker from './TaskPicker';
+import DiscoveryIntro, { ClearServices } from './DiscoveryIntro';
+import SeraphimTeaser from './SeraphimTeaser';
 import RhemaOSFeature from './RhemaOSFeature';
 import { ProductCaseCollection, ProductCaseTeaser } from './ProductCaseStudy';
 import { WebsiteCaseCollection, WebsiteCaseTeaser } from './WebsiteCaseStudy';
@@ -16,27 +17,11 @@ function Action({ href, children, secondary = false }: { href: string; children:
 }
 function Label({ children }: { children: React.ReactNode }) { return <span className={s.kicker}>{children}</span>; }
 
-function SystemVisual() {
-  return <div className={s.systemVisual} aria-label="Пример: клиент пишет, AI-помощник уточняет запрос и передаёт заявку менеджеру">
-    <div className={s.visualTop}><span>RHEMA / КАК ЭТО РАБОТАЕТ</span><span className={s.statusDot}>Пример с заявкой</span></div>
-    <div className={s.orbit} aria-hidden="true"><i /><i /><div className={s.orbitCore}><FishArtwork className={s.heroFish} /></div></div>
-    <div className={s.flowInput}><span className={s.mono}>01 / ВХОДЯЩЕЕ</span><p>«Подскажите, какой<br />вариант мне подойдёт?»</p><span className={s.tiny}>Клиент · сообщение</span></div>
-    <div className={s.flowAgent}><span className={s.agentMark} aria-hidden="true"><FishArtwork className={s.agentFish} /></span><div><strong>AI-помощник</strong><p>Отвечает и уточняет запрос</p></div></div>
-    <div className={s.flowOutput}><div><span aria-hidden="true">↳</span><strong>Заявка у менеджера</strong></div><p>Что нужно клиенту и о чём говорили</p></div>
-    <div className={s.visualBottom}><span>Человек контролирует важные действия</span><span aria-hidden="true">↗</span></div>
-  </div>;
-}
 
 function Intro({ eyebrow, title, children }: { eyebrow: string; title: string; children: React.ReactNode }) {
   return <header className={s.subHero}><Label>{eyebrow}</Label><h1>{title}</h1><p>{children}</p></header>;
 }
 
-function Scenarios() {
-  return <section className={s.section} id="services" data-reveal>
-    <div className={s.sectionHeading}><div><Label>01 / С чем поможем</Label><h2>Знакомая задача.<br /><em>Понятное решение.</em></h2></div><p>Автоматизация — это когда программа берёт на себя повторяющиеся действия. Начнём с одного участка работы, который отнимает у вашей команды время.</p></div>
-    <TaskPicker />
-  </section>;
-}
 
 function Process() {
   return <section className={s.section} id="process" data-reveal>
@@ -59,7 +44,7 @@ function Pricing() {
 function CasePreview() {
   return <section className={s.caseSection} id="cases" data-reveal>
     <div className={s.sectionHeading}><div><Label>02 / Уже собрали</Label><h2>Рабочие продукты.<br /><em>Реальные задачи.</em></h2></div><Action href="/cases" secondary>Все проекты</Action></div>
-    <RhemaOSFeature />
+    <SeraphimTeaser />
     <div className={s.caseGrid}>
       <WebsiteCaseTeaser slug="sigmaup" heading="h3" />
       <ProductCaseTeaser slug="besty" heading="h3" />
@@ -72,14 +57,12 @@ function Questions() {
 }
 
 function Diagnostic() {
-  return <section className={s.diagnostic} aria-labelledby="diagnostic-title" data-reveal><div><Label>06 / Можно сначала попробовать</Label><h2 id="diagnostic-title">Что упростить<br /><em>в вашей работе?</em></h2><p>Обсудите задачу с AI-помощником прямо здесь. Он задаст несколько вопросов и предложит идеи, которые затем можно разобрать с нашей командой.</p><div className={s.diagnosticNote}><strong>Бесплатно. Без регистрации.</strong><p>Это предварительные идеи по вашим ответам. Возможности, стоимость и пользу для бизнеса уточняем с вами лично.</p></div><a href="#contact" className={s.textLink}>Обсудить задачу с командой ↗</a></div><div className={s.agentShell}><DiagnosticAgent /></div></section>;
+  return <section className={s.diagnostic} aria-labelledby="diagnostic-title" data-reveal><div><Label>Можно подготовиться к созвону</Label><h2 id="diagnostic-title">Хотите сначала<br /><em>обсудить с AI?</em></h2><p>Это необязательный шаг. AI-помощник задаст вопросы и поможет сформулировать задачу. На бесплатную диагностику с командой можно записаться сразу.</p><div className={s.diagnosticNote}><strong>Бесплатно. Без регистрации.</strong><p>Это предварительные идеи по вашим ответам. Возможности, стоимость и пользу для бизнеса уточняем с вами лично.</p></div><a href="#contact" className={s.textLink}>Записаться на бесплатную диагностику ↗</a></div><div className={s.agentShell}><DiagnosticAgent /></div></section>;
 }
 
 export function HomePage() {
-  return <Reveal><div className={s.container}>
-    <section className={s.hero}><div className={s.heroCopy}><Label>RHEMA AI / Сайты, приложения и AI для бизнеса</Label><h1>Меньше рутины.<br /><em>Больше времени</em><br />на бизнес.</h1><p>Помогаем работать с заявками, заказами и отчётами. Создаём сайты, приложения и AI-помощников — программы, которые отвечают клиентам и выполняют задачи по вашим правилам.</p><div className={s.actions}><Action href="#contact">Обсудить мою задачу</Action><Link href="#cases" className={s.textLink}>Посмотреть примеры <span aria-hidden="true">↓</span></Link></div><span className={s.note}>Расскажите своими словами · в технологиях разберёмся мы</span></div><SystemVisual /></section>
-    <div className={s.facts}><span>Понятный первый шаг</span><div><strong>01</strong><span>задача для начала</span></div><div><strong>от 30 000 ₽</strong><span>разработка AI-помощника</span></div><div><strong>30 дней</strong><span>поддержки после запуска</span></div></div>
-    <Scenarios /><CasePreview /><Process /><Pricing /><Questions /><Diagnostic /><ContactPanel />
+  return <Reveal><div className={s.container}><DiscoveryIntro />
+    <ClearServices /><CasePreview /><Process /><Questions /><Diagnostic /><ContactPanel />
   </div></Reveal>;
 }
 export function WorkPage() {
@@ -91,7 +74,7 @@ export function CasesPage() {
     <Intro eyebrow="RHEMA / Проекты" title="Посмотрите, как это работает у других.">Сайт мастерской, онлайн-курс, учёт денег, сбор отчётов и помощь клиентам. Выберите похожую задачу — в каждом кейсе покажем, что сделали и как этим пользуются.</Intro>
     <CaseDirectory />
     <WebsiteCaseCollection />
-    <RhemaOSFeature anchor />
+    <SeraphimTeaser anchor /><RhemaOSFeature anchor />
     <ProductCaseCollection />
     <div className={s.projectList}>{projects.map((project, i) => ['jarvis', 'besty', 'sigmaup'].includes(ids[i]) ? null : <article key={project.name} id={ids[i]} className={s.project} data-reveal><div><Label>09 / {project.type}</Label><div className={s.projectName}>{project.name}<span aria-hidden="true">↗</span></div><div className={s.tags}>{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div></div><div><h2>{project.title}</h2><dl><dt>Задача</dt><dd>{project.before}</dd><dt>Что сделали</dt><dd>{project.after}</dd></dl></div></article>)}</div>
     <ContactPanel />
