@@ -24,6 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/cases/sigmaup',
     '/offer',
     '/privacy',
+    '/consent',
   ];
 
   // lastModified добавляем только при наличии достоверной даты изменения

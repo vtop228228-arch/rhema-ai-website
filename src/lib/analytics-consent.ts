@@ -10,7 +10,22 @@ export function subscribeConsent(callback: () => void) {
   return () => { window.removeEventListener('storage', callback); window.removeEventListener('rhema-cookie-consent', callback); };
 }
 export function saveConsent(choice: '1' | '0') {
+  // Отказ после согласия: Метрика уже загружена во вкладке — стираем её cookie и перезагружаем страницу.
+  const withdraw = choice === '0' && typeof window.ym === 'function';
   try { localStorage.setItem('cookie_consent', choice); memoryChoice = null; } catch { memoryChoice = choice; }
   window.dispatchEvent(new Event('rhema-cookie-consent'));
+  if (withdraw) { clearMetrikaCookies(); location.reload(); }
+}
+// «Настройки cookie» в футере: сбрасываем выбор — баннер показывается снова.
+export function resetConsent() {
+  try { localStorage.removeItem('cookie_consent'); } catch { /* хранилище недоступно */ }
+  memoryChoice = null;
+  window.dispatchEvent(new Event('rhema-cookie-consent'));
+}
+function clearMetrikaCookies() {
+  const names = document.cookie.split(';').map(c => c.split('=')[0].trim()).filter(n => n.startsWith('_ym'));
+  for (const name of names) for (const domain of ['', `; domain=${location.hostname}`, `; domain=.${location.hostname}`]) {
+    document.cookie = `${name}=; max-age=0; path=/${domain}`;
+  }
 }
 export const serverConsent = (): Choice => null;
