@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import DiagnosisSection from './DiagnosisSection';
 
 import ContactPanel from './ContactPanel';
@@ -80,8 +81,8 @@ export function CasesPage() {
 }
 export function AboutPage() {
   const founders = [
-    { firstName: 'Владислав', lastName: 'Грижак', initials: 'ВГ' },
-    { firstName: 'Тимофей', lastName: 'Матюжов', initials: 'ТМ' },
+    { firstName: 'Владислав', lastName: 'Грижак', photo: '/team/vladislav-grizhak.jpg' },
+    { firstName: 'Тимофей', lastName: 'Матюжов', photo: '/team/timofey-matyuzhov.jpg' },
   ];
 
   return <Reveal><div className={s.container}>
@@ -92,7 +93,7 @@ export function AboutPage() {
       <div className={s.foundersGrid}>
         {founders.map(founder => <article className={s.founderCard} key={founder.lastName}>
           <span className={s.mono}>ОСНОВАТЕЛЬ / AI-АРХИТЕКТОР</span>
-          <div className={s.founderMonogram} aria-hidden="true">{founder.initials}<span>↗</span></div>
+          <div className={s.founderPortrait}><Image src={founder.photo} alt={`${founder.firstName} ${founder.lastName} — сооснователь Rhema AI`} width={640} height={640} sizes="(max-width: 600px) calc(100vw - 88px), (max-width: 1100px) 42vw, 520px" /></div>
           <h2>{founder.firstName}<br />{founder.lastName}</h2>
         </article>)}
       </div>

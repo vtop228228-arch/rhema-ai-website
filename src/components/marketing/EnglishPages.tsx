@@ -2,6 +2,7 @@ import DiagnosisSection from './DiagnosisSection';
 import DiscoveryIntro, { ClearServices } from './DiscoveryIntro';
 import SeraphimTeaser from './SeraphimTeaser';
 import Link from 'next/link';
+import Image from 'next/image';
 
 import ContactPanel from './ContactPanel';
 import Reveal from './Reveal';
@@ -152,12 +153,12 @@ export function CasesPage() {
 
 export function AboutPage() {
   const founders = [
-    { firstName: 'Vladislav', lastName: 'Grizhak', initials: 'VG' },
-    { firstName: 'Timofey', lastName: 'Matyuzhov', initials: 'TM' },
+    { firstName: 'Vladislav', lastName: 'Grizhak', photo: '/team/vladislav-grizhak.jpg' },
+    { firstName: 'Timofey', lastName: 'Matyuzhov', photo: '/team/timofey-matyuzhov.jpg' },
   ];
   return <Reveal><div className={s.container}>
     <Intro eyebrow="RHEMA / Our team" title="We build tools for business. And use them ourselves.">Rhema AI is a small team building websites, apps and AI assistants for small and medium-sized businesses. We turn an everyday business task into a working tool.</Intro>
-    <section className={s.founders} aria-label="Rhema AI founders" data-reveal><div className={s.foundersGrid}>{founders.map(founder => <article className={s.founderCard} key={founder.lastName}><span className={s.mono}>CO-FOUNDER / AI ARCHITECT</span><div className={s.founderMonogram} aria-hidden="true">{founder.initials}<span>↗</span></div><h2>{founder.firstName}<br />{founder.lastName}</h2></article>)}</div></section>
+    <section className={s.founders} aria-label="Rhema AI founders" data-reveal><div className={s.foundersGrid}>{founders.map(founder => <article className={s.founderCard} key={founder.lastName}><span className={s.mono}>CO-FOUNDER / AI ARCHITECT</span><div className={s.founderPortrait}><Image src={founder.photo} alt={`${founder.firstName} ${founder.lastName} — Rhema AI co-founder`} width={640} height={640} sizes="(max-width: 600px) calc(100vw - 88px), (max-width: 1100px) 42vw, 520px" /></div><h2>{founder.firstName}<br />{founder.lastName}</h2></article>)}</div></section>
     <section className={s.aboutSplit} data-reveal><div><Label>Our approach</Label><h2>Know the work.<br /><em>Try it in practice.</em></h2></div><div><p>We built <Link href="/en/cases/jarvis" className={s.textLink}>Rhema OS (JARVIS)</Link> for our own team. It brings together customer records, call reviews, content drafts and AI assistants. We use that experience when working on your tasks.</p><h3>Start with your team</h3><p>We look at tasks that repeat, requests that get lost and information people have to copy by hand. Then we explain where AI would help and where a simpler solution would do.</p><h3>Fit the way you work</h3><p>We plan features around your work and the tools you already use. Access to the finished project, code handover and support are agreed in the project terms.</p><Action href="/en/cases" secondary>See our projects</Action></div></section>
     <ContactPanel locale="en" />
   </div></Reveal>;
