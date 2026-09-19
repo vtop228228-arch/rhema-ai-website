@@ -1,395 +1,79 @@
 'use client';
-
 import { useEffect, useRef, useState } from 'react';
-import { z } from 'zod';
+import Link from 'next/link';
 import { ymGoal } from '@/lib/analytics';
+import { getLeadAttribution } from '@/lib/attribution';
+import { diagnosisQuestions, diagnosticSummary, type DiagnosisLocale } from '@/lib/diagnostic-summary';
+import s from './DiagnosticAgent.module.css';
 
-type ChatState = 'idle' | 'active' | 'thinking' | 'map_shown' | 'done';
-type Msg = { role: 'user' | 'ai'; text: string };
-type ApiMsg = { role: 'user' | 'assistant'; content: string };
-type AgentTurn = { reply: string; options: string[]; stage: 'ask' | 'map' };
-
-const bebas = 'var(--font-bebas), Bebas Neue, sans-serif';
-
-const leadSchema = z.object({
-  name: z.string().min(2, 'Укажите имя (минимум 2 символа)').max(100),
-  contact: z.string().min(3, 'Укажите контакт').max(255),
-});
-
-// Скрытый стартовый ход — модель сама генерирует приветствие и первый вопрос (не хардкод).
-const OPENER: ApiMsg = {
-  role: 'user',
-  content: 'Поздоровайся коротко и задай первый вопрос про мой бизнес, чтобы начать диагностику.',
-};
-
-// Аварийная карта-шаблон на случай, если сеть полностью отвалилась на этапе карты.
-// Сервер почти всегда отдаёт карту сам; это последний рубеж, чтобы клиент не упёрся в «перегружен».
-const FALLBACK_MAP = `ГДЕ ВЫ ТЕРЯЕТЕ
-• Обращения теряются, пока менеджер занят или вне смены
-• Рутина — ответы, заявки, отчёты — съедает часы команды каждый день
-• Нет единой картины по цифрам: решения принимаются на глаз
-
-ЧТО МОЖНО ВНЕДРИТЬ
-→ Помощник, который мгновенно отвечает клиентам круглосуточно
-→ Автоматизация рутины: заявки и напоминания без ручного труда
-→ Сводка по ключевым показателям бизнеса в одном месте
-
-Оставьте контакт — и мы на созвоне дадим 2-3 AI-инструмента под конкретно ваш бизнес, которые повысят эффективность.`;
-
-export default function DiagnosticAgent() {
-  const sessionId = useRef('');
-  const chatRef = useRef<HTMLDivElement>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const historyRef = useRef<ApiMsg[]>([]);
-
-  const [chatState, setChatState] = useState<ChatState>('idle');
-  const [msgs, setMsgs] = useState<Msg[]>([]);
-  const [options, setOptions] = useState<string[]>([]);
-  const [inputVal, setInputVal] = useState('');
-  const [fallback, setFallback] = useState(false);
-
-  const [mapText, setMapText] = useState('');
-  const [sphere, setSphere] = useState('');
-
-  const [lead, setLead] = useState({ name: '', contact: '' });
-  const [leadErr, setLeadErr] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [consent, setConsent] = useState(false);
-
-  useEffect(() => {
-    const el = chatRef.current;
-    if (el) el.scrollTop = el.scrollHeight;
-  }, [msgs, chatState, mapText, options]);
-
-  function addMsg(role: 'user' | 'ai', text: string) {
-    setMsgs(prev => [...prev, { role, text }]);
-  }
-
-  // Один запрос к агенту с таймаутом. Возвращает ход или null (осечка).
-  // forceMap — попросить карту принудительно (когда диалог не смог продолжиться).
-  async function fetchTurn(history: ApiMsg[], forceMap = false): Promise<AgentTurn | null> {
-    const ctrl = new AbortController();
-    // Должен быть БОЛЬШЕ серверного бюджета (карта: 2×12с Claude), иначе оборвём успешный ответ.
-    const timer = setTimeout(() => ctrl.abort(), 28000);
-    try {
-      const res = await fetch('/api/diagnose', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ history: history.slice(-24), forceMap }),
-        signal: ctrl.signal,
-      });
-      if (!res.ok) return null;
-      const json = await res.json() as { data?: AgentTurn };
-      return json.data?.reply ? json.data : null;
-    } catch {
-      return null;
-    } finally {
-      clearTimeout(timer);
-    }
-  }
-
-  // Один ход к агенту: до 3 попыток (провайдер изредка отдаёт transient-осечку), и только потом фолбэк.
-  async function callAgent(history: ApiMsg[]) {
-    setOptions([]);
-    setChatState('thinking');
-
-    let turn: AgentTurn | null = null;
-    for (let attempt = 0; attempt < 3 && !turn; attempt++) {
-      if (attempt > 0) await new Promise(r => setTimeout(r, 500));
-      turn = await fetchTurn(history);
-    }
-    if (!turn) {
-      // Диалог не смог продолжиться (исчерпали ретраи). Не упираемся в «перегружен» и не суём
-      // общий шаблон-«чушь»: если человек уже что-то рассказал (≥2 ответов) — просим ЛИЧНУЮ карту
-      // по тому, что есть (forceMap). Только если и это не вышло / совсем нет ответов — фолбэк.
-      const answered = history.filter(m => m.role === 'user').length - 1;
-      if (answered >= 2) {
-        const mapTurn = await fetchTurn(history, true);
-        ymGoal('agent_map');
-        setMapText(mapTurn?.reply ?? FALLBACK_MAP);
-        setChatState('map_shown');
-      } else if (answered >= 1) {
-        ymGoal('agent_map');
-        setMapText(FALLBACK_MAP);
-        setChatState('map_shown');
-      } else {
-        goFallback();
-      }
-      return;
-    }
-
-    historyRef.current = [...history, { role: 'assistant', content: turn.reply }];
-
-    if (turn.stage === 'map') {
-      ymGoal('agent_map');
-      setMapText(turn.reply);
-      setChatState('map_shown');
-    } else {
-      addMsg('ai', turn.reply);
-      setOptions(turn.options);
-      setChatState('active');
-    }
-  }
-
-  function startChat() {
-    if (!sessionId.current) sessionId.current = typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
-    if (chatState !== 'idle') return;
-    ymGoal('agent_start');
-    historyRef.current = [OPENER];
-    callAgent(historyRef.current);
-  }
-
-  // Ответ пользователя — по клику на вариант ИЛИ вводом своего текста.
-  function sendAnswer(text: string) {
-    const a = text.trim();
-    if (!a || chatState === 'thinking') return;
-
-    if (!sphere) { setSphere(a.slice(0, 60)); ymGoal('agent_engaged'); }
-    addMsg('user', a);
-    setInputVal('');
-    if (textareaRef.current) textareaRef.current.style.height = 'auto';
-
-    const next = [...historyRef.current, { role: 'user' as const, content: a }];
-    historyRef.current = next;
-    callAgent(next);
-  }
-
-  function goFallback() {
-    setFallback(true);
-    setMapText('');
-    setOptions([]);
-    setChatState('map_shown');
-  }
-
-  function handleKey(e: React.KeyboardEvent) {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendAnswer(inputVal); }
-  }
-
-  async function submitLead() {
-    if (submitting) return;
-    if (!consent) { setLeadErr('Подтвердите согласие на обработку данных.'); return; }
-    const parsed = leadSchema.safeParse(lead);
-    if (!parsed.success) { setLeadErr(parsed.error.issues[0]?.message ?? 'Проверьте данные'); return; }
-    setLeadErr('');
-    setSubmitting(true);
-    // Краткая сводка ответов (для полей «боль»/CRM) и полный читаемый диалог
-    // (вопрос агента → ответ клиента) — чтобы команда видела всю картину, а не голые ответы.
-    const answers = msgs.filter(m => m.role === 'user').map(m => m.text).join(' | ');
-    const dialog = msgs.map(m => `${m.role === 'ai' ? '❓ Агент' : '💬 Клиент'}: ${m.text}`).join('\n\n');
-    try {
-      const res = await fetch('/api/diagnose/lead', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ sessionId: sessionId.current, ...parsed.data, consent, sphere, pain: answers, dialog, mapText }),
-      });
-      if (!res.ok) throw new Error(`lead submit failed: ${res.status}`);
-      ymGoal('agent_lead');
-      setChatState('done');
-    } catch {
-      setLeadErr('Не удалось отправить заявку. Проверьте соединение и нажмите кнопку ещё раз.');
-    } finally {
-      setSubmitting(false);
-    }
-  }
-
-  const showInput = chatState === 'active' || chatState === 'thinking';
-  const announcement = chatState === 'thinking'
-    ? 'AI-агент готовит ответ…'
-    : chatState === 'active'
-      ? msgs.filter(message => message.role === 'ai').at(-1)?.text ?? ''
-      : chatState === 'map_shown'
-        ? 'Предварительный разбор готов. Можно оставить контакт для обсуждения.'
-        : chatState === 'done' ? 'Заявка принята. Свяжемся по указанному контакту.' : '';
-
-  return (
-    <div
-      id="diagnose"
-      className="chat-panel"
-      style={{ flex: '0 0 460px', background: 'var(--card)', display: 'flex', flexDirection: 'column', minHeight: 640 }}
-    >
-      <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">{announcement}</span>
-      {/* Header */}
-      <div style={{ padding: '18px 24px', borderBottom: '1px solid #161616', display: 'flex', alignItems: 'center', gap: 9, flexShrink: 0 }}>
-        <div style={{ width: 6, height: 6, background: 'var(--accent)' }} />
-        <span style={{ fontFamily: bebas, fontSize: 14, letterSpacing: 2, color: 'var(--accent)' }}>ДИАГНОСТИКА БИЗНЕСА</span>
-      </div>
-
-      {/* IDLE */}
-      {chatState === 'idle' && (
-        <div style={{ flex: 1, padding: '30px 24px', display: 'flex', flexDirection: 'column', gap: 18, justifyContent: 'center' }}>
-          <h2 style={{ fontFamily: bebas, fontSize: 27, letterSpacing: 1, color: 'var(--ink)', lineHeight: 1.05, maxWidth: 340 }}>
-            Покажем, какие AI подойдут под ваш бизнес
-          </h2>
-          <div>
-            <button
-              onClick={startChat}
-              style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '14px 24px', fontFamily: bebas, fontSize: 22, letterSpacing: 1, display: 'flex', alignItems: 'center', gap: 8, animation: 'ctaGlow 3s ease-in-out infinite', cursor: 'pointer' }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" fill="#ffffff" /></svg>
-              НАЧАТЬ ДИАГНОСТИКУ
-            </button>
-            <p style={{ fontSize: 13, color: '#888', marginTop: 10 }}>Бесплатно · без регистрации</p>
-          </div>
-        </div>
-      )}
-
-      {/* CHAT */}
-      {chatState !== 'idle' && (
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minHeight: 0, overflow: 'hidden' }}>
-          <div ref={chatRef} style={{ flex: 1, overflowY: 'auto', padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: 12, minHeight: 0 }}>
-
-            {/* Message bubbles */}
-            {msgs.map((m, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start', animation: 'fadeUp 0.2s ease' }}>
-                <div style={{ maxWidth: '87%', padding: '9px 13px', background: m.role === 'user' ? 'var(--accent)' : 'rgba(24,24,24,0.88)' }}>
-                  <span style={{ fontSize: 14, lineHeight: 1.65, color: m.role === 'user' ? '#ffffff' : 'var(--ink2)', whiteSpace: 'pre-wrap', display: 'block' }}>{m.text}</span>
-                </div>
-              </div>
-            ))}
-
-            {/* Typing indicator */}
-            {chatState === 'thinking' && (
-              <div style={{ display: 'flex', justifyContent: 'flex-start', animation: 'fadeUp 0.2s ease' }}>
-                <div style={{ padding: '11px 14px', background: 'rgba(24,24,24,0.88)', display: 'flex', gap: 5, alignItems: 'center' }}>
-                  {[0, 0.18, 0.36].map((d, i) => (
-                    <span key={i} style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', opacity: 0.5, animation: `blink 1s ease-in-out infinite ${d}s` }} />
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Quick-reply chips для текущего вопроса */}
-            {chatState === 'active' && options.length > 0 && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, animation: 'fadeUp 0.2s ease', paddingLeft: 2 }}>
-                {options.map((opt, oi) => (
-                  <button
-                    key={oi}
-                    onClick={() => sendAnswer(opt)}
-                    style={{
-                      padding: '7px 12px',
-                      border: '1px solid #242424',
-                      background: 'rgba(14,14,14,0.9)',
-                      color: '#aaa',
-                      fontSize: 12,
-                      lineHeight: 1.45,
-                      cursor: 'pointer',
-                      textAlign: 'left',
-                      transition: 'border-color 0.15s, color 0.15s, background 0.15s',
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.color = 'var(--accent)'; e.currentTarget.style.background = 'rgba(37,99,235,0.08)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.borderColor = '#242424'; e.currentTarget.style.color = '#aaa'; e.currentTarget.style.background = 'rgba(14,14,14,0.9)'; }}
-                  >
-                    {opt}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Loss map card */}
-            {(chatState === 'map_shown' || chatState === 'done') && !fallback && (
-              <div style={{ background: 'rgba(14,14,14,0.88)', border: '1px solid #1A1A1A', padding: 16, display: 'flex', flexDirection: 'column', gap: 13, animation: 'fadeUp 0.35s ease' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-                  <div style={{ width: 2, height: 22, background: 'var(--accent)', flexShrink: 0 }} />
-                  <div>
-                    <div style={{ fontFamily: bebas, fontSize: 18, color: 'var(--accent)', letterSpacing: 1, lineHeight: 1 }}>ПРЕДВАРИТЕЛЬНЫЙ РАЗБОР</div>
-                    <div style={{ fontSize: 9, color: '#999', textTransform: 'uppercase', letterSpacing: 2, marginTop: 2 }}>{sphere || 'Ваш бизнес'}</div>
-                  </div>
-                </div>
-                <div style={{ fontSize: 13, color: 'var(--ink2)', lineHeight: 1.7, whiteSpace: 'pre-wrap' }}>
-                  {mapText || 'Анализирую…'}
-                </div>
-                <div style={{ fontSize: 10, color: '#aeb9a9', fontStyle: 'italic', lineHeight: 1.4, borderTop: '1px solid #1A1A1A', paddingTop: 9 }}>
-                  Предварительная оценка на основе ваших ответов. Точные цифры — на бесплатной диагностике.
-                </div>
-              </div>
-            )}
-
-            {/* Lead form */}
-            {chatState === 'map_shown' && (
-              <div style={{ background: 'rgba(14,14,14,0.88)', border: '1px solid #1A1A1A', padding: 16, display: 'flex', flexDirection: 'column', gap: 9, animation: 'fadeUp 0.35s ease 0.15s both' }}>
-                <div style={{ fontFamily: bebas, fontSize: 15, letterSpacing: 1, color: 'var(--ink)', lineHeight: 1.2 }}>
-                  ПОЛУЧИТЬ ПОЛНУЮ<br />ДИАГНОСТИКУ БЕСПЛАТНО
-                </div>
-                <p style={{ fontSize: 11, color: '#888', lineHeight: 1.5 }}>
-                  {fallback ? 'Оставьте контакт — обсудим вашу задачу лично.' : 'Составим точный план автоматизации под ваш бизнес.'}
-                </p>
-                <input
-                  className="input-base" aria-label="Ваше имя" autoComplete="name" maxLength={100} placeholder="Ваше имя" value={lead.name}
-                  onChange={e => setLead(p => ({ ...p, name: e.target.value }))}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.55)'; }}
-                  onBlur={e => { e.currentTarget.style.borderColor = '#1E1E1E'; }}
-                  style={{ borderColor: '#1E1E1E' }}
-                />
-                <input
-                  className="input-base" aria-label="Telegram или телефон" maxLength={255} placeholder="Telegram (@username) или телефон" value={lead.contact}
-                  onChange={e => setLead(p => ({ ...p, contact: e.target.value }))}
-                  onFocus={e => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.55)'; }}
-                  onBlur={e => { e.currentTarget.style.borderColor = '#1E1E1E'; }}
-                  style={{ borderColor: '#1E1E1E' }}
-                />
-                <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', color: '#bac6b5', fontSize: 12, lineHeight: 1.6 }}>
-                  <input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} style={{ marginTop: 4, accentColor: 'var(--accent)' }} />
-                  <span>Согласен на обработку данных по <a href="/privacy" style={{ color: '#bdceff', textDecoration: 'underline' }}>политике конфиденциальности</a>.</span>
-                </label>
-                {leadErr && (
-                  <div role="status" style={{ fontSize: 11, color: 'var(--red)', display: 'flex', alignItems: 'center', gap: 5 }}>
-                    <div style={{ width: 3, height: 3, background: 'var(--red)', flexShrink: 0 }} />{leadErr}
-                  </div>
-                )}
-                <button
-                  onClick={submitLead}
-                  disabled={submitting}
-                  style={{ background: 'var(--accent)', color: '#ffffff', border: 'none', padding: '11px 16px', fontFamily: bebas, fontSize: 17, letterSpacing: 1, width: '100%', cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.5 : 1 }}
-                >
-                  {submitting ? 'ОТПРАВЛЯЕМ…' : 'ПОЛУЧИТЬ ДИАГНОСТИКУ →'}
-                </button>
-              </div>
-            )}
-
-            {/* Done */}
-            {chatState === 'done' && (
-              <div style={{ background: 'rgba(37,99,235,0.05)', border: '1px solid rgba(37,99,235,0.13)', padding: '26px 18px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 9, textAlign: 'center', animation: 'fadeUp 0.35s ease' }}>
-                <div style={{ width: 36, height: 36, background: 'rgba(37,99,235,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M20 6L9 17L4 12" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="square" /></svg>
-                </div>
-                <div style={{ fontFamily: bebas, fontSize: 22, letterSpacing: 1, color: 'var(--accent)' }}>ЗАЯВКА ПРИНЯТА</div>
-                <div style={{ fontSize: 13, color: '#999', lineHeight: 1.65, maxWidth: 240 }}>Свяжемся по указанному контакту. Спасибо!</div>
-              </div>
-            )}
-
-          </div>
-
-          {/* Input — всё время живого диалога */}
-          {showInput && (
-            <div style={{ borderTop: '1px solid #161616', padding: '11px 16px', display: 'flex', gap: 6, background: 'var(--card)', flexShrink: 0, alignItems: 'flex-end' }}>
-              <textarea
-                ref={textareaRef}
-                aria-label="Ответ агенту" placeholder="Напишите ответ…" value={inputVal}
-                rows={1}
-                onChange={e => {
-                  setInputVal(e.target.value);
-                  e.target.style.height = 'auto';
-                  e.target.style.height = Math.min(e.target.scrollHeight, 120) + 'px';
-                }}
-                onKeyDown={handleKey}
-                disabled={chatState === 'thinking'}
-                onFocus={e => { e.currentTarget.style.borderColor = 'rgba(37,99,235,0.55)'; }}
-                onBlur={e => { e.currentTarget.style.borderColor = '#1C1C1C'; }}
-                style={{ flex: 1, background: 'rgba(19,19,19,0.88)', border: '1px solid #1C1C1C', color: 'var(--ink)', padding: '8px 12px', fontSize: 16, fontFamily: 'var(--font-inter), Inter, sans-serif', outline: 'none', transition: 'border-color 0.18s', resize: 'none', overflow: 'hidden', lineHeight: '1.55', minHeight: 36, maxHeight: 120, opacity: chatState === 'thinking' ? 0.5 : 1 }}
-              />
-              <button aria-label="Отправить ответ" onClick={() => sendAnswer(inputVal)} disabled={chatState === 'thinking'} style={{ background: 'var(--accent)', border: 'none', padding: '8px 13px', display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: chatState === 'thinking' ? 0.5 : 1, flexShrink: 0, height: 36, cursor: chatState === 'thinking' ? 'not-allowed' : 'pointer' }}>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M22 2L11 13M22 2L15 22L11 13L2 9L22 2Z" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="square" /></svg>
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-
-      <style>{`
-        @media (max-width: 900px) {
-          .chat-panel { flex: 1 1 auto !important; min-height: 560px; }
-        }
-      `}</style>
-    </div>
-  );
+export default function DiagnosticAgent({ locale = 'ru' }: { locale?: DiagnosisLocale }) {
+ const en = locale === 'en';
+ const questions = diagnosisQuestions[locale];
+ const [phase,setPhase] = useState<'idle'|'questions'|'analyzing'|'result'|'done'>('idle');
+ const [answers,setAnswers] = useState<string[]>(['','','','']);
+ const [step,setStep] = useState(0);
+ const [result,setResult] = useState('');
+ const [mode,setMode] = useState<'ai'|'guided'>('guided');
+ const [error,setError] = useState('');
+ const [sending,setSending] = useState(false);
+ const lock = useRef(false);
+ const session = useRef('');
+ const answerField = useRef<HTMLTextAreaElement>(null);
+ const resultTitle = useRef<HTMLHeadingElement>(null);
+ useEffect(() => { if(phase==='questions') answerField.current?.focus(); else if(phase==='result'||phase==='done') resultTitle.current?.focus(); }, [phase,step]);
+ const dialog = () => questions.map((q,i)=>`${q}\n${answers[i]}`).join('\n\n');
+ async function analyze() {
+  if(lock.current) return;
+  lock.current=true;setError('');setPhase('analyzing');
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),28000);
+  try {
+   const history: {role:'user'|'assistant';content:string}[]=[{role:'user',content:en?'Start the business diagnosis.':'Начать диагностику бизнеса.'}];
+   questions.forEach((q,i)=>history.push({role:'assistant',content:q},{role:'user',content:answers[i]}));
+   const response=await fetch('/api/diagnose',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({history,forceMap:true,locale}),signal:controller.signal});
+   if(!response.ok) throw new Error('unavailable');
+   const body=await response.json();
+   if(typeof body.data?.reply!=='string'||!body.data.reply.trim()) throw new Error('invalid');
+   const nextMode=body.data.mode==='ai'?'ai':'guided';
+   setResult(body.data.reply.slice(0,4000));setMode(nextMode);
+   ymGoal('agent_map',{mode:nextMode,locale});
+  } catch {
+   setResult(diagnosticSummary(answers,locale));setMode('guided');
+   ymGoal('agent_map',{mode:'guided',locale});
+  } finally { clearTimeout(timer);lock.current=false;setPhase('result'); }
+ }
+ async function submit(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();if(lock.current)return;
+  const form=new FormData(event.currentTarget);
+  const name=String(form.get('name')||'').trim();const contact=String(form.get('contact')||'').trim();
+  if(name.length<2||contact.length<3||form.get('consent')!=='on'){setError(en?'Check your name, contact and consent.':'Проверьте имя, контакт и согласие на обработку данных.');return;}
+  lock.current=true;setSending(true);setError('');
+  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),25000);
+  try {
+   session.current ||= crypto.randomUUID();
+   const response=await fetch('/api/diagnose/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:session.current,name,contact,consent:true,sphere:answers[0].slice(0,200),pain:answers[1],dialog:dialog(),mapText:result,attribution:getLeadAttribution()}),signal:controller.signal});
+   if(!response.ok)throw new Error('failed');
+   setPhase('done');ymGoal('agent_lead',{locale});ymGoal('diagnosis_request',{method:'interactive',locale});
+  } catch {setError(en?'Could not confirm delivery. Your answers are still here. Try again or message us on Telegram.':'Не удалось подтвердить отправку. Ответы сохранены на этой странице. Попробуйте ещё раз или напишите нам в Telegram.');}
+  finally {clearTimeout(timer);lock.current=false;setSending(false);}
+ }
+ const examples = en ? ['For example: a furniture workshop, selling custom kitchens.','For example: preparing quotes after customer calls.','For example: 20 enquiries a week, around 6 hours of work.','For example: Telegram, spreadsheets and manual reminders.'] : ['Например: мебельная мастерская, делаем кухни на заказ.','Например: готовить коммерческие предложения после звонков.','Например: 20 обращений в неделю, около 6 часов работы.','Например: Telegram, таблицы и напоминания вручную.'];
+ return <div className={s.shell} data-analytics-private>
+  <div className={s.top}><span>{en?'Your business / free diagnosis':'Ваш бизнес / бесплатная диагностика'}</span><span>0 ₽</span></div>
+  {phase==='idle'&&<div className={s.body}><h3>{en?'Try it with your task.':'Попробуйте на своей задаче.'}</h3><p>{en?'Answer four questions. You will see an initial analysis here, then you can leave your contact details to discuss implementation.':'Ответьте на четыре вопроса. Предварительный разбор появится здесь — затем можно оставить контакт и обсудить внедрение.'}</p><p className={s.note}>{en?'No account needed. Please do not include passwords or customer details.':'Без регистрации. Не указывайте пароли и данные ваших клиентов.'}</p><button className={s.primary} data-analytics="diagnosis_start" onClick={()=>{setPhase('questions');ymGoal('agent_start',{locale});}}>{en?'Start free diagnosis':'Начать бесплатную диагностику'} ↗</button></div>}
+  {phase==='questions'&&<form className={s.body} onSubmit={e=>{e.preventDefault();if(!answers[step].trim())return;ymGoal('diagnosis_step',{step:String(step+1),locale});if(step<3)setStep(step+1);else void analyze();}}>
+   <p className={s.note}>{en?'Question':'Вопрос'} {step+1} / 4</p><div className={s.progress} aria-hidden="true"><span style={{width:`${(step+1)*25}%`}} /></div>
+   <label className={s.question} htmlFor="diagnosis-answer">{questions[step]}</label>
+   <textarea ref={answerField} id="diagnosis-answer" required maxLength={500} rows={4} value={answers[step]} placeholder={examples[step]} onChange={e=>setAnswers(answers.map((a,i)=>i===step?e.target.value:a))} />
+   {step===2&&<button type="button" className={s.text} data-analytics="diagnosis_volume_unknown" onClick={()=>setAnswers(answers.map((a,i)=>i===2?(en?'Not sure yet':'Пока не знаю'):a))}>{en?'I do not know yet':'Пока не знаю точных цифр'}</button>}
+   <div className={s.actions}>{step>0&&<button type="button" className={s.secondary} data-analytics="diagnosis_back" onClick={()=>setStep(step-1)}>{en?'Back':'Назад'}</button>}<button className={s.primary} data-analytics="diagnosis_next" disabled={!answers[step].trim()}>{step===3?(en?'Show my analysis':'Получить разбор'):(en?'Next':'Дальше')} ↗</button></div>
+  </form>}
+  {phase==='analyzing'&&<div className={s.body} role="status"><div className={s.progress}><span className={s.loading}/></div><h3>{en?'Reviewing your answers…':'Разбираем ваши ответы…'}</h3><p>{en?'Matching your task with a possible first solution. This can take up to 30 seconds.':'Подбираем возможный первый шаг под вашу задачу. Это может занять до 30 секунд.'}</p></div>}
+  {phase==='result'&&<div className={s.body}><h3 tabIndex={-1} ref={resultTitle}>{en?'Your starting point':'С чего можно начать'}</h3><p className={s.note}>{mode==='ai'?(en?'Initial AI analysis. Feasibility and costs need to be checked with our team.':'Предварительный AI-разбор. Возможность внедрения и стоимость уточним с командой.'):(en?'AI is temporarily unavailable. Below is a guided summary of your answers.':'AI сейчас недоступен. Ниже — сводка ваших ответов и направление для обсуждения.')}</p><div className={s.result}>{result}</div>
+   {mode==='guided'&&<button className={s.secondary} data-analytics="diagnosis_retry" onClick={()=>void analyze()}>{en?'Retry AI analysis':'Повторить AI-разбор'}</button>}
+   <form className={s.lead} onSubmit={submit} aria-busy={sending}><h4>{en?'Want to put this into practice?':'Хотите внедрить это у себя?'}</h4><p>{en?'Leave your contact. We will arrange a free call and discuss the plan using these answers.':'Оставьте контакт — согласуем бесплатный созвон и обсудим план на основе ваших ответов.'}</p>
+   <label>{en?'Your name':'Ваше имя'}<input name="name" required minLength={2} maxLength={100} autoComplete="name" /></label><label>{en?'Email, Telegram or phone':'Telegram или телефон'}<input name="contact" required minLength={3} maxLength={255} autoComplete="off" /></label>
+   <label className={s.consent}><input type="checkbox" name="consent" required/><span>{en?'I agree to the processing of my data under the ':'Согласен на обработку данных по '}<Link href={en?'/en/privacy':'/privacy'} target="_blank" rel="noopener noreferrer">{en?'privacy policy':'политике конфиденциальности'}</Link>.</span></label>
+   {error&&<p role="alert">{error}</p>}<button className={s.primary} data-analytics="diagnosis_submit" disabled={sending}>{sending?(en?'Sending…':'Отправляем…'):(en?'Discuss implementation — free':'Обсудить внедрение — бесплатно')} ↗</button><a className={s.text} href="https://t.me/RhemaAI_support" data-analytics="diagnosis_telegram" target="_blank" rel="noopener noreferrer">{en?'Or message us on Telegram':'Или написать нам в Telegram'}</a></form></div>}
+  {phase==='done'&&<div className={s.body} role="status"><h3 ref={resultTitle} tabIndex={-1}>{en?'Your request is received.':'Заявка принята.'}</h3><p>{en?'We received your answers and contact details. We will get in touch to arrange a free call.':'Получили ваши ответы и контакт. Свяжемся с вами, чтобы согласовать бесплатный созвон.'}</p></div>}
+ </div>;
 }

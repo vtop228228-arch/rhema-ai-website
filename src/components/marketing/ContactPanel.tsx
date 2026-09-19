@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import Link from 'next/link';
+import { getLeadAttribution } from '@/lib/attribution';
 import { ymGoal } from '@/lib/analytics';
 import s from './Editorial.module.css';
 
@@ -17,7 +18,7 @@ export default function ContactPanel({ locale = 'ru', projectName }: { locale?: 
     if (lock.current) return;
     const data = new FormData(event.currentTarget);
     const details = String(data.get('business') ?? '').trim();
-    const payload = { name: String(data.get('name') ?? '').trim(), contact: String(data.get('contact') ?? '').trim(), business: `${en ? 'Free diagnosis request.' : 'Заявка на бесплатную диагностику.'}\n${details || (en ? 'Discuss the task on the call.' : 'Задачу обсудим на созвоне.')}`, consent: data.get('consent') === 'on' };
+    const payload = { attribution: getLeadAttribution(), name: String(data.get('name') ?? '').trim(), contact: String(data.get('contact') ?? '').trim(), business: `${en ? 'Free diagnosis request.' : 'Заявка на бесплатную диагностику.'}\n${details || (en ? 'Discuss the task on the call.' : 'Задачу обсудим на созвоне.')}`, consent: data.get('consent') === 'on' };
     const issue = [
       { field: 'name', invalid: payload.name.length < 2, message: en ? 'Enter your name using at least 2 characters.' : 'Укажите имя: минимум 2 символа без пробелов по краям.' },
       { field: 'contact', invalid: payload.contact.length < 3, message: en ? 'Enter an email address, Telegram username or phone number.' : 'Укажите Telegram или телефон, по которому можно с вами связаться.' },
@@ -61,13 +62,13 @@ export default function ContactPanel({ locale = 'ru', projectName }: { locale?: 
     </div>
     <div className={s.formShell}><div className={s.formCore}>
       {status === 'success' ? <div className={s.success} role="status"><span aria-hidden="true">✓</span><h3>{en ? 'Request received' : 'Заявка принята'}</h3><p>{en ? 'Thank you! We will contact you to arrange your free discovery call.' : 'Спасибо! Свяжемся по указанному контакту и согласуем время бесплатной диагностики.'}</p></div> :
-      <form onSubmit={submit} className={s.form} aria-busy={status === 'sending'} onChange={() => { if (!started.current) { ymGoal('contact_start', { page: window.location.pathname }); started.current = true; } }}>
+      <form data-analytics-private onSubmit={submit} className={s.form} aria-busy={status === 'sending'} onChange={() => { if (!started.current) { ymGoal('contact_start', { page: window.location.pathname }); started.current = true; } }}>
         <label htmlFor="project-name">{en ? 'Your name' : 'Как к вам обращаться'}<input id="project-name" name="name" autoComplete="name" placeholder={en ? 'Your name' : 'Ваше имя'} required minLength={2} maxLength={100} aria-invalid={invalidField === 'name' || undefined} aria-describedby={invalidField === 'name' ? 'project-error' : undefined} /></label>
         <label htmlFor="project-contact">{en ? 'Email, Telegram or phone' : 'Telegram или телефон'}<input id="project-contact" name="contact" autoComplete="off" autoCapitalize="none" spellCheck={false} placeholder={en ? 'you@company.com or @username' : '@username или +7…'} required minLength={3} maxLength={255} aria-invalid={invalidField === 'contact' || undefined} aria-describedby={invalidField === 'contact' ? 'project-error' : undefined} /></label>
         <label htmlFor="project-business">{en ? 'Your task (optional)' : 'О задаче — по желанию'}<textarea id="project-business" name="business" defaultValue={projectName ? (en ? `I am interested in a solution similar to ${projectName}. ` : `Интересует решение, похожее на ${projectName}. `) : undefined} placeholder={en ? 'For example: we run an online school and answer the same student questions every day…' : 'Например: у нас онлайн-школа, каждый день отвечаем ученикам на одинаковые вопросы…'} rows={3} maxLength={1850} aria-invalid={invalidField === 'business' || undefined} aria-describedby={invalidField === 'business' ? 'project-error' : undefined} /></label>
         <label className={s.consent}><input type="checkbox" name="consent" required aria-invalid={invalidField === 'consent' || undefined} aria-describedby={invalidField === 'consent' ? 'project-error' : undefined} /><span>{en ? 'I consent to the processing of my personal data under the ' : 'Согласен на обработку персональных данных в соответствии с '}<Link href={en ? '/en/privacy' : '/privacy'} target="_blank" rel="noopener noreferrer">{en ? 'privacy policy' : 'политикой конфиденциальности'}</Link>.</span></label>
         {status === 'error' && <p id="project-error" role="alert" className={s.error}>{error}</p>}
-        <button className={s.button} type="submit" disabled={status === 'sending'}>{status === 'sending' ? (en ? 'Sending…' : 'Отправляем…') : (en ? 'Book a free diagnosis' : 'Записаться на бесплатную диагностику')}<span aria-hidden="true">↗</span></button>
+        <button className={s.button} data-analytics="contact_submit" type="submit" disabled={status === 'sending'}>{status === 'sending' ? (en ? 'Sending…' : 'Отправляем…') : (en ? 'Book a free diagnosis' : 'Записаться на бесплатную диагностику')}<span aria-hidden="true">↗</span></button>
         <p className={s.note}>{en ? 'No obligation to commission development.' : 'Без обязательства заказывать разработку.'}</p>
       </form>}
     </div></div>

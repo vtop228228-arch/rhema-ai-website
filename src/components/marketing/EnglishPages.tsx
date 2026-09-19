@@ -1,3 +1,4 @@
+import DiagnosisSection from './DiagnosisSection';
 import DiscoveryIntro, { ClearServices } from './DiscoveryIntro';
 import SeraphimTeaser from './SeraphimTeaser';
 import Link from 'next/link';
@@ -118,7 +119,7 @@ function Questions() {
 
 export function HomePage() {
   return <Reveal><div className={s.container}><DiscoveryIntro locale="en" />
-    <ClearServices locale="en" /><CasePreview /><Process /><Questions /><ContactPanel locale="en" />
+    <ClearServices locale="en" /><DiagnosisSection locale="en" /><CasePreview /><Process /><Questions /><ContactPanel locale="en" />
   </div></Reveal>;
 }
 

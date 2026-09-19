@@ -1,3 +1,4 @@
+import { attributionSchema, attributionNotes } from '@/lib/attribution-schema';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
@@ -9,6 +10,7 @@ export const runtime = 'nodejs';
 const leadSchema = z.object({
   sessionId: z.string().min(8).max(64),
   consent: z.literal(true),
+  attribution: attributionSchema,
   name: z.string().min(2).max(100),
   contact: z.string().min(3).max(255),
   sphere: z.string().max(200).default(''),
@@ -64,8 +66,9 @@ async function sendTelegram(lead: Lead): Promise<void> {
 <b>Контакт:</b> ${escapeHtml(lead.contact)}
 <b>Сфера:</b> ${escapeHtml(lead.sphere)}
 
-<b>Карта потерь:</b>
-${escapeHtml(lead.mapText.slice(0, 1500))}`;
+<b>Предварительный разбор:</b>
+${escapeHtml(lead.mapText.slice(0, 1500))}
+${escapeHtml(attributionNotes(lead.attribution))}`;
 
   // 1) Основное уведомление (определяет успех доставки лида).
   const results = await Promise.allSettled(chatIds.map(id => tgSend(botToken, id, head)));
@@ -154,7 +157,7 @@ export async function POST(req: NextRequest) {
             contact: lead.contact,
             niche: lead.sphere || undefined,
             // Полный диалог диагностики + карта потерь — вся картина в карточке лида CRM.
-            notes: [lead.dialog.trim() || lead.pain, lead.mapText].filter(Boolean).join('\n\n') || undefined,
+            notes: [lead.dialog.trim() || lead.pain, lead.mapText, attributionNotes(lead.attribution)].filter(Boolean).join('\n\n') || undefined,
             source: 'diagnostic-agent',
           });
           if (!crm.ok) throw new Error(crm.skipped ? 'CRM is not configured' : (crm.error ?? 'CRM save failed'));

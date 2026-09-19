@@ -11,8 +11,7 @@ export default function Header({ locale = 'ru' }: { locale?: 'ru' | 'en' }) {
   const [open, setOpen] = useState(false);
   const button = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-  const hasLocalContact = !/\/(privacy|offer|demo)$/.test(pathname);
-  const contactHref = hasLocalContact ? '#contact' : `${home}#contact`;
+  const contactHref = `${home}#diagnosis`;
   const languageHref = en ? (pathname.replace(/^\/en(?=\/|$)/, '') || '/') : (pathname === '/demo' ? '/en' : `/en${pathname === '/' ? '' : pathname}`);
   return <header className={s.header} onKeyDown={e => { if(e.key === 'Escape') { setOpen(false); button.current?.focus(); } }}>
     <a href="#main-content" className={s.skip}>{en ? 'Skip to content' : 'К содержанию'}</a>

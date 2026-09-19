@@ -32,7 +32,7 @@ export default function PrivacyPage() {
       </p>
 
       <h2 style={h2}>2. Data we collect</h2>
-      <p style={p}>When you submit the contact form, we receive your name, contact details (Telegram or phone number) and the business description you choose to provide. You provide this information voluntarily.</p>
+      <p style={p}>Forms collect your name, contact details and task description. The diagnosis processes your answers and initial analysis. With analytics consent, your request also includes the traffic source, campaign tags and landing page. You provide this information voluntarily.</p>
 
       <h2 style={h2}>3. Purposes of processing</h2>
       <p style={p}>We process your data to respond to your enquiry, provide a consultation, enter into a service agreement and communicate about working together.</p>
@@ -41,10 +41,10 @@ export default function PrivacyPage() {
       <p style={p}>Processing is based on your consent under Article 9 of Russian Federal Law No. 152-FZ “On Personal Data”, which you give when submitting the form.</p>
 
       <h2 style={h2}>5. Data storage and protection</h2>
-      <p style={p}>Data is stored in a protected database (Supabase, servers in the EU). Data is not transferred to third parties except where required by law.</p>
+      <p style={p}>Requests are processed using the website server on Vercel, team notifications through Telegram, our CRM and, when configured, Supabase. Diagnostic answers are sent to an AI provider, Anthropic or NVIDIA, to prepare the analysis. Your name and contact from the form are not included in AI requests. Do not include passwords, payment credentials or your customers’ personal data in your answers.</p>
 
       <h2 style={h2}>6. Cookies and web analytics</h2>
-      <p style={p}>The website uses technical cookies for its operation and the Yandex Metrica web analytics service, including a visit counter and session replay. De-identified visit data (pages viewed, website interactions and technical device information) is sent to Yandex Metrica for statistical purposes. Personal data you enter in forms is not transferred to third parties.</p>
+      <p style={p}>Yandex Metrica loads after analytics consent. It measures page views, clicks, diagnosis stages, scroll depth and traffic sources. Sources and campaign tags are stored in sessionStorage for the browser tab and may accompany a request. Names, contacts and diagnostic answers are not included in Metrica events. Session replay is disabled. The website and forms remain available if you decline analytics.</p>
 
       <h2 style={h2}>7. Your rights</h2>
       <p style={p}>You may request access to, correction or deletion of your data, or withdraw your consent, by emailing the controller.</p>

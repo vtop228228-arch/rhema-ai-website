@@ -1,0 +1,31 @@
+﻿const {chromium}=require('C:/Users/ROG/AppData/Local/Temp/rhema-design-qa/node_modules/playwright');
+const Axe=require('C:/Users/ROG/AppData/Local/Temp/rhema-design-qa/node_modules/@axe-core/playwright').default;
+const assert=require('node:assert/strict');const fs=require('fs');
+const base=process.env.QA_BASE||'http://127.0.0.1:3120';
+(async()=>{const browser=await chromium.launch({channel:'chrome'});try{
+ for(const en of [false,true]){
+ const c=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});await c.addInitScript(()=>localStorage.setItem('cookie_consent','0'));await c.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());const p=await c.newPage();p.on('pageerror',e=>console.error('BROWSER',e.message));
+ let generation=0,leads=0;await p.route('**/api/diagnose',async r=>{generation++;const payload=r.request().postDataJSON();assert.equal(payload.history.filter(m=>m.role==='user').length,5);assert.equal(payload.locale,en?'en':'ru');assert.equal(payload.forceMap,true);await r.fulfill({status:generation===1?503:200,contentType:'application/json',body:JSON.stringify({data:{reply:en?'YOUR TASK\n• Furniture workshop.\nSTART HERE\n→ Draft a quote from the customer brief.':'ВАША ЗАДАЧА\n• Мебельная мастерская.\nС ЧЕГО НАЧАТЬ\n→ Черновик предложения по запросу клиента.',mode:'ai',stage:'map'}})});});
+ await p.route('**/api/diagnose/lead',async r=>{leads++;const body=r.request().postDataJSON();assert.ok(body.dialog.includes(en?'Furniture':'Мебель'));assert.ok(body.consent);assert.equal(body.attribution,undefined);await r.fulfill({status:leads===1?500:200,contentType:'application/json',body:'{"data":{"ok":true}}'});});
+ await p.goto(base+(en?'/en':'/'),{waitUntil:'domcontentloaded'});await p.waitForTimeout(800);await p.locator('[data-analytics="diagnosis_start"]').click();
+ const answers=en?['Furniture workshop','Prepare quotes after calls','20 enquiries a week','Telegram and spreadsheets']:['Мебельная мастерская','Готовить предложения после звонков','20 обращений в неделю','Telegram и таблицы'];
+ for(const answer of answers){await p.locator('#diagnosis-answer').fill(answer);await p.locator('[data-analytics="diagnosis_next"]').click();}
+ await p.locator('[data-analytics="diagnosis_retry"]').waitFor();assert.ok((await p.locator('#diagnosis').innerText()).includes(answers[0]));
+ await p.locator('[data-analytics="diagnosis_retry"]').click();await p.locator('#diagnosis input[name="name"]').fill('QA Example');await p.locator('#diagnosis input[name="contact"]').fill('@private_test');await p.locator('#diagnosis input[name="consent"]').check();
+ await p.locator('[data-analytics="diagnosis_submit"]').click();await p.locator('#diagnosis [role="alert"]').waitFor();assert.equal(await p.locator('#diagnosis input[name="name"]').inputValue(),'QA Example');
+ const axe=await new Axe({page:p}).include('#diagnosis').analyze();if(axe.violations.length) console.log(JSON.stringify(axe.violations.map(v=>v.nodes),null,2));assert.deepEqual(axe.violations.map(v=>v.id),[]);
+ assert.ok(await p.evaluate(()=>document.querySelector('#scroll-root').scrollWidth<=innerWidth));
+ await p.locator('#diagnosis').screenshot({path:`design-export/rhema-refresh/diagnosis-result-${en?'en':'ru'}-390.png`});
+ await p.locator('[data-analytics="diagnosis_submit"]').click();await p.locator('#diagnosis [role="status"]').waitFor();assert.equal(leads,2);assert.equal(generation,2);await c.close();
+ }
+ const c=await browser.newContext();await c.addInitScript(()=>{window.__events=[];window.ym=(...args)=>window.__events.push(args);localStorage.setItem('cookie_consent','1');});await c.route('**/*',r=>new URL(r.request().url()).hostname==='127.0.0.1'?r.continue():r.abort());const p=await c.newPage();await p.goto(base+'/?utm_source=telegram&utm_medium=social&utm_campaign=launch&utm_content=post_1&email=private@example.com',{waitUntil:'domcontentloaded'});
+ await p.waitForFunction(()=>window.__events.some(x=>x[1]==='hit'));await p.locator('a[href="#diagnosis"]').first().click();await p.locator('[data-analytics="diagnosis_start"]').click();await p.locator('#diagnosis-answer').fill('PRIVATE_BUSINESS_TEXT');await p.locator('[data-analytics="diagnosis_next"]').click();await p.locator('header a[href="/cases"]').first().click();await p.waitForURL('**/cases');await p.locator('header a[href="/"]').first().click();await p.waitForURL(url=>url.pathname==='/');
+ let payload;await p.route('**/api/contact',async r=>{payload=r.request().postDataJSON();await r.fulfill({status:200,contentType:'application/json',body:'{}'});});await p.locator('#project-name').fill('PRIVATE_NAME');await p.locator('#project-contact').fill('@PRIVATE_CONTACT');await p.locator('#contact input[name="consent"]').check();await p.locator('#contact button[type="submit"]').click();await p.locator('#contact [role="status"]').waitFor();
+ assert.equal(payload.attribution.first.source,'telegram');assert.equal(payload.attribution.last.content,'post_1');const events=await p.evaluate(()=>window.__events);assert.ok(events.some(x=>x[1]==='hit'&&x[2].includes('utm_source=telegram')));assert.ok(events.some(x=>x[2]==='ui_click'));assert.ok(events.some(x=>x[2]==='agent_start'));assert.ok(events.some(x=>x[2]==='diagnosis_step'));assert.ok(events.some(x=>x[2]==='section_view'));assert.ok(!JSON.stringify(events).match(/PRIVATE_|private@example/));fs.writeFileSync('design-export/rhema-refresh/analytics-qa-events.json',JSON.stringify(events,null,2));
+ await c.close();const denied=await browser.newContext();await denied.addInitScript(()=>{window.__events=[];window.ym=(...a)=>window.__events.push(a);localStorage.setItem('cookie_consent','0');});const d=await denied.newPage();await d.goto(base,{waitUntil:'domcontentloaded'});await d.locator('[data-analytics="diagnosis_start"]').click();assert.equal(await d.evaluate(()=>window.__events.length),0);await denied.close();
+ console.log('PASS: RU/EN four-step diagnosis, provider failure -> labeled summary -> AI retry, lead failure/retry, mobile accessibility; consent, UTM through navigation into lead, safe click/section/funnel events and PII exclusion. All lead APIs mocked.');
+}finally{await browser.close()}})().catch(e=>{console.error(e);process.exit(1)});
+
+
+
+

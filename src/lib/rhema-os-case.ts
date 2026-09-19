@@ -24,7 +24,7 @@ export const contentByLocale: Record<'ru' | 'en', RhemaOsCase> = {
     description: 'Как мы создали Rhema OS, собственную операционную систему бизнеса с AI-агентами: продажи, контент, анализ рынка и контроль работы в одном интерфейсе.',
     eyebrow: 'JARVIS / Собственная операционная система',
     intro: 'Мы создали для Rhema AI рабочую систему, в которой команда агентов помогает вести продажи, разбирать звонки, готовить контент и исследовать рынок. Основатели управляют работой через единый интерфейс и принимают решения по подготовленным материалам.',
-    challenge: 'Нам нужна была общая рабочая среда для задач агентства: видеть обращения и договорённости, готовить следующий шаг по клиенту, планировать контент и понимать, что делают AI-агенты. При этом за каждым результатом должны оставаться понятная задача, история работы и человек, который принимает решение.',
+    challenge: 'Нужно было объединить в общей системе учёт, финансы, доходы и расходы, лиды и контроль качества сообщений клиентам. В той же среде — готовить сценарии и планы контента, после созвона получать краткие итоги, анализ разговора и черновик коммерческого предложения. Задача: передать повторяющиеся действия агентам и видеть, что система делает самостоятельно, где произошла ошибка и что требует решения человека.',
     solution: 'Внутренний проект JARVIS развили в Rhema OS — операционную систему бизнеса с агентами по направлениям. В ней связаны командный центр, CRM, разбор звонков, подготовка материалов и журнал действий. Агентам заданы роли: от координации работы и AI-архитектуры до бизнес-анализа и контента. Человек видит подготовленные результаты и управляет дальнейшими действиями.',
     modules: [
       {
@@ -92,7 +92,7 @@ export const contentByLocale: Record<'ru' | 'en', RhemaOsCase> = {
     description: 'How we built Rhema OS, our internal business operating system with AI agents for sales, content, market research and oversight in one workspace.',
     eyebrow: 'JARVIS / Our own operating system',
     intro: 'We built a working system for Rhema AI where a team of agents helps manage sales, analyse calls, prepare content and research the market. The founders direct the work through one interface and make decisions using the material the agents prepare.',
-    challenge: 'We needed a shared workspace for running the agency: tracking leads and agreements, preparing the next step with a prospect, planning content and understanding what our AI agents were doing. Each result needed a clear task, a record of the work and a person responsible for the decision.',
+    challenge: 'We needed one system for records, finances, income and expenses, leads and the quality of customer messages. The same workspace needed to support content scripts and plans, call summaries, conversation analysis and draft proposals. The goal was to delegate recurring work to agents while seeing what runs automatically, what fails and what needs a human decision.',
     solution: 'We developed our internal JARVIS project into Rhema OS, a business operating system with agents assigned to specific functions. It brings together a command centre, CRM, call analysis, content preparation and an activity log. Agent roles range from coordinating work and AI architecture to business analysis and content. People review the results and direct what happens next.',
     modules: [
       {

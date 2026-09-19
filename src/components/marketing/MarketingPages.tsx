@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import DiagnosticAgent from '@/components/sections/DiagnosticAgent';
+import DiagnosisSection from './DiagnosisSection';
 
 import ContactPanel from './ContactPanel';
 import Reveal from './Reveal';
@@ -56,13 +56,11 @@ function Questions() {
   return <section className={s.faq} data-reveal><div><Label>05 / До первого шага</Label><h2>Хорошие вопросы.<br /><em>Прямые ответы.</em></h2><p>Не нашли свой?<br /><a href="https://t.me/RhemaAI_support" target="_blank" rel="noopener noreferrer">Напишите нам в Telegram ↗</a></p></div><div>{faqs.map((faq, i) => <details key={faq.q}><summary><span className={s.faqNumber}>0{i + 1}</span><span>{faq.q}</span><span className={s.faqPlus} aria-hidden="true">+</span></summary><p>{faq.a}</p></details>)}</div></section>;
 }
 
-function Diagnostic() {
-  return <section className={s.diagnostic} aria-labelledby="diagnostic-title" data-reveal><div><Label>Можно подготовиться к созвону</Label><h2 id="diagnostic-title">Хотите сначала<br /><em>обсудить с AI?</em></h2><p>Это необязательный шаг. AI-помощник задаст вопросы и поможет сформулировать задачу. На бесплатную диагностику с командой можно записаться сразу.</p><div className={s.diagnosticNote}><strong>Бесплатно. Без регистрации.</strong><p>Это предварительные идеи по вашим ответам. Возможности, стоимость и пользу для бизнеса уточняем с вами лично.</p></div><a href="#contact" className={s.textLink}>Записаться на бесплатную диагностику ↗</a></div><div className={s.agentShell}><DiagnosticAgent /></div></section>;
-}
+
 
 export function HomePage() {
   return <Reveal><div className={s.container}><DiscoveryIntro />
-    <ClearServices /><CasePreview /><Process /><Questions /><Diagnostic /><ContactPanel />
+    <ClearServices /><DiagnosisSection /><CasePreview /><Process /><Questions /><ContactPanel />
   </div></Reveal>;
 }
 export function WorkPage() {

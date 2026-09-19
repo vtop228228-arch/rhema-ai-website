@@ -1,3 +1,4 @@
+import { attributionSchema, attributionNotes } from '@/lib/attribution-schema';
 import { z } from 'zod';
 import { NextRequest, NextResponse } from 'next/server';
 import { sendLeadToCRM } from '@/lib/crm';
@@ -5,6 +6,7 @@ import { rateLimit, getClientIp } from '@/lib/rate-limit';
 import { escapeHtml } from '@/lib/escape-html';
 
 const contactSchema = z.object({
+  attribution: attributionSchema,
   name: z.string().min(2).max(100),
   contact: z.string().min(3).max(255),
   business: z.string().min(10).max(2000),
@@ -45,6 +47,7 @@ export async function POST(req: NextRequest) {
 
 <b>О бизнесе:</b>
 ${escapeHtml(validated.business)}
+${escapeHtml(attributionNotes(validated.attribution))}
 `;
 
     const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
@@ -67,7 +70,7 @@ ${escapeHtml(validated.business)}
     const crm = await sendLeadToCRM({
       name: validated.name,
       contact: validated.contact,
-      notes: validated.business,
+      notes: [validated.business, attributionNotes(validated.attribution)].filter(Boolean).join('\n\n'),
       source: 'rhema-ai-website',
     });
     if (!crm.ok && !crm.skipped) {

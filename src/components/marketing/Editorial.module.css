@@ -154,7 +154,7 @@
 .diagnosticNote { padding:20px 0; margin:12px 0; font-size:12px; }
 .diagnosticNote p { margin-top:9px; max-width:370px; }
 .agentShell { --card:#151c19; --ink:#fafcf7; --ink2:#d1d8ce; --accent:#3966ed; --font-inter:var(--font-heading); background:#dfe3d7; border-radius:28px; padding:7px; min-width:0; }
-.agentShell > div { border-radius:21px; overflow:hidden; min-height:570px!important; }
+.agentShell > div { border-radius:21px; overflow:hidden; min-height:0; }
 .agentShell :global(.chat-panel) { flex:1 1 auto!important; }
 .agentShell :global(.chat-panel) h2 { font-size:30px!important; letter-spacing:-.03em!important; line-height:1.2!important; }
 .agentShell :global(.chat-panel) button { border-radius:12px; min-height:44px; animation:none!important; }

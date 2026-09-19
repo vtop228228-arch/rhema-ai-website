@@ -1,9 +1,10 @@
+import { diagnosticSummary } from '@/lib/diagnostic-summary';
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import {
   getNvidiaKey, getAnthropicKey, MODELS,
   CLAUDE_DIALOG_MODEL, CLAUDE_MAP_MODEL,
-  CHAT_SYSTEM, MAP_SYSTEM, FALLBACK_MAP,
+  CHAT_SYSTEM, MAP_SYSTEM,
 } from '@/lib/anthropic';
 import { rateLimit, getClientIp } from '@/lib/rate-limit';
 
@@ -20,6 +21,7 @@ const bodySchema = z.object({
   // Клиент выставляет, когда диалог не смог продолжиться (исчерпал ретраи): просим карту
   // принудительно по тому, что уже рассказали, — личную, а не общий шаблон-«чушь».
   forceMap: z.boolean().optional(),
+  locale: z.enum(['ru','en']).default('ru'),
 });
 
 type AgentTurn = { reply: string; options: string[]; stage: 'ask' | 'map' };
@@ -64,7 +66,7 @@ async function callNim(apiKey: string, model: string, messages: { role: string; 
     const res = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model, max_tokens: 1000, temperature: 0.6, messages, stream: false }),
+      body: JSON.stringify({ model, max_tokens: 1400, reasoning_budget: 0, temperature: 0.3, messages, stream: false }),
       signal: ctrl.signal,
     });
     if (!res.ok) {
@@ -82,15 +84,9 @@ async function callNim(apiKey: string, model: string, messages: { role: string; 
   }
 }
 
-// Единая генерация: Claude (если задан ключ) → при осечке NIM как резерв.
-// kind управляет выбором модели Claude и бюджетом времени (Vercel Pro: maxDuration=30):
-//   'map'    = Sonnet (богаче). 2 попытки, без NIM-резерва: NIM для карты даёт мусор без маркеров,
-//              а на failure-пути лучше быстро отдать шаблон, чем тратить ещё 6с на заведомо плохой ответ.
-//   'dialog' = Haiku (быстро/дёшево). 2 попытки → если пусто, один NIM-резерв (кросс-провайдер).
-// КЛЮЧЕВОЕ: внутренний ретрай Claude. Главная причина «чуши» в проде — РАЗОВЫЙ transient-блип
-// провайдера (Anthropic 529/перегрузка); один повтор ловит почти все такие осечки. Бюджет подобран
-// так, чтобы худший случай был < клиентского таймаута 28с.
+// Providers share a 25-second budget, below the client and Vercel timeouts.
 async function generate(system: string, history: Msg[], kind: 'dialog' | 'map'): Promise<string> {
+  const deadline = Date.now() + 25000;
   const claudeMs = kind === 'map' ? 12000 : 10000; // worst: map 2×12=24с, dialog 2×10+NIM6=26с (<28с)
   // Диалоговый ход — короткий JSON (≤2 предложения + варианты): 500 токенов с запасом.
   // Карта длиннее — оставляем 1500.
@@ -103,15 +99,16 @@ async function generate(system: string, history: Msg[], kind: 'dialog' | 'map'):
       const out = await callClaude(aKey, model, system, history, claudeMs, claudeMaxTokens);
       if (out) return out;
     }
-    if (kind === 'map') return ''; // карта: NIM-резерв пропускаем (см. выше) → выше отдадим шаблон
   }
   const nKey = getNvidiaKey();
   if (!nKey) return '';
   const messages = [{ role: 'system', content: system }, ...history];
   // С Claude держим резерв минимальным (1 модель), без Claude — полный каскад.
-  const models = aKey ? MODELS.slice(0, 1) : MODELS;
+  const models = MODELS;
   for (const model of models) {
-    const content = await callNim(nKey, model, messages, 6000);
+    const remaining = deadline - Date.now();
+    if (remaining < 2000) break;
+    const content = await callNim(nKey, model, messages, Math.min(22000, remaining));
     if (content) return content;
   }
   return '';
@@ -132,7 +129,7 @@ function extractMapText(raw: string): string {
       // невалидный JSON (живые переносы) — игнорируем, ниже вернём очищенный текст
     }
   }
-  return cleaned;
+  return cleaned.replace(/\*\*/g, '').replace(/^#{1,4}\s+/gm, '').replace(/^\*\s+/gm, '• ');
 }
 
 // Достаём JSON-объект из ответа модели (на случай обёрток ```json или текста вокруг).
@@ -165,14 +162,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { history, forceMap } = bodySchema.parse(await req.json());
+    const { history, forceMap, locale } = bodySchema.parse(await req.json());
 
-    if (!getAnthropicKey() && !getNvidiaKey()) {
-      return NextResponse.json(
-        { error: { code: 'AGENT_UNAVAILABLE', message: 'Агент временно недоступен' } },
-        { status: 503 },
-      );
-    }
+
 
     // Первый user-ход — скрытый opener, поэтому реальных ответов = (user-ходы − 1).
     const realAnswers = history.filter(m => m.role === 'user').length - 1;
@@ -186,15 +178,17 @@ export async function POST(req: NextRequest) {
         .map(m => `${m.role === 'user' ? 'Клиент' : 'Рема'}: ${m.content}`)
         .join('\n');
       const mapHistory: Msg[] = [
-        { role: 'user', content: `Диалог диагностики:\n${transcript}\n\nСоставь карту потерь по этому диалогу.` },
+        { role: 'user', content: `Диалог диагностики:\n${transcript}\n\nСоставь предварительный разбор по этим ответам.` },
       ];
 
-      const r = await generate(MAP_SYSTEM, mapHistory, 'map');
+      const r = await generate(MAP_SYSTEM + (locale === 'en' ? '\nWrite the complete analysis in English.' : '\nОтвет полностью на русском языке.'), mapHistory, 'map');
       const text = r ? extractMapText(r) : '';
       // Если генерация пустая или без маркеров карты (мусор) — отдаём шаблон, а НЕ 503.
       // Клиент после пройденного диалога обязан увидеть карту, иначе это «бот сломался».
-      const reply = /[•→]/.test(text) ? text : FALLBACK_MAP;
-      return NextResponse.json({ data: { reply, options: [] as string[], stage: 'map' as const } });
+      const isAi = text.length >= 120 && text.length <= 4000 && !/<think>/i.test(text) && (locale === 'en' ? /[a-z]{3}/i.test(text) : /[а-яё]{3}/i.test(text));
+      const answers = history.filter(m => m.role === 'user').slice(1).map(m => m.content);
+      const reply = isAi ? text : diagnosticSummary(answers, locale);
+      return NextResponse.json({ data: { reply, options: [] as string[], stage: 'map' as const, mode: isAi ? 'ai' : 'guided' } });
     }
 
     // ── РАЗГОВОР: один ход диалога (повторы — на стороне клиента, чтобы не превысить лимит времени) ──

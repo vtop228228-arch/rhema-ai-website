@@ -8,7 +8,7 @@ const assert=require('node:assert/strict');
  for(const route of ['/','/en','/services','/en/services','/cases','/en/cases','/cases/seraphim','/en/cases/seraphim'])for(const width of [320,390,768,1024,1440]){
   await page.setViewportSize({width,height:1000});await page.goto(base+route,{waitUntil:'domcontentloaded'});await page.locator('h1').waitFor();
   assert.equal(await page.locator('h1').count(),1);assert.ok(!(await page.locator('main').innerText()).includes('<br')); assert.ok(await page.evaluate(()=>[document.documentElement,document.querySelector('#scroll-root')].every(e=>e.scrollWidth<=e.clientWidth+1)),`${route} overflow at ${width}`);
-  const header=page.locator('header').first();assert.ok(await header.locator('a[href$="#contact"]').count());
+  const header=page.locator('header').first();assert.ok(await header.locator('a[href$="#diagnosis"]').count());
   assert.equal(await page.locator('#project-business').getAttribute('required'),null);
   if(width===390){const a=await new Axe({page}).analyze();assert.deepEqual(a.violations.map(v=>v.id),[],route);}
   if(['/','/cases/seraphim'].includes(route)&&[390,1440].includes(width))await page.screenshot({path:`design-export/rhema-refresh/free-diagnosis-${route==='/'?'home':'seraphim'}-${width}.png`});checks++;
