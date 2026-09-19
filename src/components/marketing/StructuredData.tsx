@@ -10,7 +10,7 @@ export function SiteIdentity() {
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'Organization', '@id': `${SITE_URL}/#organization`, name: SITE_NAME,
-        url: SITE_URL, logo: `${SITE_URL}/logo.png`, email: 'rhemaaiagency@gmail.com',
+        url: SITE_URL, logo: `${SITE_URL}/logo.png`, email: 'hello@rhema.agency',
         sameAs: ['https://t.me/RhemaAI_support'],
         founder: [
           { '@type': 'Person', name: 'Владислав Грижак', jobTitle: 'Основатель и AI-архитектор' },

@@ -26,7 +26,7 @@ export default function OfferPage() {
       <p style={p}>
         Настоящий документ является публичной офертой (ст. 437 ГК РФ) физического лица —
         самозанятого <strong>Владислава Грижака</strong> (далее — Исполнитель),
-        e-mail: <a href="mailto:rhemaaiagency@gmail.com" style={{ color: 'var(--accent)' }}>rhemaaiagency@gmail.com</a>,
+        e-mail: <a href="mailto:hello@rhema.agency" style={{ color: 'var(--accent)' }}>hello@rhema.agency</a>,
         адресованной любому дееспособному физическому или юридическому лицу (далее — Заказчик).
       </p>
       <p style={p}>Акцептом оферты является оплата услуг или письменное (в т.ч. по e-mail) подтверждение условий сотрудничества.</p>
@@ -58,7 +58,7 @@ export default function OfferPage() {
 
       <h2 style={h2}>10. Контакты</h2>
       <p style={p}>
-        E-mail: <a href="mailto:rhemaaiagency@gmail.com" style={{ color: 'var(--accent)' }}>rhemaaiagency@gmail.com</a><br />
+        E-mail: <a href="mailto:hello@rhema.agency" style={{ color: 'var(--accent)' }}>hello@rhema.agency</a><br />
         Telegram: <a href="https://t.me/RhemaAI_support" style={{ color: 'var(--accent)' }}>@RhemaAI_support</a>
       </p>
     </article>

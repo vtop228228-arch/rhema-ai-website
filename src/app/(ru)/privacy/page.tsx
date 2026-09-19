@@ -26,7 +26,7 @@ export default function PrivacyPage() {
       <p style={p}>
         Оператором персональных данных является физическое лицо, осуществляющее деятельность
         в качестве самозанятого (плательщика НПД): <strong>Владислав Грижак</strong>,
-        e-mail: <a href="mailto:rhemaaiagency@gmail.com" style={{ color: 'var(--accent)' }}>rhemaaiagency@gmail.com</a>,
+        e-mail: <a href="mailto:privacy@rhema.agency" style={{ color: 'var(--accent)' }}>privacy@rhema.agency</a>,
         сайт: <a href={SITE_URL} style={{ color: 'var(--accent)' }}>{new URL(SITE_URL).host}</a>.
       </p>
 

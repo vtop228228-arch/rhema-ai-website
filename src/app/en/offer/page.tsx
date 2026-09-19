@@ -28,7 +28,7 @@ export default function OfferPage() {
         This document is a public offer under Article 437 of the Civil Code of the Russian Federation
         made by the self-employed individual <strong>Vladislav Grizhak (Владислав Грижак)</strong>
         {' '}(the “Provider”),
-        email: <a href="mailto:rhemaaiagency@gmail.com" style={{ color: 'var(--accent)' }}>rhemaaiagency@gmail.com</a>,
+        email: <a href="mailto:hello@rhema.agency" style={{ color: 'var(--accent)' }}>hello@rhema.agency</a>,
         addressed to any individual with legal capacity or legal entity (the “Client”).
       </p>
       <p style={p}>Payment for services or written confirmation of the terms of cooperation, including by email, constitutes acceptance of this offer.</p>
@@ -60,7 +60,7 @@ export default function OfferPage() {
 
       <h2 style={h2}>10. Contact details</h2>
       <p style={p}>
-        Email: <a href="mailto:rhemaaiagency@gmail.com" style={{ color: 'var(--accent)' }}>rhemaaiagency@gmail.com</a><br />
+        Email: <a href="mailto:hello@rhema.agency" style={{ color: 'var(--accent)' }}>hello@rhema.agency</a><br />
         Telegram: <a href="https://t.me/RhemaAI_support" style={{ color: 'var(--accent)' }}>@RhemaAI_support</a>
       </p>
     </article>

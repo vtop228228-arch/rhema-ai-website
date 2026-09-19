@@ -27,7 +27,7 @@ export default function PrivacyPage() {
       <p style={p}>
         The personal data controller is a self-employed individual registered under Russia’s
         professional income tax regime: <strong>Vladislav Grizhak (Владислав Грижак)</strong>,
-        email: <a href="mailto:rhemaaiagency@gmail.com" style={{ color: 'var(--accent)' }}>rhemaaiagency@gmail.com</a>,
+        email: <a href="mailto:privacy@rhema.agency" style={{ color: 'var(--accent)' }}>privacy@rhema.agency</a>,
         website: <a href={SITE_URL} style={{ color: 'var(--accent)' }}>{new URL(SITE_URL).hostname}</a>.
       </p>
 
