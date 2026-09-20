@@ -1,10 +1,11 @@
+import { IsnailTeaser } from './IsnailCase';
 import Link from 'next/link';
 import Image from 'next/image';
 import DiagnosisSection from './DiagnosisSection';
 
 import ContactPanel from './ContactPanel';
 import Reveal from './Reveal';
-import { faqs, projects, steps } from './content';
+import { faqs, steps } from './content';
 import DiscoveryIntro, { ClearServices } from './DiscoveryIntro';
 import SeraphimTeaser from './SeraphimTeaser';
 import RhemaOSFeature from './RhemaOSFeature';
@@ -68,14 +69,13 @@ export function WorkPage() {
   return <Reveal><div className={s.container}><Intro eyebrow="RHEMA / Подход" title="Вы рассказываете о задаче. Мы берём на себя технологии.">Разбираемся, как работает ваша команда, и выбираем одну задачу, которую стоит упростить. До разработки вы понимаете, что получите, сколько это стоит и как проверить результат.</Intro><Process /><section className={s.principles} data-reveal><Label>Что согласуем до разработки</Label><h2>У проекта есть<br /><em>понятный план.</em></h2><div className={s.scenarioGrid}>{[['Что создаём', 'Какие задачи решает программа, с чем её нужно соединить и что оставляем для следующих версий.'], ['Как проверяем', 'На каких реальных задачах проверяем результат и какие действия требуют подтверждения сотрудника.'], ['Что нужно от вас', 'Кто поделится материалами, расскажет о работе и поможет попробовать решение перед запуском.'], ['Цена и поддержка', 'Стоимость разработки, регулярных платежей за сервисы и состав помощи после запуска.']].map(([title, body]) => <article className={s.scenarioShell} key={title}><div className={s.scenarioCard}><h3>{title}</h3><p>{body}</p></div></article>)}</div></section><Pricing /><section id="cases" className={s.inlineLink}><Action href="/cases" secondary>Посмотреть готовые проекты</Action></section><ContactPanel /></div></Reveal>;
 }
 export function CasesPage() {
-  const ids = ['sigmaup', 'besty', 'jarvis', 'isnail'];
   return <Reveal><div className={s.container}>
     <Intro eyebrow="RHEMA / Проекты" title="Посмотрите, как это работает у других.">Сайт мастерской, онлайн-курс, учёт денег, сбор отчётов и помощь клиентам. Выберите похожую задачу — в каждом кейсе покажем, что сделали и как этим пользуются.</Intro>
     <CaseDirectory />
     <WebsiteCaseCollection />
     <SeraphimTeaser anchor /><RhemaOSFeature anchor />
     <ProductCaseCollection />
-    <div className={s.projectList}>{projects.map((project, i) => ['jarvis', 'besty', 'sigmaup'].includes(ids[i]) ? null : <article key={project.name} id={ids[i]} className={s.project} data-reveal><div><Label>09 / {project.type}</Label><div className={s.projectName}>{project.name}<span aria-hidden="true">↗</span></div><div className={s.tags}>{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div></div><div><h2>{project.title}</h2><dl><dt>Задача</dt><dd>{project.before}</dd><dt>Что сделали</dt><dd>{project.after}</dd></dl></div></article>)}</div>
+    <IsnailTeaser />
     <ContactPanel />
   </div></Reveal>;
 }

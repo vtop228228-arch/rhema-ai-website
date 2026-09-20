@@ -14,6 +14,8 @@
 .footer { display:flex; flex-direction:column; gap:22px; padding:23px 28px 26px; }
 .footer > span { font-size:11px; line-height:1.7; color:#536052; }
 .footer strong { display:flex; align-items:center; justify-content:space-between; gap:20px; font-size:14px; font-weight:600; }
+.action { composes:secondary from './ActionMotion.module.css'; padding:8px 8px 8px 18px; border-radius:999px; background:#e8ecdf; }
+.link:hover .action,.link:focus-visible .action { background:#dce6d2; }
 .footer strong span { display:grid; place-items:center; width:36px; height:36px; border-radius:50%; background:#e8ecdf; transition:transform .3s cubic-bezier(.22,1,.36,1); }
 .link:hover .footer strong span { transform:translate(3px,-3px); background:#d8e3c8; }
 .link:focus-visible { outline:3px solid #3c4ee7; outline-offset:3px; }

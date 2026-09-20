@@ -9,7 +9,7 @@
 .desktop { margin:auto; display:flex; align-items:center; gap:27px; }
 .desktop a { display:flex; align-items:center; min-height:44px; font-size:13px; color:#4b5745; font-weight:500; text-decoration:none; }
 .desktop a:hover,.desktop a[aria-current=page] { color:#1649e8; }
-.cta { display:flex; align-items:center; justify-content:space-between; gap:18px; min-height:44px; font-size:12px; font-weight:600; color:#fff; background:#1649e8; padding:6px 6px 6px 18px; border-radius:50px; text-decoration:none; white-space:nowrap; }
+.cta { composes:primary from '../marketing/ActionMotion.module.css'; display:flex; align-items:center; justify-content:space-between; gap:18px; min-height:44px; font-size:12px; font-weight:600; color:#fff; background:#1649e8; padding:6px 6px 6px 18px; border-radius:50px; text-decoration:none; white-space:nowrap; }
 .ctaShort { display:none; }
 .ctaIcon { display:grid; place-items:center; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,.15); font-size:18px; transition:transform .3s cubic-bezier(.22,1,.36,1); }
 .cta:hover .ctaIcon { transform:translate(1px,-1px); }

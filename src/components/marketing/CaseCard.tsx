@@ -34,7 +34,7 @@ export default function CaseCard({ slug, locale = 'ru', anchor = false, heading 
           <Image src={shot.src} alt={`${name}: ${title}`} width={shot.width} height={shot.height} sizes={phone ? '240px' : '(max-width: 800px) 90vw, 580px'} style={phone ? { marginTop: `${-178 / (slug === 'financefamily' ? 593 : shot.width) * 100}%` } : undefined} />
         </div>
       </div>
-      <div className={c.footer}><span>{features}</span><strong>{locale === 'en' ? 'Explore the project' : 'Что сделали'}<span aria-hidden="true">↗</span></strong></div>
+      <div className={c.footer}><span>{features}</span><strong className={c.action}>{locale === 'en' ? 'Explore the project' : 'Посмотреть проект'}<span aria-hidden="true">↗</span></strong></div>
     </Link>
   </article>;
 }

@@ -1,3 +1,4 @@
+import { IsnailTeaser } from './IsnailCase';
 import DiagnosisSection from './DiagnosisSection';
 import DiscoveryIntro, { ClearServices } from './DiscoveryIntro';
 import SeraphimTeaser from './SeraphimTeaser';
@@ -20,44 +21,7 @@ const steps = [
   { title: 'We help you launch', body: 'We connect the tools you need, show your team how to use the solution and provide instructions.', result: '30 days of support after launch' },
 ];
 
-const projects = [
-  {
-    id: 'sigmaup', name: 'SigmaUp', type: 'Learning platform',
-    title: 'Courses, students and an AI tutor in one system.',
-    body: 'A platform for Cherepakhin Academy with a student portal, courses, plans, analytics and an AI tutor.',
-    tags: ['Student portal', 'Courses & access', 'AI tutor'],
-    before: 'The academy needed its own learning environment with the flexibility to support its processes.',
-    after: 'We built a platform with learning materials, access management and tools for supporting students.',
-    service: 'business-platforms', serviceLabel: 'Custom platform development',
-  },
-  {
-    id: 'besty', name: 'Besty', type: 'Telegram mini app',
-    title: 'A fitness school that opens inside Telegram.',
-    body: 'Workouts, nutrition, challenges and measurement records, with a workspace for the expert to manage content and member support.',
-    tags: ['Mini app', 'Challenges', 'Expert dashboard'],
-    before: 'Learning materials and student support were spread across chats and manual work by the course curator.',
-    after: 'Students can access workouts, recipes, a measurement tracker and support in one application.',
-    service: 'business-platforms', serviceLabel: 'Platforms and mini apps',
-  },
-  {
-    id: 'jarvis', name: 'Rhema OS / JARVIS', type: 'Our own operating system',
-    title: 'An agency operating system with a team of AI agents.',
-    body: 'Agent coordination, CRM, call analysis, content workflows and activity tracking in the system we built for our own team.',
-    tags: ['AI agents', 'Business platform', 'Human control'],
-    before: 'We needed a shared working environment for agents, sales, content and the people responsible for them.',
-    after: 'We built Rhema OS: a business platform with agent roles, sales workflows, content drafts and a record of activity and costs.',
-    service: 'business-automation', serviceLabel: 'Business process automation',
-  },
-  {
-    id: 'isnail', name: 'ISnail Academy', type: 'AI course assistant',
-    title: 'An assistant that knows the course material.',
-    body: 'Vika, an AI course assistant, answers questions, checks assignments against defined criteria and supports students.',
-    tags: ['Knowledge base', 'Assignment review', 'Student support'],
-    before: 'Repeated questions and assignment reviews took up the course team’s time.',
-    after: 'We developed an assistant based on the course material to answer questions and review assignments.',
-    service: 'ai-agents', serviceLabel: 'AI agent development',
-  },
-];
+
 
 const faqs = [
   { q: 'Is the diagnosis really free?', a: 'Yes. We review your task and discuss a useful first step at no charge. Leave your details and we will arrange a call. If you decide to commission development, we agree its scope, price and timeline separately. There is no obligation to buy.' },
@@ -146,7 +110,7 @@ export function CasesPage() {
     <WebsiteCaseCollection locale="en" />
     <SeraphimTeaser locale="en" anchor /><RhemaOSFeature locale="en" anchor />
     <ProductCaseCollection locale="en" />
-    <div className={s.projectList}>{projects.map((project) => ['jarvis', 'besty', 'sigmaup'].includes(project.id) ? null : <article key={project.name} id={project.id} className={s.project} data-reveal><div><Label>09 / {project.type}</Label><div className={s.projectName}>{project.name}<span aria-hidden="true">↗</span></div><div className={s.tags}>{project.tags.map(tag => <span key={tag}>{tag}</span>)}</div></div><div><h2>{project.title}</h2><dl><dt>The task</dt><dd>{project.before}</dd><dt>What we built</dt><dd>{project.after}</dd></dl><p style={{ marginTop: 22 }}><Link className={s.textLink} href={`/en/services/${project.service}`}>{project.serviceLabel}<span aria-hidden="true">↗</span></Link></p></div></article>)}</div>
+    <IsnailTeaser locale="en" />
     <ContactPanel locale="en" />
   </div></Reveal>;
 }

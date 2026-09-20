@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/cases',
     '/cases/jarvis',
     '/cases/seraphim',
+    '/cases/isnail',
     '/cases/besty',
     '/cases/mayak',
     '/cases/financefamily',
